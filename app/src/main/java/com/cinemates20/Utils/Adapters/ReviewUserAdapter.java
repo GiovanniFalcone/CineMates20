@@ -48,7 +48,7 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
     @Override
     public ReviewUserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_user_row, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(500,150));
+        v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return new ReviewUserAdapter.ViewHolder(v);
     }
 

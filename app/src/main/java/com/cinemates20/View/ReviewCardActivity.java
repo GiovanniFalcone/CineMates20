@@ -14,6 +14,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -38,7 +39,8 @@ public class ReviewCardActivity extends AppCompatActivity {
     private int flag = 0;
     private ImageView buttonBack, buttonReportMenu;
     private FloatingActionButton buttonLike, buttonDislike, buttonLove, buttonClapping, buttonGrrr;
-    private TextView nameAuthorView, reviewView, numberReactionView;
+    private TextView nameAuthorView, reviewView;
+    private Button numberReactionView;
     private EditText writeComment;
     private RecyclerView recyclerView;
     private CommentUserAdapter commentUserAdapter;

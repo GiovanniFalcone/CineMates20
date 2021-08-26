@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.cinemates20.Presenter.WriteReviewPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
@@ -43,8 +46,12 @@ public class WriteReviewActivity extends AppCompatActivity {
         overview = getIntent().getStringExtra("MovieOverview");
 
         titleMovie.setText(title);
-        Utils.putImage(WriteReviewActivity.this, url, poster);
-        overviewMovie.setText(overview);
+        //Utils.putImage(WriteReviewActivity.this, url, poster);
+        Glide.with(WriteReviewActivity.this.getApplicationContext())
+                .load("http://image.tmdb.org/t/p/original"+ url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(poster);
+        //overviewMovie.setText(overview);
         Button buttonConfirmReview = findViewById(R.id.button2);
 
         buttonConfirmReview.setOnClickListener(view -> writeReviewPresenter.clickAddReview());

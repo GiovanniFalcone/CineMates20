@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -118,43 +119,6 @@ public class MovieCardFragment extends Fragment{
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(background);
     }
-
-    public void setBackground(String url){
-        //constraintLayout.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gold));
-        //BitmapDrawable d = new BitmapDrawable(getResources(), url);
-        //constraintLayout.setBackground(d);
-
-        /*try {
-            URL u = new URL(url);
-            Bitmap bitmap = BitmapFactory.decodeStream(u.openConnection().getInputStream());
-            Drawable image = new BitmapDrawable(requireContext().getResources(), bitmap);
-            constraintLayout.setDrawingCacheEnabled(false);
-            constraintLayout.setBackground(image);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        //setImagebackground(constraintLayout, url);
-
-    }
-
-    public static void setImagebackground(ConstraintLayout constraintLayout,String url) {
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            URL x2 = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) x2.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Drawable dr = new BitmapDrawable(myBitmap);
-            constraintLayout.setBackgroundDrawable(dr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public void setRecycler(List<Review> authorList) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
