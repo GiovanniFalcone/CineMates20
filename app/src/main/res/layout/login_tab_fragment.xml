@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:endIconTint="#FFD700"
+        app:errorEnabled="true"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.128"
+        app:layout_constraintWidth_percent=".8"
+        app:startIconDrawable="@drawable/ic_baseline_person_24"
+        app:startIconTint="#FFD700">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textUsernameLogin"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="@string/username"
+            android:inputType="textEmailAddress"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="#FFD700"
+        app:errorEnabled="true"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".3"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernameLogin"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintWidth_percent=".8"
+        android:layout_marginTop="20dp"
+        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:startIconTint="#FFD700">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textPasswordLogin"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+        android:id="@+id/textForgetPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/password_dimenticata"
+        android:textColor="#00BCD4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/passwordLogin"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLogin"
+        app:layout_constraintVertical_bias="0" />
+
+    <Button
+        android:id="@+id/buttonLoginRegular"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="76dp"
+        android:background="@drawable/button_bg"
+        android:enabled="false"
+        android:text="@string/login"
+        android:textColor="@drawable/button_text"
+        android:textStyle="bold"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordLogin"
+        app:layout_constraintWidth_percent=".8" />
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/oppure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginRegular" />
+
+    <!-- <com.facebook.login.widget.LoginButton
+        android:id="@+id/buttonLoginWithFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginWithGoogle" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/buttonLoginWithGoogle"
+        android:layout_width="119dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="52dp"
+        app:icon="@drawable/ic_google_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonLoginRegular" />
+    -->
+    <CheckBox
+        android:id="@+id/keepLogBox"
+        android:layout_width="116dp"
+        android:layout_height="30dp"
+        android:text="Ricordami"
+        android:textColor="#5C5C5C"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLoginRegular"
+        app:layout_constraintEnd_toStartOf="@+id/textForgetPass"
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLogin"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLoginWithFacebook"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#3b5998"
+        android:text="Continua con Facebook"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/facebook_logo"
+        app:iconSize="25dp"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label"
+        app:layout_constraintVertical_bias="0.134"
+        app:layout_constraintWidth_percent=".8" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLoginWithGoogle"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="sans-serif"
+        android:text="Continua con Google"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/google_logo"
+        app:iconSize="25dp"
+        app:iconTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginWithFacebook"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintWidth_percent=".8" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

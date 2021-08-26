@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bottom_card_shape"
+    android:paddingBottom="80dp"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <io.github.florent37.shapeofview.shapes.ArcView
+            android:id="@+id/arcView"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:elevation="50.0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_arc_height="35dp"
+            app:shape_arc_position="bottom">
+
+            <ImageView
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="-35dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_tmdb_logo" />
+
+        </io.github.florent37.shapeofview.shapes.ArcView>
+
+        <TextView
+            android:id="@+id/movieTitle"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="22dp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="MovieTitle"
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background" />
+
+        <RatingBar
+            android:id="@+id/valutation"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="270dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressTint="@color/gold"
+            android:scaleX=".3"
+            android:scaleY=".3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
+
+        <TextView
+            android:id="@+id/moviePlot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:padding="2dp"
+            android:text="Plot"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/valutation" />
+
+        <TextView
+            android:id="@id/movieOverview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp"
+            android:text="plot"
+            android:textColor="@color/white"
+            android:justificationMode="inter_word"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moviePlot" />
+
+        <TextView
+            android:id="@+id/textViewCast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="25dp"
+            android:text="Cast"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movieOverview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerReviewCast"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCast"
+            tools:listitem="@layout/cast_row" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerReview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/friendReview"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerReviewCast"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/friendReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:text="Friend Review"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerReviewCast" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendReview"
+            tools:listitem="@layout/review_user_row" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView >

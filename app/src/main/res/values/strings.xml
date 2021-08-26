@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">CineMates20</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="password_dimenticata">Password Dimenticata?</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="iscriviti">Iscriviti</string>
+    <string name="conferma_password">Conferma password</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_feed">Feed</string>
+    <string name="title_user">User</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="notifiche">Notifiche</string>
+    <string name="le_mie_recensioni">Le mie recensioni</string>
+    <string name="le_mie_liste">Le mie liste</string>
+    <string name="lista_amici">Lista amici</string>
+    <string name="problemi_di_accesso">Problemi di accesso</string>
+    <string name="inserisci_la_tua_mail_per_recuperare_la_tua_password">Inserisci la tua mail per recuperare la tua password</string>
+    <string name="recupera_password">Recupera password</string>
+    <string name="torna_indietro">Torna indietro</string>
+    <string name="popolari">I più Popolari</string>
+    <string name="search">Search</string>
+    <string name="facebook_app_id">147432087401272</string>
+    <string name="fb_login_protocol_scheme">fb147432087401272</string>
+    <string name="oppure">Oppure</string>
+    <string name="invia">Invia</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ora_nelle_sale">Ora nelle sale</string>
+    <string name="i_pi_votati">I più votati</string>
+    <string name="mail_inviata">Abbiamo inviato una mail di verifica, controlla la tua posta per confermare l\'account ed effettuare il login</string>
+    <string name="non_verificato">L\'account non è verificato. Controlla la tua posta</string>
+    <string name="credenziali_errate">La mail o la password fornite sono errate. Controlla e riprova</string>
+    <string name="instruction_mail">Istruzioni per il recupero della password inoltrate alla tua casella di posta</string>
+    <string name="something_wrong">Non è stato possibile inviare la mail per il recupero</string>
+    <string name="signup_failed">Autenticazione fallita</string>
+    <string name="conferma_recensione">Sei sicuro di voler salvare questa recensione? In seguito non sarà possibile modificarla o cancellarla o scriverne una nuova per lo stesso titoli</string>
+    <string name="commenti_degli_amici">Commenti degli amici</string>
+    <string name="scrivi_un_commento">Scrivi un commento</string>
+    <string name="valuta_questa_recensione">Valuta questa recensione</string>
+    <string name="visualizza_numero_reazioni">Visualizza numero reazioni</string>
+    <string name="il_tuo_amico_pensa_che">Il tuo amico pensa che:</string>
+    <string name="ultimo_passaggio">Un ultimo passaggio!</string>
+    <string name="completa_accesso_username">Inserisci un username per completare l\'accesso:</string>
+    <string name="accetta">accetta</string>
+    <string name="rifiuta">rifiuta</string>
+    <string name="nomeutente">nomeUtente</string>
+    <string name="time">Time</string>
+    <string name="menu">Menu</string>
+    <string name="logout">Logout</string>
+    <string-array name="options">
+        <item>Le mie recensioni</item>
+        <item>Lista Amici</item>
+        <item>Logout</item>
+    </string-array>
+</resources>

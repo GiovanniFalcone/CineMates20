@@ -1,0 +1,2 @@
+rootProject.name = "CineMates20"
+include ':app'

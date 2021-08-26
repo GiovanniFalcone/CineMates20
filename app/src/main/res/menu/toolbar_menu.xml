@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/addToFavorite"
+        android:title="Aggiungi alla lista dei film preferiti"
+        />
+
+    <item
+        android:id="@+id/removeFromFavorite"
+        android:title="Rimuovi dalla lista dei preferiti"/>
+
+    <item
+        android:id="@+id/addToWatch"
+        android:title="Aggiungi alla lista dei film da vedere"
+        />
+
+    <item
+        android:id="@+id/removeFromWatch"
+        android:title="Rimuovi dalla lista dei film da vedere"
+        />
+
+    <item
+        android:id="@+id/addToCustom"
+        android:title="Aggiungi ad una lista personalizzata"/>
+
+    <item
+        android:id="@+id/removeFromCustom"
+        android:title="Rimuovi dalla lista personalizzata"/>
+
+
+</menu>
