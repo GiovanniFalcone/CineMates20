@@ -1,5 +1,6 @@
 package com.cinemates20.Presenter;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 
@@ -111,7 +112,12 @@ public class MovieCardPresenter {
             AtomicInteger selected = new AtomicInteger();
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(movieCardFragment.getFragmentContext());
             builder.setTitle("Seleziona una lista");
-            builder.setSingleChoiceItems(customLists, 0, (dialogInterface, i) -> selected.set(i))
+            builder.setSingleChoiceItems(customLists, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    selected.set(i);
+                }
+            })
                     .setPositiveButton("Aggiungi", (dialogInterface, i) -> {
                         userDAO.addMovieToList(currentUser, customLists[selected.get()], idMovie);
                         dialogInterface.dismiss();

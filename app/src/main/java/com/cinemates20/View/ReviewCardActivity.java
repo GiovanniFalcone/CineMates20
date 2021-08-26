@@ -6,23 +6,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cinemates20.Model.Comment;
+import com.cinemates20.Presenter.ReportPresenter;
 import com.cinemates20.Presenter.WriteCommentPresenter;
 import com.cinemates20.Utils.Adapters.CommentUserAdapter;
 import com.cinemates20.Presenter.ReviewCardPresenter;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.cinemates20.R.*;
 
@@ -34,9 +41,11 @@ public class ReviewCardActivity extends AppCompatActivity {
     private TextView nameAuthorView, reviewView, numberReactionView;
     private EditText writeComment;
     private RecyclerView recyclerView;
+    private CommentUserAdapter commentUserAdapter;
     private RatingBar ratingBar;
     private ReviewCardPresenter reviewCardPresenter;
     private WriteCommentPresenter writeCommentPresenter;
+    private ReportPresenter reportPresenter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -46,6 +55,7 @@ public class ReviewCardActivity extends AppCompatActivity {
 
         reviewCardPresenter = new ReviewCardPresenter(this);
         writeCommentPresenter = new WriteCommentPresenter(this);
+        reportPresenter = new ReportPresenter(this);
 
         buttonBack = findViewById(id.imageViewBackButton);
         buttonReportMenu = findViewById(id.imageViewMenuRecensione);
@@ -92,12 +102,20 @@ public class ReviewCardActivity extends AppCompatActivity {
     }
 
     public void setRecycler(List<Comment> authorList) {
-        Log.d("Passo", "Sono in setRecycler");
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        CommentUserAdapter commentUserAdapter = new CommentUserAdapter(this, authorList);
-        Log.d("Passo", "Sono in setRecycler prima di setAdapter");
+        commentUserAdapter = new CommentUserAdapter(this, authorList);
         recyclerView.setAdapter(commentUserAdapter);
+        clickOption(commentUserAdapter);
+    }
+
+    public void clickOption(CommentUserAdapter commentUserAdapter){
+        commentUserAdapter.setOnItemClickListener(new CommentUserAdapter.ClickListener() {
+            @Override
+            public void onItemClickListener() {
+                reportPresenter.onClickOption();
+            }
+        });
     }
 
     public void onClickEvents(){
@@ -172,6 +190,7 @@ public class ReviewCardActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(writeComment.getWindowToken(), 0);
             writeComment.setFocusable(false);
             writeComment.setFocusableInTouchMode(true);
+            writeComment.getText().clear();
             return true;
         });
     }
@@ -261,4 +280,18 @@ public class ReviewCardActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public Context getActivityContext(){
+        return this;
+    }
+
+    public void updateRecycler(){
+        commentUserAdapter.setOnItemClickListener(new CommentUserAdapter.ClickListener() {
+            @Override
+            public void updateRecycler(int sizeList) {
+                recyclerView.post(() -> commentUserAdapter.notifyItemInserted(sizeList + 1));
+            }
+        });
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.cinemates20.Utils;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -84,4 +86,24 @@ public class Utils {
         return task;
     }
 
+    public static String setTime(long time) {
+        long now = Calendar.getInstance().getTime().getTime();
+        long difference = now - time;
+
+        if (difference < 60 * 1000) {
+            return  "moments ago";
+        } else if (difference < 2 * DateUtils.MINUTE_IN_MILLIS) {
+            return "a minute ago";
+        } else if (difference < 60 * DateUtils.MINUTE_IN_MILLIS) {
+            return (difference / DateUtils.MINUTE_IN_MILLIS + " minutes ago");
+        } else if (difference < 2 * DateUtils.HOUR_IN_MILLIS) {
+            return ("an hour ago");
+        } else if (difference < 24 * DateUtils.HOUR_IN_MILLIS) {
+            return (difference / DateUtils.HOUR_IN_MILLIS + " hours ago");
+        } else if (difference < 48 * DateUtils.HOUR_IN_MILLIS) {
+            return ("yesterday");
+        } else {
+            return (difference / DateUtils.DAY_IN_MILLIS + " days ago");
+        }
+    }
 }

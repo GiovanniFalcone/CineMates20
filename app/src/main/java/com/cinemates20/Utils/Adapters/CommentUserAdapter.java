@@ -1,8 +1,11 @@
 package com.cinemates20.Utils.Adapters;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,15 @@ import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.R;
 import com.cinemates20.Utils.CircleTransform;
+import com.cinemates20.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.ViewHolder>{
@@ -35,13 +44,14 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView authorComment, txtComment, txtTimeAndDate;
-        private ImageView imageView;
+        private final ImageView iconUser, option;
         public ViewHolder(View v) {
             super(v);
             authorComment = v.findViewById(R.id.txtName);
             txtComment = v.findViewById(R.id.txtComment);
             txtTimeAndDate = v.findViewById(R.id.txtDateComment);
-            imageView = v.findViewById(R.id.imageView5);
+            iconUser = v.findViewById(R.id.userPropic);
+            option = v.findViewById(R.id.option);
         }
     }
 
@@ -49,10 +59,11 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
     @Override
     public CommentUserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_user_row, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150));
+        v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return new CommentUserAdapter.ViewHolder(v);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CommentUserAdapter.ViewHolder holder, int position) {
         Comment comment = commentList.get(position);
@@ -61,11 +72,22 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
         UserDAO userDAO = new UserDAO_Firestore(context.getApplicationContext());
         Uri uri = userDAO.getImageUri(comment.getAuthor());
         if(uri != null){
-            Picasso.get().load(uri).transform(new CircleTransform()).into(holder.imageView);
+            Picasso.get().load(uri).transform(new CircleTransform()).into(holder.iconUser);
         }
 
         holder.txtComment.setText(comment.getTextComment());
-        //holder.txtTimeAndDate.setText(authorReview.getTimeAndDate());
+
+        String time = Utils.setTime(comment.getDateAndTime().getTime());
+        holder.txtTimeAndDate.setText(time);
+
+        holder.option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickListener.onItemClickListener();
+            }
+        });
+
+        clickListener.updateRecycler(commentList.size());
     }
 
     @Override
@@ -78,7 +100,8 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
     }
 
     public interface ClickListener {
-        void onItemClickListener(List<Comment> authorList, int position, View view);
+        default void onItemClickListener() {}
+        default void updateRecycler(int sizeList) {}
     }
 }
 

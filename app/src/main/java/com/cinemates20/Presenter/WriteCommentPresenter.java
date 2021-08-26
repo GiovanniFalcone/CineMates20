@@ -33,5 +33,7 @@ public class WriteCommentPresenter {
 
         commentDAO.saveComment(idReview, authorComment, textComment);
 
+        reviewCardActivity.updateRecycler();
+
     }
 }

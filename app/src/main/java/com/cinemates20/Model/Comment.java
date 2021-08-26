@@ -5,7 +5,7 @@ import java.util.Date;
 public class Comment {
 
     private String textComment, author, idReview, idComment;
-    private Date timeAndDate;
+    private Date dateAndTime;
     private boolean visible;
 
     public String getIdReview() {
@@ -24,12 +24,12 @@ public class Comment {
         this.idComment = idComment;
     }
 
-    public Date getTimeAndDate() {
-        return timeAndDate;
+    public Date getDateAndTime() {
+        return dateAndTime;
     }
 
-    public void setTimeAndDate(Date timeAndDate) {
-        this.timeAndDate = timeAndDate;
+    public void setDateAndTime(Date dateAndTime) {
+        this.dateAndTime = dateAndTime;
     }
 
     public String getTextComment() {
@@ -63,7 +63,7 @@ public class Comment {
                 ", author='" + author + '\'' +
                 ", idReview='" + idReview + '\'' +
                 ", idComment='" + idComment + '\'' +
-                ", timeAndDate=" + timeAndDate +
+                ", dateAndTime=" + dateAndTime +
                 ", visible=" + visible +
                 '}';
     }
