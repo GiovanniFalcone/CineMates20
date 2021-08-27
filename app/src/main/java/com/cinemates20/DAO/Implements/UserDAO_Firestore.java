@@ -257,7 +257,7 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
     @Override
     public void removeFriend(String currentUser, String friendToRemove) {
         collectionReference
-                .whereEqualTo("email", currentUser)
+                .whereEqualTo("username", currentUser)
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){

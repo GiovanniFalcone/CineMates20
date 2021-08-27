@@ -58,58 +58,58 @@ public class SearchMovieTabFragment extends Fragment {
 
     public void onClickGenre(View view) {
         CardView action = view.findViewById(R.id.action);
-        action.setOnClickListener(view1 -> searchMoviePresenter.onGenreClicked(28));
+        action.setOnClickListener(view1 -> searchMoviePresenter.onGenreClicked(28, "Action"));
 
         CardView adventure = view.findViewById(R.id.adventure);
-        adventure.setOnClickListener(view12 -> searchMoviePresenter.onGenreClicked(12));
+        adventure.setOnClickListener(view12 -> searchMoviePresenter.onGenreClicked(12, "Adventure"));
 
         CardView animation = view.findViewById(R.id.animation);
-        animation.setOnClickListener(view13 -> searchMoviePresenter.onGenreClicked(16));
+        animation.setOnClickListener(view13 -> searchMoviePresenter.onGenreClicked(16, "Animation"));
 
         CardView comedy = view.findViewById(R.id.comedy);
-        comedy.setOnClickListener(view14 -> searchMoviePresenter.onGenreClicked(35));
+        comedy.setOnClickListener(view14 -> searchMoviePresenter.onGenreClicked(35, "Comedy"));
 
         CardView crime = view.findViewById(R.id.crime);
-        crime.setOnClickListener(view15 -> searchMoviePresenter.onGenreClicked(80));
+        crime.setOnClickListener(view15 -> searchMoviePresenter.onGenreClicked(80, "Crime"));
 
         CardView documentary = view.findViewById(R.id.documentary);
-        documentary.setOnClickListener(view16 -> searchMoviePresenter.onGenreClicked(99));
+        documentary.setOnClickListener(view16 -> searchMoviePresenter.onGenreClicked(99, "Documentary"));
 
         CardView drama = view.findViewById(R.id.drama);
-        drama.setOnClickListener(view17 -> searchMoviePresenter.onGenreClicked(18));
+        drama.setOnClickListener(view17 -> searchMoviePresenter.onGenreClicked(18, "Drama"));
 
         CardView family = view.findViewById(R.id.family);
-        family.setOnClickListener(view18 -> searchMoviePresenter.onGenreClicked(10751));
+        family.setOnClickListener(view18 -> searchMoviePresenter.onGenreClicked(10751, "Family"));
 
         CardView fantasy = view.findViewById(R.id.fantasy);
-        fantasy.setOnClickListener(view19 -> searchMoviePresenter.onGenreClicked(14));
+        fantasy.setOnClickListener(view19 -> searchMoviePresenter.onGenreClicked(14, "Fantasy"));
 
         CardView history = view.findViewById(R.id.history);
-        history.setOnClickListener(view110 -> searchMoviePresenter.onGenreClicked(36));
+        history.setOnClickListener(view110 -> searchMoviePresenter.onGenreClicked(36, "History"));
 
         CardView horror = view.findViewById(R.id.horror);
-        horror.setOnClickListener(view111 -> searchMoviePresenter.onGenreClicked(27));
+        horror.setOnClickListener(view111 -> searchMoviePresenter.onGenreClicked(27, "Horror"));
 
         CardView music = view.findViewById(R.id.music);
-        music.setOnClickListener(view112 -> searchMoviePresenter.onGenreClicked(10402));
+        music.setOnClickListener(view112 -> searchMoviePresenter.onGenreClicked(10402, "Music"));
 
         CardView mistery = view.findViewById(R.id.mistery);
-        mistery.setOnClickListener(view113 -> searchMoviePresenter.onGenreClicked(9648));
+        mistery.setOnClickListener(view113 -> searchMoviePresenter.onGenreClicked(9648, "Mistery"));
 
         CardView romance = view.findViewById(R.id.romance);
-        romance.setOnClickListener(view114 -> searchMoviePresenter.onGenreClicked(10749));
+        romance.setOnClickListener(view114 -> searchMoviePresenter.onGenreClicked(10749, "Romance"));
 
         CardView scienceFiction = view.findViewById(R.id.scienceFiction);
-        scienceFiction.setOnClickListener(view115 -> searchMoviePresenter.onGenreClicked(878));
+        scienceFiction.setOnClickListener(view115 -> searchMoviePresenter.onGenreClicked(878, "Science fiction"));
 
         CardView thriller = view.findViewById(R.id.thriller);
-        thriller.setOnClickListener(view116 -> searchMoviePresenter.onGenreClicked(53));
+        thriller.setOnClickListener(view116 -> searchMoviePresenter.onGenreClicked(53, "Thriller"));
 
         CardView war = view.findViewById(R.id.war);
-        war.setOnClickListener(view117 -> searchMoviePresenter.onGenreClicked(10752));
+        war.setOnClickListener(view117 -> searchMoviePresenter.onGenreClicked(10752, "War"));
 
         CardView western = view.findViewById(R.id.western);
-        western.setOnClickListener(view118 -> searchMoviePresenter.onGenreClicked(37));
+        western.setOnClickListener(view118 -> searchMoviePresenter.onGenreClicked(37, "Western"));
     }
 
     public void onSearchMovie() {

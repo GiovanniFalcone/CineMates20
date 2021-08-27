@@ -65,12 +65,11 @@ public class MyReviewsAdapter extends RecyclerView.Adapter<MyReviewsAdapter.View
                 .transform(new RoundedCorners(30))
                 .into(holder.imageView);
 
-        holder.imageViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickListener.onItemClickListener(movieDb.getTitle(), position);
-            }
-        });
+        holder.imageViewButton.setOnClickListener(view ->
+                clickListener.onItemClickListener(movieDb.getTitle(), position));
+
+        holder.imageView.setOnClickListener(view ->
+                clickListener.onItemClickListener(movieDb.getTitle(), position));
     }
 
     @Override

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cinemates20.Presenter.GenresPresenter;
 import com.cinemates20.R;
@@ -30,6 +31,9 @@ public class GenresFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_genres, container, false);
 
         recyclerView = view.findViewById(R.id.movieListByGenre);
+        TextView genreName = view.findViewById(R.id.genreName);
+
+        genreName.setText(requireArguments().getString("genreName"));
 
         genresPresenter = new GenresPresenter(this);
 
@@ -51,11 +55,7 @@ public class GenresFragment extends Fragment {
     }
 
     public void clickItemRecycler(MovieAdapter movieAdapter) {
-        movieAdapter.setOnItemClickListener(new MovieAdapter.ClickListener() {
-            @Override
-            public void onItemClickListener(List<MovieDb> movieDbList, int position, View view) {
-                genresPresenter.onMovieClicked(movieDbList, position);
-            }
-        });
+        movieAdapter.setOnItemClickListener((movieDbList, position, view) ->
+                genresPresenter.onMovieClicked(movieDbList, position));
     }
 }

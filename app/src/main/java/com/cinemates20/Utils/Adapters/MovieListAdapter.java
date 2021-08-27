@@ -61,12 +61,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
                 .transform(new RoundedCorners(30))
                 .into(holder.poster);
 
-        holder.removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickListener.onItemClickListener(String.valueOf(movieDb.getId()));
-            }
-        });
+        holder.removeButton.setOnClickListener(view ->
+                clickListener.onItemClickListener(String.valueOf(movieDb.getId())));
     }
 
     @Override

@@ -52,10 +52,11 @@ public class SearchMoviePresenter extends AsyncTask<String, Void, List<MovieDb>>
         searchMoviesCallback.onResults(results);
     }
 
-    public void onGenreClicked(int idGenre) {
+    public void onGenreClicked(int idGenre, String genreName) {
         GenresFragment genresFragment = new GenresFragment();
         Bundle args = new Bundle();
         args.putInt("idGenre", idGenre);
+        args.putString("genreName", genreName);
         genresFragment.setArguments(args);
         Utils.changeFragment(searchMovieTabFragment, genresFragment, R.id.nav_host_fragment_activity_main);
     }

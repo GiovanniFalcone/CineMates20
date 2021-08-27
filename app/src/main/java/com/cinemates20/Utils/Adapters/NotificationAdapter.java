@@ -17,6 +17,7 @@ import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Notification;
 import com.cinemates20.R;
 import com.cinemates20.Utils.CircleTransform;
+import com.cinemates20.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -32,18 +33,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public NotificationAdapter(Context context, List<Notification> notificationList) {
         this.context = context;
         this.notificationList = notificationList;
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView title, time = null;
+        private final TextView title, txtTimeAndDate;
         private final Button buttonConfirm, buttonDelete;
         private final ImageView icon;
 
         public ViewHolder(View v) {
             super(v);
             title = v.findViewById(R.id.txtName);
-            //time = v.findViewById(R.id.time);
+            txtTimeAndDate = v.findViewById(R.id.time);
             buttonConfirm = v.findViewById(R.id.buttonAccetta);
             buttonDelete = v.findViewById(R.id.buttonRifiuta);
             icon = v.findViewById(R.id.imageView8);
@@ -51,13 +51,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public static class ViewHolder2 extends RecyclerView.ViewHolder {
-        private final TextView textNotification;
+        private final TextView textNotification, txtTimeAndDate;
         private final ImageView icon;
 
         public ViewHolder2(View v) {
             super(v);
             textNotification = v.findViewById(R.id.txtNotification);
             icon = v.findViewById(R.id.imageView9);
+            txtTimeAndDate = v.findViewById(R.id.date);
         }
     }
 
@@ -76,12 +77,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         View v=null;
         if(viewType == 0){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.notify_friend_request, parent, false);
-            v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150));
+            v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             return new ViewHolder(v);
         }
         else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.generic_notification_row, parent, false);
-            v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150));
+            v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             return new ViewHolder2(v);
         }
     }
@@ -94,13 +95,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String userWhoSentRequest = notificationList.get(position).getUserWhoSent();
         Uri uri = userDAO.getImageUri(userWhoSentRequest);
 
+        String time = Utils.setTime(notificationList.get(position).getDateAndTime().getTime());
+
         if(itemType == 0){
             ((ViewHolder)holder).title.setText(userWhoSentRequest);
+            ((ViewHolder)holder).txtTimeAndDate.setText(time);
             Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder) holder).icon);
             ((ViewHolder)holder).buttonConfirm.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm"));
             ((ViewHolder)holder).buttonDelete.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete"));
         }else if(itemType == 1){
             ((ViewHolder2)holder).textNotification.setText(userWhoSentRequest + " ha accettato la tua richiesta");
+            ((ViewHolder2)holder).txtTimeAndDate.setText(time);
             Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder2) holder).icon);
         }
     }

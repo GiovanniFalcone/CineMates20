@@ -25,7 +25,6 @@ public class GenresPresenter {
         this.genresFragment  = genresFragment;
     }
 
-
     public void onGenreClicked() {
         AtomicReference<List<MovieDb>> movies = new AtomicReference<>();
 
@@ -44,6 +43,7 @@ public class GenresPresenter {
         }
 
         genresFragment.setRecycler(movies.get());
+
     }
 
     /**

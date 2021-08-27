@@ -33,7 +33,6 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
         this.context = context;
         this.movieDb = movieDb;
         this.filteredMovie = movieDb;
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder
@@ -66,11 +65,11 @@ public class SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.
     public void onBindViewHolder(@NonNull SearchMovieAdapter.ViewHolder holder, int position) {
 
         //Open new page if user click movie
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickListener.onItemClickListener(filteredMovie.get(position));
-            }
+        holder.image.setOnClickListener(v ->
+                clickListener.onItemClickListener(filteredMovie.get(position)));
+
+        holder.itemView.setOnClickListener(view -> {
+            clickListener.onItemClickListener(filteredMovie.get(position));
         });
 
         MovieDb movie = filteredMovie.get(position);
