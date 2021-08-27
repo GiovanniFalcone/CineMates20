@@ -50,12 +50,8 @@ public class MyListsAdapter extends RecyclerView.Adapter<MyListsAdapter.ViewHold
         String nameList = nameLists.get(position);
 
         holder.nameListView.setText(nameList);
-        holder.seeMovieListImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickListener.onItemClickListener(nameList);
-            }
-        });
+        holder.seeMovieListImage.setOnClickListener(view -> clickListener.onItemClickListener(nameList));
+        holder.itemView.setOnClickListener(view -> clickListener.onItemClickListener(nameList));
     }
 
     @Override

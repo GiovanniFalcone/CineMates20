@@ -1,5 +1,6 @@
 package com.cinemates20.Utils.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Review;
 import com.cinemates20.R;
 import com.cinemates20.Utils.CircleTransform;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,11 +37,12 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
-        private final ImageView imageView, propic;
+        private final ImageView propic;
+        private final FloatingActionButton button;
         public ViewHolder(View v) {
             super(v);
             title = v.findViewById(R.id.txtName);
-            imageView = v.findViewById(R.id.imageView5);
+            button = v.findViewById(R.id.imageView5);
             propic = v.findViewById(R.id.imageView7);
         }
     }
@@ -53,7 +56,7 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReviewUserAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewUserAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Review authorReview = authorList.get(position);
 
         holder.title.setText(authorReview.getAuthor());
@@ -66,8 +69,8 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
             Picasso.get().load(uri).transform(new CircleTransform()).into(holder.propic);
         }
 
-
-        holder.imageView.setOnClickListener(view -> clickListener.onItemClickListener(authorList, position, view));
+        holder.itemView.setOnClickListener(view -> clickListener.onItemClickListener(authorList, position, view));
+        holder.button.setOnClickListener(view -> clickListener.onItemClickListener(authorList, position, view));
     }
 
     @Override

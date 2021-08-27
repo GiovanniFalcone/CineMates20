@@ -28,7 +28,6 @@ public class WriteReviewActivity extends AppCompatActivity {
     private int idMovie;
     private ImageView poster;
     private TextView titleMovie, overviewMovie;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
