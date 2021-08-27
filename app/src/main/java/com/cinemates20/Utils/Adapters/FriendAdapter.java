@@ -69,7 +69,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         holder.button.setText("Rimuovi amico");
         holder.button.setBackgroundColor(Color.GREEN);
 
-        if(uri != null)
+        if(!uri.toString().equals(""))
             Picasso.get().load(uri).transform(new CircleTransform()).into(holder.icon);
 
         holder.button.setOnClickListener(view -> {

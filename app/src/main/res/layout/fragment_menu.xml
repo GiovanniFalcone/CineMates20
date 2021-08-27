@@ -6,15 +6,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".View.MenuFragment">
 
-    <ImageView
+    <io.github.florent37.shapeofview.shapes.CircleView
+        android:id="@+id/userPropicCircle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
             android:id="@+id/userPropic"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_baseline_person_24"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+    </io.github.florent37.shapeofview.shapes.CircleView>
+
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -27,7 +39,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userPropic">
+        app:layout_constraintTop_toBottomOf="@+id/userPropicCircle">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/myReviewsCardView"

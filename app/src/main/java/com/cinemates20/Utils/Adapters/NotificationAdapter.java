@@ -2,6 +2,7 @@ package com.cinemates20.Utils.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.cinemates20.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -100,13 +102,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(itemType == 0){
             ((ViewHolder)holder).title.setText(userWhoSentRequest);
             ((ViewHolder)holder).txtTimeAndDate.setText(time);
-            Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder) holder).icon);
+            if(!uri.toString().equals(""))
+                Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder) holder).icon);
             ((ViewHolder)holder).buttonConfirm.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm"));
             ((ViewHolder)holder).buttonDelete.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete"));
         }else if(itemType == 1){
             ((ViewHolder2)holder).textNotification.setText(userWhoSentRequest + " ha accettato la tua richiesta");
             ((ViewHolder2)holder).txtTimeAndDate.setText(time);
-            Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder2) holder).icon);
+            if(!uri.toString().equals(""))
+                Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder2) holder).icon);
         }
     }
 
