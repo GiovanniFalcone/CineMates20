@@ -166,7 +166,6 @@ public class MovieCardPresenter {
 
         //set the backdrop into movie card
         movieCardFragment.setHeader(getBackdrop());
-        //movieCardFragment.setHeader("http://image.tmdb.org/t/p/original" + movieCardFragment.getImageURL());
 
         //Get cast of current movie and show it
         List<String> urls = getCast();
@@ -196,7 +195,7 @@ public class MovieCardPresenter {
             for(int i = 0; i < idPerson.size(); i++) {
                 List<Artwork> resultImg = api.getPeople().getPersonImages(idPerson.get(i));
                 Artwork artwork = resultImg.get(0);
-                urlPerson.add("http://image.tmdb.org/t/p/original" + artwork.getFilePath());
+                urlPerson.add("http://image.tmdb.org/t/p/w300" + artwork.getFilePath());
             }
         });
 
@@ -223,10 +222,7 @@ public class MovieCardPresenter {
 
             MovieImages res = api.getMovies().getImages(movieCardFragment.getIdMovie(), "");
             backdrop.set("http://image.tmdb.org/t/p/original" + res.getBackdrops().get(0).getFilePath());
-            for(int i = 0; i < res.getPosters().size(); i++)
-                Log.d("ktm", "http://image.tmdb.org/t/p/original" + res.getBackdrops().get(i).getFilePath());
-                //backdrop.set("http://image.tmdb.org/t/p/original" + res.getPosters().get(i).getFilePath());
-        });
+            });
 
         //Waits for the computation to complete, and then retrieves its result.
         try {

@@ -84,7 +84,6 @@ public class MovieCardFragment extends Fragment{
         imageButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
 
         titleMovie.setText(title);
-        //Utils.putImage(requireContext(), url, poster);
         overviewMovie.setText(overview);
         ratingBar.setRating(valutation);
 

@@ -13,13 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
 import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Review;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -65,8 +66,12 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
 
         UserDAO userDAO = new UserDAO_Firestore(context.getApplicationContext());
         Uri uri = userDAO.getImageUri(authorReview.getAuthor());
-        if(uri != null){
-            Picasso.get().load(uri).transform(new CircleTransform()).into(holder.propic);
+        if(!uri.toString().equals("")){
+            Glide.with(context.getApplicationContext())
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CircleCrop())
+                    .into(holder.propic);
         }
 
         holder.itemView.setOnClickListener(view -> clickListener.onItemClickListener(authorList, position, view));

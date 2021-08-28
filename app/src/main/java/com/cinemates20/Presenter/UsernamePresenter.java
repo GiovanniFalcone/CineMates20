@@ -22,7 +22,7 @@ public class UsernamePresenter {
      * If it doesn't exists, save user Data into Firestore db and show the home
      */
     public void onChooseUsername(){
-        String username = usernameActivity.getUsername();
+        String username = usernameActivity.getUsername().toLowerCase();
         userDAO = new UserDAO_Firestore(usernameActivity.getApplicationContext());
         boolean isExists = userDAO.checkIfUsernameExists(username);
         usernameActivity.setErrorToNull();

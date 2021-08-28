@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/action" />
+                android:src="@drawable/ic_tmdb_logo" />
 
         </io.github.florent37.shapeofview.shapes.ArcView>
 
@@ -112,10 +112,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerReviewCast"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCast"
-            tools:listitem="@layout/cast_row" />
+            tools:listitem="@layout/cast_row"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal"/>
 
         <ImageView
             android:id="@+id/imageView4"

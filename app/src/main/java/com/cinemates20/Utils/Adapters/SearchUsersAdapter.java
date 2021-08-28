@@ -14,10 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.Model.User;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -65,8 +66,12 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
         User user = searchedUserList.get(position);
 
         holder.name.setText(user.getUsername());
-        if(user.getIcon() != null){
-            Picasso.get().load(Uri.parse(user.getIcon())).transform(new CircleTransform()).into(holder.imageView);
+        if(!user.getIcon().equals("")){
+            Glide.with(context.getApplicationContext())
+                    .load(user.getIcon())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CircleCrop())
+                    .into(holder.imageView);
         }
 
         holder.button.setBackgroundColor(Color.BLUE);

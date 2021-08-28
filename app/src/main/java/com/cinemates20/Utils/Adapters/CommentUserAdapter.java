@@ -4,8 +4,6 @@ package com.cinemates20.Utils.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
 import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
 import com.cinemates20.Utils.Utils;
-import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Locale;
 
 
 public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.ViewHolder>{
@@ -71,8 +66,12 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
 
         UserDAO userDAO = new UserDAO_Firestore(context.getApplicationContext());
         Uri uri = userDAO.getImageUri(comment.getAuthor());
-        if(uri != null){
-            Picasso.get().load(uri).transform(new CircleTransform()).into(holder.iconUser);
+        if(!uri.toString().equals("")){
+            Glide.with(context.getApplicationContext())
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CircleCrop())
+                    .into(holder.iconUser);
         }
 
         holder.txtComment.setText(comment.getTextComment());

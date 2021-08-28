@@ -20,12 +20,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.Presenter.MenuPresenter;
 import com.cinemates20.Presenter.NavigationPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
+import com.cinemates20.Utils.Adapters.NotificationAdapter;
 import com.cinemates20.Utils.Utils;
-import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class MenuFragment extends Fragment {
 
@@ -82,7 +86,11 @@ public class MenuFragment extends Fragment {
     }
 
     public void setPropic(String uri){
-        Picasso.get().load(uri).transform(new CircleTransform()).into(proPic);
+        Glide.with(requireContext().getApplicationContext())
+                .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new CircleCrop())
+                .into(proPic);
     }
 
     public Uri getImageUri(){

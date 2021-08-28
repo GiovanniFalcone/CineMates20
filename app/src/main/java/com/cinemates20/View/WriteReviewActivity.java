@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,7 +35,9 @@ public class WriteReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
+
         writeReviewPresenter = new WriteReviewPresenter(this);
+
         titleMovie = findViewById(R.id.movieTitle);
         overviewMovie = findViewById(R.id.movieOverview);
         poster = findViewById(R.id.moviePoster);
@@ -45,13 +49,31 @@ public class WriteReviewActivity extends AppCompatActivity {
         overview = getIntent().getStringExtra("MovieOverview");
 
         titleMovie.setText(title);
-        //Utils.putImage(WriteReviewActivity.this, url, poster);
         Glide.with(WriteReviewActivity.this.getApplicationContext())
                 .load("http://image.tmdb.org/t/p/original"+ url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
-        //overviewMovie.setText(overview);
+
         Button buttonConfirmReview = findViewById(R.id.button2);
+        buttonConfirmReview.setEnabled(false);
+
+        textBoxReview.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                buttonConfirmReview.setEnabled(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(textBoxReview.getText().toString().isEmpty())
+                    buttonConfirmReview.setEnabled(false);
+            }
+        });
 
         buttonConfirmReview.setOnClickListener(view -> writeReviewPresenter.clickAddReview());
     }

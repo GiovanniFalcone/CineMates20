@@ -9,9 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -38,7 +41,7 @@ public class ReviewCardActivity extends AppCompatActivity {
 
     private int flag = 0;
     private ImageView buttonBack, buttonReportMenu;
-    private FloatingActionButton buttonLike, buttonDislike, buttonLove, buttonClapping, buttonGrrr;
+    private FloatingActionButton buttonLike, buttonDislike, buttonLove, buttonClapping, buttonGrrr, buttonSend;
     private TextView nameAuthorView, reviewView;
     private Button numberReactionView;
     private EditText writeComment;
@@ -66,6 +69,7 @@ public class ReviewCardActivity extends AppCompatActivity {
         buttonLove = findViewById(id.loveButton);
         buttonClapping = findViewById(id.clappingButton);
         buttonGrrr = findViewById(id.grrButton);
+        buttonSend = findViewById(id.sendComment);
         nameAuthorView = findViewById(id.authorEditText);
         reviewView = findViewById(id.textReviewAuthor);
         numberReactionView = findViewById(id.seeAllReaction);
@@ -186,14 +190,32 @@ public class ReviewCardActivity extends AppCompatActivity {
         numberReactionView.setOnClickListener(view ->
                 reviewCardPresenter.onClickNumberReactions());
 
-        writeComment.setOnEditorActionListener((textView, i, keyEvent) -> {
+        buttonSend.setEnabled(false);
+        writeComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                buttonSend.setEnabled(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(writeComment.getText().toString().isEmpty())
+                    buttonSend.setEnabled(false);
+
+            }
+        });
+        buttonSend.setOnClickListener(view -> {
             writeCommentPresenter.clickAddComment(String.valueOf(writeComment.getText()));
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(writeComment.getWindowToken(), 0);
             writeComment.setFocusable(false);
             writeComment.setFocusableInTouchMode(true);
             writeComment.getText().clear();
-            return true;
         });
     }
 

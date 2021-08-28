@@ -15,11 +15,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
 import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 
@@ -70,7 +72,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         holder.button.setBackgroundColor(Color.GREEN);
 
         if(!uri.toString().equals(""))
-            Picasso.get().load(uri).transform(new CircleTransform()).into(holder.icon);
+            Glide.with(context.getApplicationContext())
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CircleCrop())
+                    .into(holder.icon);
 
         holder.button.setOnClickListener(view -> {
             Toast.makeText(view.getContext(), "Amicizia con " + user + " cancellata",

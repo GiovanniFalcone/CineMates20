@@ -178,23 +178,37 @@
                         tools:listitem="@layout/comment_user_row" />
 
                     <EditText
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="@color/white"
-                        android:background="@drawable/edit_text_bg"
                         android:id="@+id/editTextScriviCommento"
                         android:layout_width="match_parent"
-                        android:layout_height="42dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="15dp"
-                        android:ems="10"
-                        android:hint="@string/scrivi_un_commento"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="80dp"
+                        android:background="@color/white"
+                        android:hint="Write comment"
                         android:inputType="textMultiLine"
+                        android:lines="2"
+                        android:gravity="top"
+                        android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
+                        android:scrollHorizontally="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+                        app:layout_constraintTop_toBottomOf="@+id/recyclerView"/>
 
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/sendComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                        app:borderWidth="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/editTextScriviCommento" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

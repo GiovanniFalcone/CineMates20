@@ -23,7 +23,7 @@ public class SignupPresenter {
     }
 
     public void onClickSignUp()  {
-        String username = signupTabFragment.getUsername();
+        String username = signupTabFragment.getUsername().toLowerCase();
         String mail = signupTabFragment.getEmail();
         String psw = signupTabFragment.getPassword();
         String confirmPsw = signupTabFragment.getConfirmPsw();

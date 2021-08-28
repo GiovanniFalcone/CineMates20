@@ -2,7 +2,6 @@ package com.cinemates20.Utils.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +12,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
 import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Notification;
 import com.cinemates20.R;
-import com.cinemates20.Utils.CircleTransform;
 import com.cinemates20.Utils.Utils;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Objects;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -103,14 +102,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((ViewHolder)holder).title.setText(userWhoSentRequest);
             ((ViewHolder)holder).txtTimeAndDate.setText(time);
             if(!uri.toString().equals(""))
-                Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder) holder).icon);
+                Glide.with(context.getApplicationContext())
+                        .load(uri)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .transform(new CircleCrop())
+                        .into(((ViewHolder)holder).icon);
             ((ViewHolder)holder).buttonConfirm.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm"));
             ((ViewHolder)holder).buttonDelete.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete"));
         }else if(itemType == 1){
             ((ViewHolder2)holder).textNotification.setText(userWhoSentRequest + " ha accettato la tua richiesta");
             ((ViewHolder2)holder).txtTimeAndDate.setText(time);
             if(!uri.toString().equals(""))
-                Picasso.get().load(uri).transform(new CircleTransform()).into(((ViewHolder2) holder).icon);
+                Glide.with(context.getApplicationContext())
+                        .load(uri)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .transform(new CircleCrop())
+                        .into(((ViewHolder2)holder).icon);
         }
     }
 

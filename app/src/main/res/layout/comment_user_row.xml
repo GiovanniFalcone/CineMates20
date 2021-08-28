@@ -18,15 +18,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/userPropic"
+            <io.github.florent37.shapeofview.shapes.CircleView
+                android:id="@+id/userPropicCircle"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:background="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/userPropic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/default_icon" />
+
+            </io.github.florent37.shapeofview.shapes.CircleView>
 
             <TextView
                 android:id="@+id/txtName"
@@ -36,9 +44,9 @@
                 android:text="CommentAuthorName"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/option"
                 app:layout_constraintHorizontal_bias="0.059"
-                app:layout_constraintStart_toEndOf="@+id/userPropic"
+                app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -58,14 +66,15 @@
 
             <TextView
                 android:id="@+id/txtComment"
-                android:layout_width="240dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="5dp"
                 android:text="CommentText"
+                android:layout_marginStart="75dp"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/userPropic"
+                app:layout_constraintEnd_toStartOf="@+id/option"
+                app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
             <TextView
@@ -75,7 +84,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:text="date"
-                app:layout_constraintStart_toEndOf="@+id/userPropic"
+                app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtComment" />
 
 
