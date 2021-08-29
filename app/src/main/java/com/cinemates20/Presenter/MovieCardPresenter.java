@@ -76,22 +76,10 @@ public class MovieCardPresenter {
     }
 
     /**
-     * Add the movie to the clicked list
-     * @param listName - the name of the list in which to insert the film
-     */
-    public void onClickAddMovieToList(String listName) {
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        String idMovie = String.valueOf(movieCardFragment.getIdMovie());
-
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
-        userDAO.addMovieToList(currentUser, listName, idMovie);
-    }
-
-    /**
-     * Open a dialog which contain all custom list of the user
+     * Open a dialog which contain all list of the user
      * except the list that already contain the current movie
      */
-    public void onClickAddMovieToCustomList() {
+    public void onClickAddMovieToList() {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
 
@@ -103,8 +91,6 @@ public class MovieCardPresenter {
         List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
 
         //remove from the list all lists that already contains the current movie
-        allCustomLists.remove("Watch List");
-        allCustomLists.remove("Favorite List");
         allCustomLists.removeAll(nameList);
         String[] customLists = allCustomLists.toArray(new String[0]);
 
@@ -120,6 +106,7 @@ public class MovieCardPresenter {
             })
                     .setPositiveButton("Aggiungi", (dialogInterface, i) -> {
                         userDAO.addMovieToList(currentUser, customLists[selected.get()], idMovie);
+                        movieCardFragment.setFlag(true);
                         dialogInterface.dismiss();
                         Utils.showDialog(movieCardFragment.getFragmentContext(), "Fatto!", "Film aggiunto correttamente alla lista");
                     })
@@ -140,29 +127,12 @@ public class MovieCardPresenter {
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
 
         /*
-         * Check in which list is saved the current movie and set the flag in order to show the correct
-         * menu for adding/remove into/from the lists.
+         * Check if the movie is saved in at least one list. If it is true enable button to remove it eventually.
          * Then get the cast of current movie.
          */
         UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
         List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
-
-        Boolean[] flag = new Boolean[] {false, false, false};
-        
-        if(!nameList.isEmpty()){
-            for(int i = 0; i < nameList.size(); i++){
-                if(nameList.get(i).equals("Favorite List")) {
-                    flag[0] = true;
-                    movieCardFragment.setFlag(flag);
-                } else if(nameList.get(i).equals("Watch List")){
-                    flag[1] = true;
-                    movieCardFragment.setFlag(flag);
-                } else {
-                    flag[2] = true;
-                    movieCardFragment.setFlag(flag);
-                }
-            }
-        }
+        movieCardFragment.setFlag(!nameList.isEmpty());
 
         //set the backdrop into movie card
         movieCardFragment.setHeader(getBackdrop());
@@ -234,23 +204,12 @@ public class MovieCardPresenter {
         return backdrop.get();
     }
 
-    /**
-     * Remove the movie from clicked list
-     * @param listName - the name of the list to remove the movie from
-     */
-    public void onClickRemoveFromList(String listName) {
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        String idMovie = String.valueOf(movieCardFragment.getIdMovie());
-
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
-        userDAO.removeMovieFromList(idMovie, listName, currentUser);
-    }
 
     /**
-     * Open a dialog which contain all custom list of the user
+     * Open a dialog which contain all list of the user
      * that contains the current movie in order to remove it
      */
-    public void onClickRemoveMovieFromCustomList() {
+    public void onClickRemoveMovieFromList() {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
 
@@ -258,10 +217,6 @@ public class MovieCardPresenter {
 
         //get all list that contains the current movie
         List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
-
-        //remove from the list all lists that already contains the current movie
-        nameList.remove("Watch List");
-        nameList.remove("Favorite List");
 
         nameList.toArray(new String[0]);
 
@@ -272,9 +227,9 @@ public class MovieCardPresenter {
         builder.setSingleChoiceItems(nameList.toArray(new String[0]), 0, (dialogInterface, i) -> selected.set(i))
                 .setPositiveButton("Rimuovi", (dialogInterface, i) -> {
                     userDAO.removeMovieFromList(idMovie, nameList.toArray(new String[0])[selected.get()], currentUser);
+                    movieCardFragment.setFlag(nameList.size() - 1 != 0);
                     dialogInterface.dismiss();
                     Utils.showDialog(movieCardFragment.getFragmentContext(), "Fatto!", "Film eliminato correttamente dalla lista");
-
                 })
                 .setNegativeButton("Annulla", (dialogInterface, i) ->
                         dialogInterface.dismiss())

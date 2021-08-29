@@ -34,11 +34,6 @@ public class NavigationActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
 
         UserDAO_Firestore userDAO = new UserDAO_Firestore(getApplicationContext());

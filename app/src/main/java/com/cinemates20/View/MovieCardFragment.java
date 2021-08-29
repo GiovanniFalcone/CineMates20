@@ -34,6 +34,7 @@ import com.cinemates20.Presenter.MovieCardPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.CastAdapter;
 import com.cinemates20.Utils.Adapters.ReviewUserAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ import java.util.List;
 
 public class MovieCardFragment extends Fragment{
 
-    private ImageView poster, background, imageButton;
+    private ImageView background, imageButton;
     private TextView titleMovie, overviewMovie;
     private RatingBar ratingBar;
     private MovieCardPresenter movieCardPresenter;
@@ -52,7 +53,8 @@ public class MovieCardFragment extends Fragment{
     private int idMovie;
     private float valutation;
     private RecyclerView recyclerViewReview, recyclerViewCast;
-    private Boolean [] flag = new Boolean[] {false, false, false};
+    private boolean flag;
+    private FloatingActionButton buttonAddToList, buttonRemoveFromList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +70,7 @@ public class MovieCardFragment extends Fragment{
         overview = requireArguments().getString("MovieOverview");
         valutation = requireArguments().getFloat("MovieRating", 3f);
 
-        //poster = view.findViewById(R.id.moviePoster);
+
         background = view.findViewById(R.id.background);
         titleMovie = view.findViewById(R.id.movieTitle);
         overviewMovie = view.findViewById(R.id.movieOverview);
@@ -76,8 +78,8 @@ public class MovieCardFragment extends Fragment{
         recyclerViewReview = view.findViewById(R.id.recyclerReview);
         recyclerViewCast = view.findViewById(R.id.recyclerReviewCast);
         imageButton = view.findViewById(R.id.imageView4);
-
-        setHasOptionsMenu(true);
+        buttonAddToList = view.findViewById(R.id.buttonAddToList);
+        buttonRemoveFromList = view.findViewById(R.id.buttonRemoveFromList);
 
         movieCardPresenter.setMovieCard();
 
@@ -86,6 +88,9 @@ public class MovieCardFragment extends Fragment{
         titleMovie.setText(title);
         overviewMovie.setText(overview);
         ratingBar.setRating(valutation);
+
+        buttonAddToList.setOnClickListener(view1 -> movieCardPresenter.onClickAddMovieToList());
+        buttonRemoveFromList.setOnClickListener(view12 -> movieCardPresenter.onClickRemoveMovieFromList());
 
         return view;
     }
@@ -144,54 +149,13 @@ public class MovieCardFragment extends Fragment{
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu);
-        menu.getItem(0).setVisible(!flag[0]);
-        menu.getItem(1).setVisible(flag[0]);
-
-        menu.getItem(2).setVisible(!flag[1]);
-        menu.getItem(3).setVisible(flag[1]);
-
-        menu.getItem(5).setVisible(flag[2]);
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case R.id.addToFavorite:
-                movieCardPresenter.onClickAddMovieToList("Favorite List");
-                break;
-            case R.id.addToWatch:
-                movieCardPresenter.onClickAddMovieToList("Watch List");
-                break;
-            case R.id.addToCustom:
-                movieCardPresenter.onClickAddMovieToCustomList();
-                break;
-            case R.id.removeFromFavorite:
-                movieCardPresenter.onClickRemoveFromList("Favorite List");
-                break;
-            case R.id.removeFromWatch:
-                movieCardPresenter.onClickRemoveFromList("Watch List");
-                break;
-            case R.id.removeFromCustom:
-                movieCardPresenter.onClickRemoveMovieFromCustomList();
-                break;
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
-
-    public void setFlag(Boolean [] flag){
-        this.flag = flag;
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
     }
 
-
+    public void setFlag(boolean value){
+        flag = value;
+        buttonRemoveFromList.setEnabled(flag);
+    }
     
 }
