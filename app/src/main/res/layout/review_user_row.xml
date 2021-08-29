@@ -7,15 +7,18 @@
     android:layout_height="match_parent">
 <!-- -->
     <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardElevation="1dp"
+        app:cardElevation="0dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:fontFamily="@font/nexa_bold"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -42,14 +46,18 @@
                 android:layout_marginEnd="10dp"
                 android:background="@android:color/transparent"
                 android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
                 app:borderWidth="0dp"
                 app:elevation="0dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:state_pressed="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:pressedTranslationZ="0dp"
-                app:tint="@color/gold" />
+                app:tint="@color/black" />
 
 
             <io.github.florent37.shapeofview.shapes.CircleView

@@ -75,7 +75,7 @@ public class HomePresenter extends AsyncTask<Void, Void, Triple<List<MovieDb>, L
         args.putString("MovieTitle", movieDbList.get(position).getTitle());
         args.putString("MovieUrl", movieDbList.get(position).getPosterPath());
         args.putString("MovieOverview", movieDbList.get(position).getOverview());
-        args.putFloat("MovieRating", movieDbList.get(position).getVoteAverage()/2);
+        args.putFloat("MovieRating", movieDbList.get(position).getVoteAverage());
         movieCardFragment.setArguments(args);
         Utils.changeFragment(homeFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
     }

@@ -61,8 +61,6 @@ public class ReviewUserAdapter extends RecyclerView.Adapter<ReviewUserAdapter.Vi
         Review authorReview = authorList.get(position);
 
         holder.title.setText(authorReview.getAuthor());
-        holder.title.setTextColor(ContextCompat.getColor(context, R.color.white));
-
 
         UserDAO userDAO = new UserDAO_Firestore(context.getApplicationContext());
         Uri uri = userDAO.getImageUri(authorReview.getAuthor());

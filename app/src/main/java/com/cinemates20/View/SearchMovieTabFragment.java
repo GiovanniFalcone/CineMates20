@@ -154,7 +154,7 @@ public class SearchMovieTabFragment extends Fragment {
             args.putString("MovieTitle", filteredMovie.getTitle());
             args.putString("MovieUrl", filteredMovie.getPosterPath());
             args.putString("MovieOverview", filteredMovie.getOverview());
-            args.putFloat("MovieRating", filteredMovie.getVoteAverage()/2);
+            args.putFloat("MovieRating", filteredMovie.getVoteAverage());
             movieCardFragment.setArguments(args);
             Utils.changeFragment(this, movieCardFragment, R.id.nav_host_fragment_activity_main);
         });

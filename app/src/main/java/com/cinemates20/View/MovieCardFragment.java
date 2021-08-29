@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -45,9 +46,9 @@ import java.util.List;
 
 public class MovieCardFragment extends Fragment{
 
-    private ImageView background, imageButton;
-    private TextView titleMovie, overviewMovie;
-    private RatingBar ratingBar;
+    private ImageView background;
+    private Button writeReviewButton;
+    private TextView titleMovie, overviewMovie, valutationText;
     private MovieCardPresenter movieCardPresenter;
     private String title, url, overview;
     private int idMovie;
@@ -74,20 +75,20 @@ public class MovieCardFragment extends Fragment{
         background = view.findViewById(R.id.background);
         titleMovie = view.findViewById(R.id.movieTitle);
         overviewMovie = view.findViewById(R.id.movieOverview);
-        ratingBar = view.findViewById(R.id.valutation);
+        valutationText = view.findViewById(R.id.valutation);
         recyclerViewReview = view.findViewById(R.id.recyclerReview);
         recyclerViewCast = view.findViewById(R.id.recyclerReviewCast);
-        imageButton = view.findViewById(R.id.imageView4);
+        writeReviewButton = view.findViewById(R.id.imageView4);
         buttonAddToList = view.findViewById(R.id.buttonAddToList);
         buttonRemoveFromList = view.findViewById(R.id.buttonRemoveFromList);
 
         movieCardPresenter.setMovieCard();
 
-        imageButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
+        writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
 
         titleMovie.setText(title);
         overviewMovie.setText(overview);
-        ratingBar.setRating(valutation);
+        valutationText.setText(String.valueOf(valutation));
 
         buttonAddToList.setOnClickListener(view1 -> movieCardPresenter.onClickAddMovieToList());
         buttonRemoveFromList.setOnClickListener(view12 -> movieCardPresenter.onClickRemoveMovieFromList());
