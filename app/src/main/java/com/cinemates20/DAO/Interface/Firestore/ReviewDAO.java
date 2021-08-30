@@ -9,7 +9,7 @@ public interface ReviewDAO {
 
     void saveReview(String username, String text, int idMovie, String titleMovie);
 
-    void getUserReviewByMovie(String titleMovie);
+    List<Review> getUserReviewByMovie(String titleMovie);
 
     Review getReviewByAuthor(String author, String titleMovie);
 

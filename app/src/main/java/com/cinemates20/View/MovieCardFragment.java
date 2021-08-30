@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +31,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.cinemates20.Model.Review;
 import com.cinemates20.Presenter.MovieCardPresenter;
 import com.cinemates20.R;
@@ -120,9 +124,19 @@ public class MovieCardFragment extends Fragment{
 
     public void setHeader(String url){
         Glide.with(requireContext())
+                .asBitmap()
                 .load(url)
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(background);
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        background.setImageBitmap(resource);
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
     }
 
     public void setRecycler(List<Review> authorList) {

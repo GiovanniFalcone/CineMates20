@@ -135,7 +135,7 @@ public class MovieCardPresenter {
         movieCardFragment.setFlag(!nameList.isEmpty());
 
         //set the backdrop into movie card
-        movieCardFragment.setHeader(getBackdrop());
+        getBackdrop();
 
         //Get cast of current movie and show it
         List<String> urls = getCast();
@@ -183,25 +183,17 @@ public class MovieCardPresenter {
      * This method will return the landscape poster of current movie
      * @return the backdrop poster
      */
-    public String getBackdrop(){
+    public void getBackdrop(){
         AtomicReference<String> backdrop = new AtomicReference<>();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<?> future = executorService.submit(() -> {
+        executorService.execute(() -> {
             TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-
             MovieImages res = api.getMovies().getImages(movieCardFragment.getIdMovie(), "");
             backdrop.set("http://image.tmdb.org/t/p/original" + res.getBackdrops().get(0).getFilePath());
-            });
-
-        //Waits for the computation to complete, and then retrieves its result.
-        try {
-            future.get();
-        }catch (InterruptedException | ExecutionException e){
-            e.printStackTrace();
-        }
-
-        return backdrop.get();
+            movieCardFragment.setHeader(backdrop.get());
+        });
+        executorService.shutdown();
     }
 
 
@@ -241,12 +233,7 @@ public class MovieCardPresenter {
      */
     public void setUserReviewByMovie() {
         reviewDAO = new ReviewDAO_Firestore(movieCardFragment.getContext());
-        reviewDAO.getUserReviewByMovie(movieCardFragment.getMovieTitle());
-        reviewDAO.setReviewCallback(new ReviewCallback() {
-            @Override
-            public void setAuthorList(List<Review> listAuthor) {
-                movieCardFragment.setRecycler(listAuthor);
-            }
-        });
+        List<Review> listAuthor = reviewDAO.getUserReviewByMovie(movieCardFragment.getMovieTitle());
+        movieCardFragment.setRecycler(listAuthor);
     }
 }

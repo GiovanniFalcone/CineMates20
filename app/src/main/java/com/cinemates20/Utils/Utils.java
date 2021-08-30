@@ -62,6 +62,7 @@ public class Utils {
         currentFragment.requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top)
                 .replace(idLayout, newFragment)
                 .addToBackStack(null)
                 .commit();

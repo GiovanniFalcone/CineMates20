@@ -3,14 +3,11 @@ package com.cinemates20.DAO.Implements;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.cinemates20.DAO.Interface.Callbacks.ReviewCallback;
 import com.cinemates20.DAO.Interface.Firestore.ReviewDAO;
 import com.cinemates20.Model.Review;
 import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -71,27 +68,23 @@ public class ReviewDAO_Firestore implements ReviewDAO {
     }
 
     @Override
-    public void getUserReviewByMovie(String titleMovie) {
+    public List<Review> getUserReviewByMovie(String titleMovie) {
         List<Review> listAuthor = new ArrayList<>();
-
-        db.collection("reviews")
+        Task<QuerySnapshot> task = db.collection("reviews")
                 .whereEqualTo("titleMovie", titleMovie)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                Log.d("ReviewDao", document.getId() + " => " + document.getData());
-                                Review author = document.toObject(Review.class);
-                                listAuthor.add(author);
-                            }
-                        } else {
-                            Log.d("ReviewDao", "Error getting documents: ", task.getException());
-                        }
-                        reviewCallback.setAuthorList(listAuthor);
-                    }
-                });
+                .addOnCompleteListener(task1 -> { });
+        Utils.waitTask(task);
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                Log.d("ReviewDao", document.getId() + " => " + document.getData());
+                Review author = document.toObject(Review.class);
+                listAuthor.add(author);
+            }
+        } else {
+            Log.d("ReviewDao", "Error getting documents: ", task.getException());
+        }
+        return listAuthor;
     }
 
     @Override
