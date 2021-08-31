@@ -3,6 +3,7 @@ package com.cinemates20.Utils.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.cinemates20.DAO.Implements.UserDAO_Firestore;
+import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.User;
 import com.cinemates20.R;
 
@@ -64,11 +67,19 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
     @Override
     public void onBindViewHolder(@NonNull SearchUsersAdapter.ViewHolder holder, int position) {
         User user = searchedUserList.get(position);
-
         holder.name.setText(user.getUsername());
-        if(!user.getIcon().equals("")){
-            Glide.with(context.getApplicationContext())
+        if(user.getIcon()!=null){
+            if(!user.getIcon().equals("")){
+                Glide.with(context.getApplicationContext())
                     .load(user.getIcon())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(new CircleCrop())
+                    .into(holder.imageView);
+            }
+        }else{
+            UserDAO userDAO = new UserDAO_Firestore(context);
+            Glide.with(context.getApplicationContext())
+                    .load(userDAO.getImageUri(user.getUsername()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new CircleCrop())
                     .into(holder.imageView);

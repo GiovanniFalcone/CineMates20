@@ -33,7 +33,7 @@ public class UsersReactionPresenter {
         String id = usersReactionsFragment.getIdReview();
         int index = usersReactionsFragment.getIndexTab();
 
-        switch (index){
+        switch (index) {
             case 0:
                 userList = reviewDAO.getListNumberReactions("like", id);
                 break;
@@ -50,7 +50,6 @@ public class UsersReactionPresenter {
                 userList = reviewDAO.getListNumberReactions("grrr", id);
                 break;
         }
-
         usersReactionsFragment.setRecycler(userList);
     }
 

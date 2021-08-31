@@ -101,6 +101,12 @@ public class MovieCardFragment extends Fragment{
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        //movieCardPresenter.setUserReviewByMovie();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         movieCardPresenter.setUserReviewByMovie();

@@ -58,7 +58,7 @@ public class Review {
     }
 
     public Date getDateAndTime() {
-        return dateAndTime;
+        return (Date)dateAndTime.clone();
     }
 
     public void setDateAndTime(Date dateAndTime) {

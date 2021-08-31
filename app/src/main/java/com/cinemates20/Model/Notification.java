@@ -9,7 +9,7 @@ public class Notification {
     private String userWhoReceived, userWhoSent;
 
     public Date getDateAndTime() {
-        return dateAndTime;
+        return (Date)dateAndTime.clone();
     }
 
     public void setDateAndTime(Date dateAndTime) {
