@@ -20,7 +20,9 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity android:name="com.cinemates20.View.UsernameActivity" />
-        <activity android:name="com.cinemates20.View.ReviewCardActivity" />
+        <activity
+            android:name="com.cinemates20.View.ReviewCardActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name="com.cinemates20.View.WriteReviewActivity" />
         <activity android:name="com.cinemates20.FacebookActivity" />
         <activity
