@@ -6,41 +6,35 @@
     android:layout_width= "match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false">
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <io.github.florent37.shapeofview.shapes.CircleView
                 android:id="@+id/userPropicCircle"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
                 <ImageView
                     android:id="@+id/userPropic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/default_icon" />
-
             </io.github.florent37.shapeofview.shapes.CircleView>
-
             <TextView
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:text="CommentAuthorName"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -48,7 +42,6 @@
                 app:layout_constraintHorizontal_bias="0.059"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/option"
                 android:layout_width="wrap_content"
@@ -63,7 +56,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_baseline_menu_24" />
-
             <TextView
                 android:id="@+id/txtComment"
                 android:layout_width="match_parent"
@@ -76,7 +68,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/option"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtName" />
-
             <TextView
                 android:id="@+id/txtDateComment"
                 android:layout_width="wrap_content"
@@ -87,8 +78,6 @@
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtComment" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 </LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.1"
         android:orientation="vertical"
-        app:cardBackgroundColor="@color/gold"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +22,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/gold">
 
             <ImageView
                 android:id="@+id/userPropic"
@@ -47,10 +48,11 @@
                 android:background="@drawable/edit_text_bg"
                 android:backgroundTint="@color/white"
                 android:hint="Write a comment..."
-                android:inputType="textMultiLine"
+                android:inputType="textCapSentences|textMultiLine"
                 android:lines="2"
-                android:paddingLeft="15dp"
-                android:paddingTop="3dp"
+                android:maxLines="4"
+                android:paddingStart="18dp"
+                android:paddingEnd="15dp"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:scrollHorizontally="false"
@@ -58,8 +60,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@id/userPropic"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.526" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendComment"
@@ -80,11 +81,9 @@
     </androidx.cardview.widget.CardView>
 
     <ScrollView
-        android:paddingBottom="16dp"
         android:id="@+id/scrollView"
-        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -188,7 +187,7 @@
                 android:background="@drawable/button_bg"
                 android:text="@string/visualizza_numero_reazioni"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/likeButton" />
+                app:layout_constraintTop_toBottomOf="@+id/cardViewReaction" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -203,68 +202,99 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/authorEditText" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/grrButton"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewReaction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/clappingButton"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/ic_angry" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/clappingButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/loveButton"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/ic_clapping" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/loveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/dislikeButton"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/ic_heart" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/dislikeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:backgroundTint="@color/white"
-                app:layout_constraintStart_toEndOf="@+id/likeButton"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/ic_baseline_thumb_down_24" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/likeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-
-                app:backgroundTint="@color/white"
+                android:layout_marginTop="5dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
+                app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/grrButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="5dp"
+                        app:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/clappingButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_angry" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/clappingButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/loveButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_clapping" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/loveButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/dislikeButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_heart" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/dislikeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/likeButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_baseline_thumb_down_24" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/likeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:backgroundTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
                 android:padding="15dp"
                 android:text="@string/commenti_degli_amici"
                 android:textColor="@color/black"

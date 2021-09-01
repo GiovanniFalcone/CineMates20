@@ -57,11 +57,12 @@
         <entry key="..\:/Users/falco/Downloads/CineMates20_v1_3.0+1.0/app/src/main/res/layout/search_recycler_row.xml" value="0.14221014492753623" />
         <entry key="..\:/Users/falco/Downloads/CineMates20_v1_3.0+1.0/app/src/main/res/layout/search_user_row.xml" value="0.17255434782608695" />
         <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.2203125" />
-        <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/activity_review_card.xml" value="0.33" />
+        <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/activity_review_card.xml" value="0.28887251289609434" />
         <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/activity_username.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/comment_user_row.xml" value="0.13994565217391305" />
         <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/fragment_feed.xml" value="0.1" />
         <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/my_review_user_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/franc/Desktop/CineMates20/app/src/main/res/layout/notify_friend_request.xml" value="0.33" />
       </map>
     </option>
   </component>
