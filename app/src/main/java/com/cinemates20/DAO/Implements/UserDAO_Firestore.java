@@ -220,6 +220,43 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
     }
 
     @Override
+    public List<String> getMovieListsNameByUser(String currentUser) {
+        Task<QuerySnapshot> task = collectionReference
+                .whereEqualTo("email", currentUser)
+                .get()
+                .addOnCompleteListener(task1 -> {});
+
+        Utils.waitTask(task);
+
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot doc : Objects.requireNonNull(task.getResult())) {
+                user = doc.toObject(User.class);
+            }
+        } else {
+            Log.d("UserDAO", "Error getting documents: ", task.getException());
+        }
+
+        return user.getMovieLists();
+    }
+
+    @Override
+    public void addCustomList(String nameList, String currentUser) {
+        collectionReference
+                .whereEqualTo("email", currentUser)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())) {
+                            String idUserDocument = documentSnapshot.getId();
+                            collectionReference
+                                    .document(idUserDocument)
+                                    .update("movieLists", FieldValue.arrayUnion(nameList));
+                        }
+                    }
+                });
+    }
+
+    @Override
     public void removeRequestSent(String currentUser, String userWhoReceivedRequest) {
         //Remove from the request table of the user that received the request
         //get IdDocument of the user who received the friendship request
@@ -317,155 +354,6 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
         return listUsername;
     }
 
-    @Override
-    public void addMovieToList(String currentUser, String listName, String idMovie) {
-        //Create subcollection
-        Map<String, Object> map = new HashMap<>();
-        map.put("idMovie", idMovie);
-        map.put("DateAndTime", new Timestamp(new Date()));
-        map.put("listName", listName);
-
-        collectionReference
-                .whereEqualTo("email", currentUser)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())){
-                            String idUserDocument = documentSnapshot.getId();
-                            collectionReference
-                                    .document(idUserDocument)
-                                    .collection("Movie Lists")
-                                    .document()
-                                    .set(map);
-                        }
-                    }else
-                        Log.d("UserDAO", "Error getting documents: ", task.getException());
-                });
-    }
-
-    @Override
-    public List<String> getMovieListsNameByUser(String currentUser) {
-        Task <QuerySnapshot> task = collectionReference
-                .whereEqualTo("email", currentUser)
-                .get()
-                .addOnCompleteListener(task1 -> {});
-
-        Utils.waitTask(task);
-
-        if (task.isSuccessful()) {
-            for (QueryDocumentSnapshot doc : Objects.requireNonNull(task.getResult())) {
-                user = doc.toObject(User.class);
-            }
-        } else {
-            Log.d("UserDAO", "Error getting documents: ", task.getException());
-        }
-
-        return user.getMovieLists();
-    }
-
-    @Override
-    public List<Integer> getMoviesByList(String clickedList, String currentUser) {
-        String idUserDocument = getUserIdDocument();
-        List<Integer> moviesList = new ArrayList<>();
-
-        Task <QuerySnapshot> taskSubCollection = collectionReference
-                .document(idUserDocument)
-                .collection("Movie Lists")
-                .whereEqualTo("listName", clickedList)
-                .get()
-                .addOnCompleteListener(task2 -> {});
-
-        Utils.waitTask(taskSubCollection);
-
-        if (taskSubCollection.isSuccessful()) {
-            for (QueryDocumentSnapshot doc2 : Objects.requireNonNull(taskSubCollection.getResult())) {
-                moviesList.add(Integer.parseInt(Objects.requireNonNull(doc2.getString("idMovie"))));
-            }
-        } else {
-            Log.d("UserDAO", "Error getting documents: ", taskSubCollection.getException());
-        }
-
-        return moviesList;
-    }
-
-    @Override
-    public void addCustomList(String nameList, String currentUser) {
-        collectionReference
-                .whereEqualTo("email", currentUser)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())) {
-                            String idUserDocument = documentSnapshot.getId();
-                            collectionReference
-                                    .document(idUserDocument)
-                                    .update("movieLists", FieldValue.arrayUnion(nameList));
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public List<String> getListsThatContainsCurrentMovie(String idMovie, String currentUser) {
-        String idUserDocument = getUserIdDocument();
-        List<String> nameLists = new ArrayList<>();
-
-        // Create a query against the subcollection.
-        Query queryRequest =  collectionReference
-                .document(idUserDocument)
-                .collection("Movie Lists")
-                .whereEqualTo("idMovie", idMovie);
-
-        //Get query results
-        Task<QuerySnapshot> taskSub = queryRequest.get().addOnCompleteListener(task2 -> {});
-        Utils.waitTask(taskSub);
-
-        if (taskSub.isSuccessful()) {
-            for (QueryDocumentSnapshot doc : Objects.requireNonNull(taskSub.getResult())) {
-                nameLists.add(doc.getString("listName"));
-            }
-        } else {
-            Log.d("UserDAO", "Error getting documents: ", taskSub.getException());
-        }
-
-        return nameLists;
-    }
-
-    @Override
-    public void removeMovieFromList(String idMovie, String listName, String currentUser) {
-        collectionReference
-                .whereEqualTo("email", currentUser)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        for(DocumentSnapshot doc : Objects.requireNonNull(task.getResult())){
-                            String idUserDocument = doc.getId();
-
-                            //now we search the document to delete into subcollection of currentUser
-                            collectionReference
-                                    .document(idUserDocument)
-                                    .collection("Movie Lists")
-                                    .whereEqualTo("idMovie", idMovie)
-                                    .whereEqualTo("listName", listName)
-                                    .get()
-                                    .addOnCompleteListener(task1 -> {
-                                        for(DocumentSnapshot doc1 : Objects.requireNonNull(task1.getResult())){
-                                            if(task1.isSuccessful()){
-                                                String idDocumentToDelete = doc1.getId();
-
-                                                //now we can delete the document
-                                                collectionReference
-                                                        .document(idUserDocument)
-                                                        .collection("Movie Lists")
-                                                        .document(idDocumentToDelete)
-                                                        .delete();
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
-    }
 
     @Override
     public boolean checkIfUsernameExists(String username) {

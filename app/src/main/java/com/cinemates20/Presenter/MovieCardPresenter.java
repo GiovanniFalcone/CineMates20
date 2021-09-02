@@ -1,12 +1,13 @@
 package com.cinemates20.Presenter;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 
+import com.cinemates20.DAO.Implements.MovieListDAO_Firestore;
 import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Callbacks.ReviewCallback;
+import com.cinemates20.DAO.Interface.Firestore.MovieListDAO;
+import com.cinemates20.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Review;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.MovieCardFragment;
@@ -38,10 +39,6 @@ import info.movito.themoviedbapi.model.people.PersonCast;
 public class MovieCardPresenter {
 
     private final MovieCardFragment movieCardFragment;
-    /**
-     * DA MIGLIORARE: richiamare interfaccia ReviewDAO
-     */
-    private ReviewDAO_Firestore reviewDAO;
 
     public MovieCardPresenter(MovieCardFragment movieCardFragment){
         this.movieCardFragment = movieCardFragment;
@@ -83,12 +80,13 @@ public class MovieCardPresenter {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
 
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
+        UserDAO userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
         //Get all list of user
         List<String> allCustomLists = userDAO.getMovieListsNameByUser(currentUser);
 
         //get all list that contains the current movie
-        List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
+        MovieListDAO movieListDAO = new MovieListDAO_Firestore(movieCardFragment.getContext());
+        List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
 
         //remove from the list all lists that already contains the current movie
         allCustomLists.removeAll(nameList);
@@ -98,14 +96,9 @@ public class MovieCardPresenter {
             AtomicInteger selected = new AtomicInteger();
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(movieCardFragment.getFragmentContext());
             builder.setTitle("Seleziona una lista");
-            builder.setSingleChoiceItems(customLists, 0, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    selected.set(i);
-                }
-            })
+            builder.setSingleChoiceItems(customLists, 0, (dialogInterface, i) -> selected.set(i))
                     .setPositiveButton("Aggiungi", (dialogInterface, i) -> {
-                        userDAO.addMovieToList(currentUser, customLists[selected.get()], idMovie);
+                        movieListDAO.addMovieToList(currentUser, customLists[selected.get()], idMovie);
                         movieCardFragment.setFlag(true);
                         dialogInterface.dismiss();
                         Utils.showDialog(movieCardFragment.getFragmentContext(), "Fatto!", "Film aggiunto correttamente alla lista");
@@ -125,17 +118,16 @@ public class MovieCardPresenter {
     public void setMovieCard(){
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
-
         /*
          * Check if the movie is saved in at least one list. If it is true enable button to remove it eventually.
          * Then get the cast of current movie.
          */
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
-        List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
+        MovieListDAO movieListDAO = new MovieListDAO_Firestore(movieCardFragment.getContext());
+        List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
         movieCardFragment.setFlag(!nameList.isEmpty());
 
         //set the backdrop into movie card
-        getBackdrop();
+        setBackdrop();
 
         //Get cast of current movie and show it
         List<String> urls = getCast();
@@ -180,10 +172,9 @@ public class MovieCardPresenter {
     }
 
     /**
-     * This method will return the landscape poster of current movie
-     * @return the backdrop poster
+     * This method will set the landscape poster of current movie
      */
-    public void getBackdrop(){
+    private void setBackdrop(){
         AtomicReference<String> backdrop = new AtomicReference<>();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -205,10 +196,10 @@ public class MovieCardPresenter {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String idMovie = String.valueOf(movieCardFragment.getIdMovie());
 
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieCardFragment.getContext());
+        MovieListDAO movieListDAO = new MovieListDAO_Firestore(movieCardFragment.getContext());
 
         //get all list that contains the current movie
-        List<String> nameList = userDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
+        List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
 
         nameList.toArray(new String[0]);
 
@@ -218,7 +209,7 @@ public class MovieCardPresenter {
         builder.setTitle("Seleziona una lista");
         builder.setSingleChoiceItems(nameList.toArray(new String[0]), 0, (dialogInterface, i) -> selected.set(i))
                 .setPositiveButton("Rimuovi", (dialogInterface, i) -> {
-                    userDAO.removeMovieFromList(idMovie, nameList.toArray(new String[0])[selected.get()], currentUser);
+                    movieListDAO.removeMovieFromList(idMovie, nameList.toArray(new String[0])[selected.get()], currentUser);
                     movieCardFragment.setFlag(nameList.size() - 1 != 0);
                     dialogInterface.dismiss();
                     Utils.showDialog(movieCardFragment.getFragmentContext(), "Fatto!", "Film eliminato correttamente dalla lista");
@@ -229,10 +220,10 @@ public class MovieCardPresenter {
     }
 
     /**
-     * Get all users who has written review about clicked movie and show them
+     * Set all users who has written review about clicked movie and show them
      */
     public void setUserReviewByMovie() {
-        reviewDAO = new ReviewDAO_Firestore(movieCardFragment.getContext());
+        ReviewDAO reviewDAO = new ReviewDAO_Firestore(movieCardFragment.getContext());
         List<Review> listAuthor = reviewDAO.getUserReviewByMovie(movieCardFragment.getMovieTitle());
         movieCardFragment.setRecycler(listAuthor);
     }

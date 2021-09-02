@@ -1,6 +1,7 @@
 package com.cinemates20.Presenter;
 
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
+import com.cinemates20.DAO.Implements.MovieListDAO_Firestore;
+import com.cinemates20.DAO.Interface.Firestore.MovieListDAO;
 import com.cinemates20.View.MovieListUserFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,8 +29,8 @@ public class MovieListUserPresenter {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
         String clickedList = movieListUserFragment.getClickedList();
 
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieListUserFragment.getContext());
-        List<Integer> idMoviesList = userDAO.getMoviesByList(clickedList, currentUser);
+        MovieListDAO movieListDAO = new MovieListDAO_Firestore(movieListUserFragment.getContext());
+        List<Integer> idMoviesList = movieListDAO.getMoviesByList(clickedList, currentUser);
 
         List<MovieDb> movieDbList = getMoviesOfList(idMoviesList);
 
@@ -61,8 +62,8 @@ public class MovieListUserPresenter {
 
     public void removeMovieFromList(String idMovie, String clickedList) {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(movieListUserFragment.getContext());
+        MovieListDAO movieListDAO = new MovieListDAO_Firestore(movieListUserFragment.getContext());
 
-        userDAO.removeMovieFromList(idMovie, clickedList, currentUser);
+        movieListDAO.removeMovieFromList(idMovie, clickedList, currentUser);
     }
 }
