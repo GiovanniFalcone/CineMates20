@@ -44,14 +44,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="60dp"
-                android:gravity="top"
                 android:background="@drawable/edit_text_bg"
                 android:backgroundTint="@color/white"
+                android:gravity="top"
                 android:hint="Write a comment..."
                 android:inputType="textCapSentences|textMultiLine"
                 android:lines="2"
                 android:maxLines="4"
                 android:paddingStart="18dp"
+                android:paddingTop="5dp"
                 android:paddingEnd="15dp"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
@@ -60,7 +61,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@id/userPropic"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendComment"

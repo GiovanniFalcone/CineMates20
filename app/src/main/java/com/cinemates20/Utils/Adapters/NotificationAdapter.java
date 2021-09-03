@@ -58,7 +58,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder2(View v) {
             super(v);
             textNotification = v.findViewById(R.id.txtNotification);
-            icon = v.findViewById(R.id.imageView9);
+            icon = v.findViewById(R.id.userPropic);
             txtTimeAndDate = v.findViewById(R.id.date);
         }
     }
@@ -75,7 +75,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v=null;
+        View v;
         if(viewType == 0){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.notify_friend_request, parent, false);
             v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -107,8 +107,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .transform(new CircleCrop())
                         .into(((ViewHolder)holder).icon);
-            ((ViewHolder)holder).buttonConfirm.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm"));
-            ((ViewHolder)holder).buttonDelete.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete"));
+            ((ViewHolder)holder).buttonConfirm.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm", position));
+            ((ViewHolder)holder).buttonDelete.setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete", position));
         }else if(itemType == 1){
             ((ViewHolder2)holder).textNotification.setText(userWhoSentRequest + " ha accettato la tua richiesta");
             ((ViewHolder2)holder).txtTimeAndDate.setText(time);
@@ -132,7 +132,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface ClickListener {
-        void onItemClickListener(String userWhoSentRequest, String buttonType);
+        void onItemClickListener(String userWhoSentRequest, String buttonType, int position);
     }
 
 }

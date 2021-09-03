@@ -43,6 +43,8 @@ public class ReviewCardPresenter {
         }
     }
 
+
+
     public String getId(){
         return id;
     }
@@ -72,6 +74,7 @@ public class ReviewCardPresenter {
         commentDAO = new CommentDAO_Firestore(reviewCardActivity.getApplication());
         List<Comment> commentList = commentDAO.getUserCommentByReview(reviewCardActivity.getIdReview());
         reviewCardActivity.setRecycler(commentList);
+        commentDAO.prova(reviewCardActivity.getIdReview());
     }
 
     /**

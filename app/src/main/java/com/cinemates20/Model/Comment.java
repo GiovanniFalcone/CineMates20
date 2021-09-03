@@ -8,6 +8,18 @@ public class Comment {
     private Date dateAndTime;
     private boolean visible;
 
+    public Comment(String textComment, String author, String idReview, String idComment, Date dateAndTime, boolean visible) {
+        this.textComment = textComment;
+        this.author = author;
+        this.idReview = idReview;
+        this.idComment = idComment;
+        this.dateAndTime = dateAndTime;
+        this.visible = visible;
+    }
+
+    public Comment() {
+    }
+
     public String getIdReview() {
         return idReview;
     }

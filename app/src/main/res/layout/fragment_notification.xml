@@ -6,11 +6,11 @@
     tools:context=".View.NotificationFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="20dp"
         android:id="@+id/notificationRv"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

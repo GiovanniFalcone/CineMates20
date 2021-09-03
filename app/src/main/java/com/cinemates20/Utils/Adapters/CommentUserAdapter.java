@@ -89,6 +89,10 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
         clickListener.updateRecycler(commentList.size());
     }
 
+    public List<Comment> getCommentList(){
+        return commentList;
+    }
+
     @Override
     public int getItemCount() {
         return commentList.size();

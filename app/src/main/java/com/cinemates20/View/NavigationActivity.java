@@ -37,7 +37,7 @@ public class NavigationActivity extends AppCompatActivity{
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
 
         UserDAO_Firestore userDAO = new UserDAO_Firestore(getApplicationContext());
-        NotificationDAO notificationDAO = new NotificationDAO_Firestore(getApplicationContext());
+        NotificationDAO_Firestore notificationDAO = new NotificationDAO_Firestore(getApplicationContext());
         String currentUser = userDAO.getUsername(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()).getUsername();
         notificationDAO.updateNotifica(currentUser, new NotificationCallback() {
             @Override

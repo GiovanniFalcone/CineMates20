@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cinemates20.Model.Notification;
 import com.cinemates20.Presenter.FriendsRequestPresenter;
@@ -45,13 +47,22 @@ public class NotificationFragment extends Fragment {
         NotificationAdapter notificationAdapter;
         notificationAdapter = new NotificationAdapter(getContext(), notificationList);
         recyclerView.setAdapter(notificationAdapter);
-        notificationAdapter.notifyDataSetChanged();
-        clickListner(notificationAdapter);
+        clickListner(notificationAdapter, notificationList);
     }
 
-    public void clickListner(NotificationAdapter notificationAdapter) {
-        notificationAdapter.setOnItemClickListener((userWhoSentRequest, buttonType) -> {
+    public void clickListner(NotificationAdapter notificationAdapter, List<Notification> notificationList) {
+        notificationAdapter.setOnItemClickListener((userWhoSentRequest, buttonType, position) -> {
             friendsRequestPresenter.manageAcceptOrDeclineFriendRequest(userWhoSentRequest, buttonType, getContext());
+
+            if(buttonType.equals("confirm"))
+                Toast.makeText(requireContext(),"Richiesta accettata", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(requireContext(),"Richiesta rifiutata", Toast.LENGTH_SHORT).show();
+
+            notificationList.remove(position);
+            recyclerView.removeViewAt(position);
+            notificationAdapter.notifyItemRemoved(position);
+            notificationAdapter.notifyItemRangeChanged(position, notificationAdapter.getItemCount());
         });
     }
 

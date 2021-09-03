@@ -216,6 +216,7 @@ public class ReviewCardActivity extends AppCompatActivity {
             writeComment.setFocusable(false);
             writeComment.setFocusableInTouchMode(true);
             writeComment.getText().clear();
+
         });
     }
 
@@ -309,13 +310,10 @@ public class ReviewCardActivity extends AppCompatActivity {
         return this;
     }
 
-    public void updateRecycler(){
-        commentUserAdapter.setOnItemClickListener(new CommentUserAdapter.ClickListener() {
-            @Override
-            public void updateRecycler(int sizeList) {
-                recyclerView.post(() -> commentUserAdapter.notifyItemInserted(sizeList + 1));
-            }
-        });
+    public void updateRecycler(Comment comment){
+        List<Comment> commentList = commentUserAdapter.getCommentList();
+        commentList.add(comment);
+        commentUserAdapter.notifyItemInserted(commentUserAdapter.getItemCount() + 1);
     }
 
 }

@@ -34,7 +34,7 @@
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:text="CommentAuthorName"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -56,24 +56,27 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_baseline_menu_24" />
+
             <TextView
                 android:id="@+id/txtComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="69.8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="60dp"
-                android:layout_marginTop="10dp"
                 android:text="CommentText"
-                android:layout_marginStart="75dp"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/option"
+                app:layout_constraintHorizontal_bias="0.644"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtName" />
+
             <TextView
                 android:id="@+id/txtDateComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="date"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtComment" />
