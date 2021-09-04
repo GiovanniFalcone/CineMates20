@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -106,26 +107,36 @@ public class CommentDAO_Firestore implements com.cinemates20.DAO.Interface.Fires
                 });
     }
 
-    public void prova(String idReview){
-        List<Comment> commentList = new ArrayList<>();
+    public List<String> prova(String idReview){
+        List<String> commentList = new ArrayList<>();
+
         commentRef
                 .whereEqualTo("idReview", idReview)
                 .orderBy("dateAndTime")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null)
-                            Log.w("UserDao", "Listen failed.", error);
-                        if (value != null) {
-                            for(QueryDocumentSnapshot documentSnapshot : value){
-                                commentList.add(documentSnapshot.toObject(Comment.class));
-                                Log.d("CommentDAO_Firestore", "data: " + commentList);
-                            }
-                        } else {
-                            Log.d("UserDao", "Current data: null");
+                .addSnapshotListener((value, error) -> {
+                    if (error != null)
+                        Log.w("UserDao", "Listen failed.", error);
+
+                    for (DocumentChange dc : Objects.requireNonNull(value).getDocumentChanges()) {
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Comment comment = dc.getDocument().toObject(Comment.class);
+                                commentCallback.setNewComments(comment);
+                                Log.d("CommentDAO_Firestore", "new: " + dc.getDocument().getData());
+                                break;
+                            case MODIFIED:
+                                Log.d("CommentDAO_Firestore", "modified: " + dc.getDocument().getData());
+                                break;
+                            case REMOVED:
+                                Log.d("CommentDAO_Firestore", "removed: " + dc.getDocument().getData());
+                                break;
                         }
                     }
                 });
+
+        Log.d("CommentDAO_Firestore", "Ok");
+
+        return commentList;
     }
 
 }

@@ -1,10 +1,12 @@
 package com.cinemates20.Presenter;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cinemates20.DAO.Implements.CommentDAO_Firestore;
 import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
 import com.cinemates20.DAO.Implements.UserDAO_Firestore;
+import com.cinemates20.DAO.Interface.Callbacks.CommentCallback;
 import com.cinemates20.DAO.Interface.Firestore.ReviewDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Model.Review;
@@ -73,8 +75,16 @@ public class ReviewCardPresenter {
     public void setUserCommentByReview(){
         commentDAO = new CommentDAO_Firestore(reviewCardActivity.getApplication());
         List<Comment> commentList = commentDAO.getUserCommentByReview(reviewCardActivity.getIdReview());
+        List<String> prova = commentDAO.prova(reviewCardActivity.getIdReview());
+        commentDAO.setCommentCallback(new CommentCallback() {
+            @Override
+            public void setNewComments(Comment comment) {
+                commentList.add(comment);
+                reviewCardActivity.setRecycler(commentList);
+            }
+        });
+        Log.d("CommentDAO_Firestore", "prova: " + prova);
         reviewCardActivity.setRecycler(commentList);
-        commentDAO.prova(reviewCardActivity.getIdReview());
     }
 
     /**

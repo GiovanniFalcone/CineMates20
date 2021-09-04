@@ -5,6 +5,6 @@ import com.cinemates20.Model.Comment;
 import java.util.List;
 
 public interface CommentCallback {
-    default void setAuthorList(List<com.cinemates20.Model.Comment> listAuthor) {}
+    default void setNewComments(Comment comment) {}
     default void setComment(Comment comment) {}
 }
