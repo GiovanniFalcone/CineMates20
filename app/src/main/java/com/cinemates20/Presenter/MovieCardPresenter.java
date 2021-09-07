@@ -1,6 +1,8 @@
 package com.cinemates20.Presenter;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.cinemates20.DAO.Implements.MovieListDAO_Firestore;
 import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
@@ -130,8 +132,7 @@ public class MovieCardPresenter {
         setBackdrop();
 
         //Get cast of current movie and show it
-        List<String> urls = getCast();
-        movieCardFragment.setRecyclerCast(urls);
+        setCast();
 
         setUserReviewByMovie();
     }
@@ -140,35 +141,24 @@ public class MovieCardPresenter {
      * This method will return the cast of the movie.
      * @return the cast list
      */
-    public List<String> getCast (){
-        List<Integer> idPerson = new ArrayList<>();
+    private void setCast (){
         List<String> urlPerson = new ArrayList<>();
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<?> future = executorService.submit(() -> {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
             TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-
             MovieDb result = api.getMovies().getMovie(movieCardFragment.getIdMovie(), "en", TmdbMovies.MovieMethod.credits);
             List<PersonCast> personCasts = result.getCast();
             for(Person person : personCasts) {
-                idPerson.add(person.getId());
+                List<Artwork> resultImg = api.getPeople().getPersonImages(person.getId());
+                if(resultImg.size() != 0) {
+                    urlPerson.add("http://image.tmdb.org/t/p/w300" + resultImg.get(0).getFilePath());
+                }
             }
-
-            for(int i = 0; i < idPerson.size(); i++) {
-                List<Artwork> resultImg = api.getPeople().getPersonImages(idPerson.get(i));
-                Artwork artwork = resultImg.get(0);
-                urlPerson.add("http://image.tmdb.org/t/p/w300" + artwork.getFilePath());
-            }
+            handler.post(() -> {
+                movieCardFragment.setRecyclerCast(urlPerson);
+            });
         });
-
-        //Waits for the computation to complete, and then retrieves its result.
-        try {
-            future.get();
-        }catch (InterruptedException | ExecutionException e){
-            e.printStackTrace();
-        }
-
-        return urlPerson;
     }
 
     /**

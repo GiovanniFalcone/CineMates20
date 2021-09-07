@@ -185,29 +185,82 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movieOverview" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerReviewCast"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewCast"
+            app:cardElevation="0dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCast"
-            tools:listitem="@layout/cast_row"
-            android:clipToPadding="false"
-            android:scrollbars="horizontal"/>
+            app:cardBackgroundColor="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@android:color/transparent"
+                    app:shimmer_repeat_mode="restart"
+                    app:shimmer_shape="radial"
+                    android:orientation="horizontal"
+                    android:animationCache="true"
+                    android:animateLayoutChanges="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <include layout="@layout/cast_row_shimmer_effect"
+                        android:background="@android:color/transparent"
+                        android:backgroundTint="@android:color/transparent"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+                    <include layout="@layout/cast_row_shimmer_effect"/>
+
+                </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+            </HorizontalScrollView>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerReviewCast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCast"
+                tools:listitem="@layout/cast_row"
+                android:clipToPadding="false"
+                android:scrollbars="horizontal"
+                android:visibility="gone"/>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/friendReview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:text="Friends Review"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/nexa_bold"
+            android:text="Friends Review"
             android:textColor="@color/black"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerReviewCast" />
+            app:layout_constraintTop_toBottomOf="@+id/viewCast" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerReview"

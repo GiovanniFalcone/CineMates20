@@ -39,6 +39,7 @@ import com.cinemates20.Presenter.MovieCardPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.CastAdapter;
 import com.cinemates20.Utils.Adapters.ReviewUserAdapter;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class MovieCardFragment extends Fragment{
     private MovieCardPresenter movieCardPresenter;
     private String title, url, overview;
     private int idMovie;
+    private ShimmerFrameLayout shimmerFrameLayout;
     private float valutation;
     private RecyclerView recyclerViewReview, recyclerViewCast;
     private boolean flag;
@@ -85,7 +87,9 @@ public class MovieCardFragment extends Fragment{
         writeReviewButton = view.findViewById(R.id.imageView4);
         buttonAddToList = view.findViewById(R.id.buttonAddToList);
         buttonRemoveFromList = view.findViewById(R.id.buttonRemoveFromList);
+        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
 
+        shimmerFrameLayout.startShimmer();
         movieCardPresenter.setMovieCard();
 
         writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
@@ -158,6 +162,9 @@ public class MovieCardFragment extends Fragment{
         recyclerViewCast.setLayoutManager(layoutManager);
         CastAdapter castAdapter = new CastAdapter(getContext(), urlCast);
         recyclerViewCast.setAdapter(castAdapter);
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        recyclerViewCast.setVisibility(View.VISIBLE);
     }
 
     public void clickListener(ReviewUserAdapter reviewUserAdapter) {
