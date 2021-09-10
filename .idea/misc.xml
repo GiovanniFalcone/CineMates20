@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/activity_authentication.xml" value="0.1213768115942029" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/activity_navigation.xml" value="0.1213768115942029" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/cast_row.xml" value="0.5" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/cast_row_shimmer.xml" value="0.5" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/data_placeholder_layout.xml" value="0.75" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/fragment_home.xml" value="0.1213768115942029" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/fragment_movie_card.xml" value="0.2932692307692308" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/prova.xml" value="0.22" />
+        <entry key="..\:/Users/falco/Desktop/CineMates20/app/src/main/res/layout/prova2.xml" value="0.33" />
         <entry key="..\:/Users/falco/Desktop/CineMates20_v1/app/src/main/res/drawable-v24/bg_shape.xml" value="0.2203125" />
         <entry key="..\:/Users/falco/Desktop/CineMates20_v1/app/src/main/res/drawable/bottom_card_shape.xml" value="0.2203125" />
         <entry key="..\:/Users/falco/Desktop/CineMates20_v1/app/src/main/res/drawable/bottom_nav_shape.xml" value="0.20092592592592592" />

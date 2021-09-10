@@ -18,8 +18,8 @@ import java.util.List;
 
 public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
 
-    private List<String> cast;
-    private Context context;
+    private final List<String> cast;
+    private final Context context;
 
     public CastAdapter(Context context, List<String> cast){
         this.context = context;
@@ -55,7 +55,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageView;
+        private final ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

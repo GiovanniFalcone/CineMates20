@@ -39,6 +39,7 @@ import com.cinemates20.Presenter.MovieCardPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.CastAdapter;
 import com.cinemates20.Utils.Adapters.ReviewUserAdapter;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class MovieCardFragment extends Fragment{
     private RecyclerView recyclerViewReview, recyclerViewCast;
     private boolean flag;
     private FloatingActionButton buttonAddToList, buttonRemoveFromList;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +77,6 @@ public class MovieCardFragment extends Fragment{
         overview = requireArguments().getString("MovieOverview");
         valutation = requireArguments().getFloat("MovieRating", 3f);
 
-
         background = view.findViewById(R.id.background);
         titleMovie = view.findViewById(R.id.movieTitle);
         overviewMovie = view.findViewById(R.id.movieOverview);
@@ -85,7 +86,9 @@ public class MovieCardFragment extends Fragment{
         writeReviewButton = view.findViewById(R.id.imageView4);
         buttonAddToList = view.findViewById(R.id.buttonAddToList);
         buttonRemoveFromList = view.findViewById(R.id.buttonRemoveFromList);
+        shimmerFrameLayout = view.findViewById(R.id.shimmerLayout);
 
+        shimmerFrameLayout.startShimmer();
         movieCardPresenter.setMovieCard();
 
         writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
@@ -158,6 +161,10 @@ public class MovieCardFragment extends Fragment{
         recyclerViewCast.setLayoutManager(layoutManager);
         CastAdapter castAdapter = new CastAdapter(getContext(), urlCast);
         recyclerViewCast.setAdapter(castAdapter);
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        recyclerViewCast.setVisibility(View.VISIBLE);
     }
 
     public void clickListener(ReviewUserAdapter reviewUserAdapter) {

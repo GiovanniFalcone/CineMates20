@@ -86,12 +86,11 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
             }
         });
 
-        clickListener.updateRecycler(commentList.size());
     }
 
-    public List<Comment> getCommentList(){
+    /*public List<Comment> getCommentList(){
         return commentList;
-    }
+    }*/
 
     @Override
     public int getItemCount() {
@@ -104,7 +103,6 @@ public class CommentUserAdapter extends RecyclerView.Adapter<CommentUserAdapter.
 
     public interface ClickListener {
         default void onItemClickListener() {}
-        default void updateRecycler(int sizeList) {}
     }
 }
 

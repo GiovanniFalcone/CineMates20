@@ -35,9 +35,7 @@ public class WriteCommentPresenter {
 
         commentDAO.saveComment(idReview, authorComment, textComment);
 
-        Comment comment = new Comment(textComment, authorComment, idReview, null, new Date(), true);
-        reviewCardActivity.updateRecycler(comment);
-
-
+        //Comment comment = new Comment(textComment, authorComment, idReview, null, new Date(), true);
+        //reviewCardActivity.updateRecycler(comment);
     }
 }

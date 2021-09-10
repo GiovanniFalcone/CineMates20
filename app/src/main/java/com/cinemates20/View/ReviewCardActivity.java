@@ -24,6 +24,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cinemates20.DAO.Implements.CommentDAO_Firestore;
+import com.cinemates20.DAO.Interface.Firestore.CommentDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Presenter.ReportPresenter;
 import com.cinemates20.Presenter.WriteCommentPresenter;
@@ -31,6 +33,12 @@ import com.cinemates20.Utils.Adapters.CommentUserAdapter;
 import com.cinemates20.Presenter.ReviewCardPresenter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.core.FirestoreClient;
+import com.google.firestore.v1.FirestoreGrpc;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -309,11 +317,4 @@ public class ReviewCardActivity extends AppCompatActivity {
     public Context getActivityContext(){
         return this;
     }
-
-    public void updateRecycler(Comment comment){
-        List<Comment> commentList = commentUserAdapter.getCommentList();
-        commentList.add(comment);
-        commentUserAdapter.notifyItemInserted(commentUserAdapter.getItemCount() + 1);
-    }
-
 }

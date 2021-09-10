@@ -1,16 +1,14 @@
 package com.cinemates20.DAO.Implements;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cinemates20.DAO.Interface.Callbacks.CommentCallback;
+import com.cinemates20.DAO.Interface.Firestore.CommentDAO;
 import com.cinemates20.Model.Comment;
-import com.cinemates20.Utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -18,8 +16,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.ListenerRegistrationImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +29,13 @@ import java.util.Map;
 import java.util.Objects;
 
 
-public class CommentDAO_Firestore implements com.cinemates20.DAO.Interface.Firestore.CommentDAO {
+public class CommentDAO_Firestore implements CommentDAO {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference commentRef = db.collection("comments");
     private Context context;
     private CommentCallback commentCallback;
+    private ListenerRegistration listenerRegistration;
 
     public CommentDAO_Firestore(Context context){ this.context = context; }
 
@@ -63,57 +64,13 @@ public class CommentDAO_Firestore implements com.cinemates20.DAO.Interface.Fires
     }
 
     @Override
-    public List<Comment> getUserCommentByReview(String idReview) {
+    public List<Comment> getUserCommentByReview(String idReview, Context context) {
         List<Comment> commentList = new ArrayList<>();
 
-        //Create task to get result and wait it
-        Task<QuerySnapshot> task = commentRef.whereEqualTo("idReview", idReview)
-                .orderBy("dateAndTime")
-                .get().addOnCompleteListener(task1 -> {});
-        Utils.waitTask(task);
-
-        if(task.isSuccessful()){
-            for(QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())){
-                commentList.add(documentSnapshot.toObject(Comment.class));
-                Log.d("CommentDAO_Firestore", "data: " + commentList);
-            }
-        }
-        else
-            Log.d("CommentDAO_Firestore", "Error getting documents: ", task.getException());
-
-        return commentList;
-    }
-
-    @Override
-    public void getCommentByAuthor(String author, String titleMovie) {
-        db.collection("reviews")
-                .whereEqualTo("author", author)
-                .whereEqualTo("titleMovie", titleMovie)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                Log.d("CommentDao", document.getId() + " => " + document.getData());
-                                Comment comment = document.toObject(Comment.class);
-                                commentCallback.setComment(comment);
-                            }
-                        } else {
-                            Log.d("CommentDao", "Error getting documents: ", task.getException());
-                        }
-
-                    }
-                });
-    }
-
-    public List<String> prova(String idReview){
-        List<String> commentList = new ArrayList<>();
-
-        commentRef
+        listenerRegistration = commentRef
                 .whereEqualTo("idReview", idReview)
                 .orderBy("dateAndTime")
-                .addSnapshotListener((value, error) -> {
+                .addSnapshotListener((Activity) context, (value, error) -> {
                     if (error != null)
                         Log.w("UserDao", "Listen failed.", error);
 
@@ -134,9 +91,26 @@ public class CommentDAO_Firestore implements com.cinemates20.DAO.Interface.Fires
                     }
                 });
 
-        Log.d("CommentDAO_Firestore", "Ok");
-
         return commentList;
+    }
+
+    @Override
+    public void getCommentByAuthor(String author, String titleMovie) {
+        db.collection("reviews")
+                .whereEqualTo("author", author)
+                .whereEqualTo("titleMovie", titleMovie)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            Log.d("CommentDao", document.getId() + " => " + document.getData());
+                            Comment comment = document.toObject(Comment.class);
+                            commentCallback.setComment(comment);
+                        }
+                    } else {
+                        Log.d("CommentDao", "Error getting documents: ", task.getException());
+                    }
+                });
     }
 
 }

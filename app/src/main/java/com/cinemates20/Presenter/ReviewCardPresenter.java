@@ -15,6 +15,7 @@ import com.cinemates20.View.ReactionsTabFragment;
 import com.cinemates20.View.UsersReactionsFragment;
 import com.cinemates20.View.ReviewCardActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.List;
 import java.util.Objects;
@@ -74,8 +75,7 @@ public class ReviewCardPresenter {
 
     public void setUserCommentByReview(){
         commentDAO = new CommentDAO_Firestore(reviewCardActivity.getApplication());
-        List<Comment> commentList = commentDAO.getUserCommentByReview(reviewCardActivity.getIdReview());
-        List<String> prova = commentDAO.prova(reviewCardActivity.getIdReview());
+        List<Comment> commentList = commentDAO.getUserCommentByReview(reviewCardActivity.getIdReview(), reviewCardActivity.getActivityContext());
         commentDAO.setCommentCallback(new CommentCallback() {
             @Override
             public void setNewComments(Comment comment) {
@@ -83,19 +83,16 @@ public class ReviewCardPresenter {
                 reviewCardActivity.setRecycler(commentList);
             }
         });
-        Log.d("CommentDAO_Firestore", "prova: " + prova);
-        reviewCardActivity.setRecycler(commentList);
     }
 
     /**
      * Open bottom sheet dialog and pass idReview to it
      */
     public void onClickNumberReactions(){
-        ReactionsTabFragment reactionsTabFragment = new ReactionsTabFragment();
         //Get id review
         String id = getId();
         //Pass the id to fragment dialog and show it
-        UsersReactionsFragment usersReactionsFragment = new UsersReactionsFragment();
+        ReactionsTabFragment reactionsTabFragment = new ReactionsTabFragment();
         Bundle arg = new Bundle();
         arg.putString("idReview", id);
         reactionsTabFragment.setArguments(arg);
