@@ -1,5 +1,6 @@
 package com.cinemates20.DAO.Implements;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -186,7 +187,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     }
 
     @Override
-    public List<Notification> getNotifiche(String currentUser) {
+    public List<Notification> getNotifications(String currentUser) {
         List<Notification> notificationList = new ArrayList<>();
 
         Query query = collectionReference
@@ -206,22 +207,19 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     }
 
     @Override
-    public void updateNotifica(String currentUser, NotificationCallback notificationCallback) {
+    public void updateNotifications(String currentUser, Context context, NotificationCallback notificationCallback) {
         collectionReference
                 .whereIn("type", Arrays.asList("RequestReceived", "RequestAccepted"))
                 .whereEqualTo("userWhoReceived", currentUser)
                 .whereEqualTo("flag", "unchecked")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null)
-                            Log.w("UserDao", "Listen failed.", error);
-                        if (value != null) {
-                            notificationCallback.numberNotification(value.size());
+                .addSnapshotListener((Activity) context, (value, error) -> {
+                    if (error != null)
+                        Log.w("UserDao", "Listen failed.", error);
+                    if (value != null) {
+                        notificationCallback.numberNotification(value.size());
 
-                        } else {
-                            Log.d("UserDao", "Current data: null");
-                        }
+                    } else {
+                        Log.d("UserDao", "Current data: null");
                     }
                 });
     }

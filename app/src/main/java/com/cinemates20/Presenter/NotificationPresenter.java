@@ -27,7 +27,7 @@ public class NotificationPresenter {
         notificationDAO = new NotificationDAO_Firestore(notificationFragment.getContext());
         notificationDAO.changeNotificationState(currentUser);
 
-        List<Notification> notificationList = notificationDAO.getNotifiche(currentUser);
+        List<Notification> notificationList = notificationDAO.getNotifications(currentUser);
         Log.d("NotificationList", "" + notificationList);
         notificationFragment.setRecycler(notificationList);
     }
