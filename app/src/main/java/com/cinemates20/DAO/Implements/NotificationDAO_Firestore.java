@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -182,7 +183,9 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     }
 
     @Override
-    public void updateNotifications(String currentUser, NotificationCallback notificationCallback) {
+    public List<Notification> updateNotifications(String currentUser, NotificationCallback notificationCallback) {
+        List<Notification> notificationList = new ArrayList<>();
+
         collectionReference
                 .whereIn("type", Arrays.asList("RequestReceived", "RequestAccepted"))
                 .whereEqualTo("userWhoReceived", currentUser)
@@ -192,10 +195,11 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
                         Log.w("UserDao", "Listen failed.", error);
                     if (value != null) {
                         notificationCallback.numberNotification(value.size());
-
                     } else {
                         Log.d("UserDao", "Current data: null");
                     }
                 });
+
+        return notificationList;
     }
 }

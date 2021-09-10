@@ -20,5 +20,5 @@ public interface NotificationDAO {
 
     List<Notification> getNotifications(String currentUser);
 
-    void updateNotifications(String currentUser, NotificationCallback notificationCallback);
+    List<Notification> updateNotifications(String currentUser, NotificationCallback notificationCallback);
 }
