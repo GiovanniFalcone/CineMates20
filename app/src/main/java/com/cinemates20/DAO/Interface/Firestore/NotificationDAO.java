@@ -1,7 +1,5 @@
 package com.cinemates20.DAO.Interface.Firestore;
 
-import android.content.Context;
-
 import com.cinemates20.DAO.Interface.Callbacks.NotificationCallback;
 import com.cinemates20.Model.Notification;
 
@@ -16,13 +14,11 @@ public interface NotificationDAO {
 
     void removeNotificationOfAcceptedRequest(String currentUser, String userWhoReceivedNotification);
 
-    List<String> getRequestReceived(String userWhoRecivedRequest);
-
-    List<String> getRequestAccepted(String currentUser);
+    List<String> getRequestReceived(String userWhoRecivedRequest, String currentUser);
 
     void sendNotificationAccepted(String currentUser, String userAdded);
 
     List<Notification> getNotifications(String currentUser);
 
-    void updateNotifications(String currentUser, Context context, NotificationCallback notificationCallback);
+    void updateNotifications(String currentUser, NotificationCallback notificationCallback);
 }

@@ -28,7 +28,6 @@ public class NotificationPresenter {
         notificationDAO.changeNotificationState(currentUser);
 
         List<Notification> notificationList = notificationDAO.getNotifications(currentUser);
-        Log.d("NotificationList", "" + notificationList);
         notificationFragment.setRecycler(notificationList);
     }
 }

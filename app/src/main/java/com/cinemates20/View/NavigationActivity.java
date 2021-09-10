@@ -39,7 +39,7 @@ public class NavigationActivity extends AppCompatActivity{
         UserDAO_Firestore userDAO = new UserDAO_Firestore(getApplicationContext());
         NotificationDAO_Firestore notificationDAO = new NotificationDAO_Firestore(getApplicationContext());
         String currentUser = userDAO.getUsername(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()).getUsername();
-        notificationDAO.updateNotifications(currentUser, NavigationActivity.this, new NotificationCallback() {
+        notificationDAO.updateNotifications(currentUser,  new NotificationCallback() {
             @Override
             public void numberNotification(int n) {
                 if (n > 0)

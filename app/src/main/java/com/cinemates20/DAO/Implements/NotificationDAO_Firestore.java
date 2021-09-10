@@ -122,14 +122,13 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     }
 
     @Override
-    public List<String> getRequestReceived(String userWhoReceivedRequest) {
+    public List<String> getRequestReceived(String userWhoReceivedRequest, String currentUser) {
         List<String> listUsername = new ArrayList<>();
-        UserDAO_Firestore userDAO = new UserDAO_Firestore(context.getApplicationContext());
-        String current = userDAO.getUsername(FirebaseAuth.getInstance().getCurrentUser().getEmail()).getUsername();
+
         // Create a query against the subcollection.
         Query queryRequest =  collectionReference
                 .whereEqualTo("type", "RequestReceived")
-                .whereEqualTo("userWhoReceived", current)
+                .whereEqualTo("userWhoReceived", currentUser)
                 .orderBy("dateAndTime", Query.Direction.DESCENDING);
 
         //Get query results
@@ -143,30 +142,6 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
         }
 
         Log.d("Notification", "list: " + listUsername);
-        return listUsername;
-    }
-
-    @Override
-    public List<String> getRequestAccepted(String currentUser) {
-        List<String> listUsername = new ArrayList<>();
-
-        // Create a query against thecollection.
-        Query queryRequest = collectionReference
-                .orderBy("dateAndTime", Query.Direction.DESCENDING)
-                .whereEqualTo("type", "RequestAccepted")
-                .whereEqualTo("userWhoReceived", currentUser)
-                ;
-
-        //Get query results
-        Task<QuerySnapshot> taskRequest = queryRequest.get().addOnCompleteListener(task2 -> {});
-        Utils.waitTask(taskRequest);
-
-        if(taskRequest.isSuccessful()) {
-            for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(taskRequest.getResult())) {
-                listUsername.add(documentSnapshot2.getString("userWhoSent"));
-            }
-        }
-
         return listUsername;
     }
 
@@ -207,12 +182,12 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     }
 
     @Override
-    public void updateNotifications(String currentUser, Context context, NotificationCallback notificationCallback) {
+    public void updateNotifications(String currentUser, NotificationCallback notificationCallback) {
         collectionReference
                 .whereIn("type", Arrays.asList("RequestReceived", "RequestAccepted"))
                 .whereEqualTo("userWhoReceived", currentUser)
                 .whereEqualTo("flag", "unchecked")
-                .addSnapshotListener((Activity) context, (value, error) -> {
+                .addSnapshotListener((value, error) -> {
                     if (error != null)
                         Log.w("UserDao", "Listen failed.", error);
                     if (value != null) {

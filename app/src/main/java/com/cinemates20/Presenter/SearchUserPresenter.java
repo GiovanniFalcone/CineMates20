@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class SearchUserPresenter {
 
-    private SearchUserTabFragment searchUserTabFragment;
+    private final SearchUserTabFragment searchUserTabFragment;
     private UserDAO userDAO;
     private NotificationDAO notificationDAO;
 
@@ -29,7 +29,7 @@ public class SearchUserPresenter {
 
         List<User> searchedUserList = userDAO.getListUsername(query, user.getUsername());
         List<String> sentList = userDAO.getRequestSent(query);
-        List<String> receivedList = notificationDAO.getRequestReceived(query);
+        List<String> receivedList = notificationDAO.getRequestReceived(query, user.getUsername());
         searchUserTabFragment.setRecycler(searchedUserList, sentList, receivedList, user.getFriends());
     }
 }
