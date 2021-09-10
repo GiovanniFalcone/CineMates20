@@ -11,6 +11,5 @@ public interface CommentDAO {
 
     List<Comment> getUserCommentByReview(String titleMovie, Context context);
 
-
     void getCommentByAuthor(String author, String titleMoview);
 }
