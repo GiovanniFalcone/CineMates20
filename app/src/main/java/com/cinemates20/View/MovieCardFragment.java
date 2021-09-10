@@ -57,11 +57,11 @@ public class MovieCardFragment extends Fragment{
     private MovieCardPresenter movieCardPresenter;
     private String title, url, overview;
     private int idMovie;
+    private ShimmerFrameLayout shimmerFrameLayout;
     private float valutation;
     private RecyclerView recyclerViewReview, recyclerViewCast;
     private boolean flag;
     private FloatingActionButton buttonAddToList, buttonRemoveFromList;
-    private ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +76,7 @@ public class MovieCardFragment extends Fragment{
         url = requireArguments().getString("MovieUrl");
         overview = requireArguments().getString("MovieOverview");
         valutation = requireArguments().getFloat("MovieRating", 3f);
+
 
         background = view.findViewById(R.id.background);
         titleMovie = view.findViewById(R.id.movieTitle);
@@ -161,7 +162,6 @@ public class MovieCardFragment extends Fragment{
         recyclerViewCast.setLayoutManager(layoutManager);
         CastAdapter castAdapter = new CastAdapter(getContext(), urlCast);
         recyclerViewCast.setAdapter(castAdapter);
-
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
         recyclerViewCast.setVisibility(View.VISIBLE);

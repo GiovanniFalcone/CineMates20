@@ -3,7 +3,6 @@ package com.cinemates20.Presenter;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.cinemates20.DAO.Implements.MovieListDAO_Firestore;
 import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
@@ -22,8 +21,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -130,35 +131,33 @@ public class MovieCardPresenter {
         //set the backdrop into movie card
         setBackdrop();
 
-        //Set cast of current movie and show it
+        //Get cast of current movie and show it
         setCast();
 
         setUserReviewByMovie();
     }
 
     /**
-     * This method will set the cast of the movie.
+     * This method will return the cast of the movie.
+     * @return the cast list
      */
     private void setCast (){
         List<String> urlPerson = new ArrayList<>();
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
-
         executor.execute(() -> {
             TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-
             MovieDb result = api.getMovies().getMovie(movieCardFragment.getIdMovie(), "en", TmdbMovies.MovieMethod.credits);
             List<PersonCast> personCasts = result.getCast();
             for(Person person : personCasts) {
                 List<Artwork> resultImg = api.getPeople().getPersonImages(person.getId());
                 if(resultImg.size() != 0) {
-                    Log.d("KTM", "" + person.getName());
                     urlPerson.add("http://image.tmdb.org/t/p/w300" + resultImg.get(0).getFilePath());
                 }
             }
-
-            handler.post(() -> movieCardFragment.setRecyclerCast(urlPerson));
+            handler.post(() -> {
+                movieCardFragment.setRecyclerCast(urlPerson);
+            });
         });
     }
 
