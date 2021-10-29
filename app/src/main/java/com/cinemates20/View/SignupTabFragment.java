@@ -96,7 +96,7 @@ public class SignupTabFragment extends Fragment {
     }
 
     public void setErrorInvalidPassword(){
-        textInputLayoutPassword.setError("Password non valida");
+        textInputLayoutPassword.setError("Invalid password");
     }
 
     public void setErrorToNull(){
@@ -107,14 +107,14 @@ public class SignupTabFragment extends Fragment {
     }
 
     public void setErrorNotMatchingPassword(){
-        textInputLayoutConfermaPassword.setError("Le password non corrispondono");
+        textInputLayoutConfermaPassword.setError("The password doesn't match");
     }
 
     public void setErrorInvalidMail(){
-        textInputLayoutEmail.setError("Mail non valida");
+        textInputLayoutEmail.setError("Invalid email");
     }
 
-    public void setErrorUsername() {
-        textInputLayoutUsername.setError("Username già in uso");
+    public void setErrorUsername(String error) {
+        textInputLayoutUsername.setError(error);
     }
 }

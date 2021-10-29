@@ -9,6 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,49 +20,40 @@
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="9dp"
-                android:text="Aggiungi amico"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="Add"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nexa_bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.494" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/nexa_bold"
                 android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/button"
                 app:layout_constraintHorizontal_bias="0.253"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txtAppendState"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="14dp"
-                android:text=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button"
-                app:layout_constraintHorizontal_bias="0.142"
-                app:layout_constraintTop_toBottomOf="@+id/txtName"
-                app:layout_constraintVertical_bias="0.214" />
 
             <io.github.florent37.shapeofview.shapes.CircleView
                 android:id="@+id/userPropicCircle"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 

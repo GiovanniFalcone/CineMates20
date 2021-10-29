@@ -9,10 +9,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/transparent"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
         app:endIconTint="#FFD700"
         app:errorEnabled="true"
         app:hintEnabled="false"
@@ -31,10 +33,44 @@
             android:id="@+id/chooseNameList"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:background="@drawable/edit_text_bg"
+            android:background="@drawable/text_box_list_style"
             android:hint="Name list"
+            android:fontFamily="@font/nexa_regular"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nexa_bold"
+        android:text="Give a description to new list"
+        android:textSize="14sp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseNameListLayout" />
+
+    <EditText
+        android:layout_marginTop="15dp"
+        android:id="@+id/editTextBoxDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/text_box_list_style"
+        android:fontFamily="@font/nexa_regular"
+        android:gravity="top|start"
+        android:hint="Write description"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

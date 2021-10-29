@@ -7,18 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cinemates20.Model.Notification;
 import com.cinemates20.Presenter.FriendsRequestPresenter;
 import com.cinemates20.Presenter.NotificationPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Adapters.NotificationAdapter;
+import com.cinemates20.Utils.Adapters.GenericAdapter;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         recyclerView = view.findViewById(R.id.notificationRv);
 
-        friendsRequestPresenter = new FriendsRequestPresenter(this);
+        friendsRequestPresenter = new FriendsRequestPresenter(this, getContext());
         notificationPresenter = new NotificationPresenter(this);
 
         notificationPresenter.notificationClicked();
@@ -51,26 +49,27 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     public void setRecycler(List<Notification> notificationList) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        NotificationAdapter notificationAdapter;
-        notificationAdapter = new NotificationAdapter(getContext(), notificationList);
-        recyclerView.setAdapter(notificationAdapter);
-        clickListener(notificationAdapter, notificationList);
+        GenericAdapter<Notification> personAdapter = new GenericAdapter<>(notificationList, getContext());
+        recyclerView.setAdapter(personAdapter);
+        clickListener(personAdapter, notificationList);
     }
 
-    public void clickListener(NotificationAdapter notificationAdapter, List<Notification> notificationList) {
-        notificationAdapter.setOnItemClickListener((userWhoSentRequest, buttonType, position) -> {
-            friendsRequestPresenter.manageAcceptOrDeclineFriendRequest(userWhoSentRequest, buttonType, getContext());
+    public void clickListener(GenericAdapter<Notification> genericAdapter, List<Notification> notificationList) {
+        genericAdapter.setOnItemClickListener(new GenericAdapter.ClickListener() {
+            @Override
+            public void onItemClickListener(String userWhoSentRequest, String buttonType, int position) {
+                friendsRequestPresenter.manageAcceptOrDeclineFriendRequest(userWhoSentRequest, buttonType);
 
-            if(buttonType.equals("confirm"))
-                Toast.makeText(requireContext(),"Richiesta accettata", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(requireContext(),"Richiesta rifiutata", Toast.LENGTH_SHORT).show();
+                if(buttonType.equals("confirm"))
+                    Toast.makeText(requireContext(),"Request accepted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(requireContext(),"Request refused", Toast.LENGTH_SHORT).show();
 
-            //Remove item whenever user accept or refuse request
-            notificationList.remove(position);
-            recyclerView.removeViewAt(position);
-            notificationAdapter.notifyItemRemoved(position);
-            notificationAdapter.notifyItemRangeChanged(position, notificationAdapter.getItemCount());
+                notificationList.remove(position);
+                recyclerView.removeViewAt(position);
+                genericAdapter.notifyItemRemoved(position);
+                genericAdapter.notifyItemRangeChanged(position, genericAdapter.getItemCount());
+            }
         });
     }
 

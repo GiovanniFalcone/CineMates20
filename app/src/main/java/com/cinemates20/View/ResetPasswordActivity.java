@@ -34,12 +34,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
         forgot = findViewById(R.id.buttonForgot);
         back = findViewById(R.id.textBack);
 
-        back.setOnClickListener(view -> super.onBackPressed());
+        back.setOnClickListener(view -> finish());
 
         editTextEmail.addTextChangedListener(textWatcher);
     }
 
-    private void eventListner() {
+    private void eventListener() {
         forgot.setOnClickListener(v -> {
             resetPasswordPresenter.onClickPasswordForgot();
         });
@@ -60,7 +60,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
             if(!Utils.checkIfFieldIsEmpty(mail)){
                 forgot.setEnabled(true);
-                eventListner();
+                eventListener();
             }else{
                 forgot.setEnabled(false);
             }

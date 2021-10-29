@@ -1,17 +1,20 @@
 package com.cinemates20.Presenter;
 
 import android.content.Intent;
+import android.util.Log;
 
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.DAOFactory;
+import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.NavigationActivity;
 import com.cinemates20.View.UsernameActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class UsernamePresenter {
 
-    private UsernameActivity usernameActivity;
-    private UserDAO userDAO;
+    private final UsernameActivity usernameActivity;
 
     public UsernamePresenter (UsernameActivity usernameActivity){
         this.usernameActivity = usernameActivity;
@@ -23,14 +26,32 @@ public class UsernamePresenter {
      */
     public void onChooseUsername(){
         String username = usernameActivity.getUsername().toLowerCase();
-        userDAO = new UserDAO_Firestore(usernameActivity.getApplicationContext());
+
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        UserDAO userDAO = daoFactory.getUserDAO();
+
         boolean isExists = userDAO.checkIfUsernameExists(username);
         usernameActivity.setErrorToNull();
+
         if(isExists)
             usernameActivity.setErrorUsername();
         else{
-            Utils.showDialog(usernameActivity.getActivityContext(), "Accesso completato!", "Hai completato l'accesso, ora potrai accedere alla home!");
+            Utils.showDialog(usernameActivity.getActivityContext(), "Access completed!", "You have completed the login, now you will be able to access the home! ");
             userDAO.saveUser(username, usernameActivity.getCurrentUser());
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(usernameActivity.getUsername())
+                    .build();
+
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Log.d("UsernamePresenter", "User profile updated.");
+                        }
+                    });
+
             usernameActivity.startActivity(new Intent(usernameActivity.getActivityContext(), NavigationActivity.class));
         }
     }

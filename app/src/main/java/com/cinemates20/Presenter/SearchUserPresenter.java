@@ -1,9 +1,8 @@
 package com.cinemates20.Presenter;
 
-import com.cinemates20.DAO.Implements.NotificationDAO_Firestore;
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Firestore.NotificationDAO;
-import com.cinemates20.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.DAOFactory;
+import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.User;
 import com.cinemates20.View.SearchUserTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,22 +13,27 @@ import java.util.Objects;
 public class SearchUserPresenter {
 
     private final SearchUserTabFragment searchUserTabFragment;
-    private UserDAO userDAO;
-    private NotificationDAO notificationDAO;
 
     public SearchUserPresenter(SearchUserTabFragment searchUserTabFragment){
         this.searchUserTabFragment = searchUserTabFragment;
     }
 
+    /**
+     * This method will get and set the searched users by current user.
+     * @param query the user that current user want to search
+     */
     public void onSearchUsers(String query){
-        userDAO = new UserDAO_Firestore(searchUserTabFragment.requireContext());
-        notificationDAO = new NotificationDAO_Firestore(searchUserTabFragment.requireContext());
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        UserDAO userDAO = daoFactory.getUserDAO();
+        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
 
-        User user = userDAO.getUsername(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
+        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
 
-        List<User> searchedUserList = userDAO.getListUsername(query, user.getUsername());
+        List<User> searchedUserList = userDAO.getListUsername(query, username);
         List<String> sentList = userDAO.getRequestSent(query);
-        List<String> receivedList = notificationDAO.getRequestReceived(query, user.getUsername());
-        searchUserTabFragment.setRecycler(searchedUserList, sentList, receivedList, user.getFriends());
+        List<String> receivedList = notificationDAO.getRequestReceived(query, username);
+        List<String> friendList = userDAO.getFriends(username);
+
+        searchUserTabFragment.setRecycler(searchedUserList, sentList, receivedList, friendList);
     }
 }

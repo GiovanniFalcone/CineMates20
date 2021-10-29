@@ -36,7 +36,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="120dp"
+            android:paddingBottom="220dp"
             android:clipToPadding="false"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -89,7 +89,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -98,6 +98,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Action"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -124,7 +125,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -132,6 +133,8 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Adventure"
+                            android:fontFamily="@font/nexa_bold"
+
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -158,7 +161,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -167,6 +170,7 @@
                             android:layout_marginStart="10dp"
                             android:text="Animation"
                             android:textColor="@color/white"
+                            android:fontFamily="@font/nexa_bold"
                             android:textSize="22sp"
                             android:textStyle="bold" />
 
@@ -192,7 +196,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -201,6 +205,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Comedy"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -209,6 +214,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/crime"
+                        android:fontFamily="@font/nexa_bold"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_rowWeight="1"
@@ -227,7 +233,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -236,6 +242,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Crime"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -262,7 +269,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -271,8 +278,9 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Documentary"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
 
                     </androidx.cardview.widget.CardView>
@@ -297,7 +305,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -306,6 +314,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Drama"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -332,7 +341,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -341,6 +350,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Family"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -367,7 +377,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -375,6 +385,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Fantasy"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -401,7 +412,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -409,6 +420,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="History"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -435,7 +447,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -444,6 +456,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Horror"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -470,7 +483,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -479,6 +492,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Music"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -505,7 +519,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -513,6 +527,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Mistery"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -539,7 +554,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -547,6 +562,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Romance"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -573,7 +589,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -582,6 +598,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Sci-fi"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -608,7 +625,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -617,6 +634,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Thriller"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -643,7 +661,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -652,6 +670,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="War"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -678,7 +697,7 @@
                         <View
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/daeliminare_3" />
+                            android:background="@drawable/gradient_genre_effect" />
 
 
                         <TextView
@@ -687,6 +706,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginStart="10dp"
                             android:text="Western"
+                            android:fontFamily="@font/nexa_bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
                             android:textStyle="bold" />

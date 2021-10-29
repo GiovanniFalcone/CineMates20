@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,17 +23,13 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-
 public class LoginTabFragment extends Fragment {
 
     private TextInputLayout textInputLayoutUsername, textInputLayoutPassword;
     private EditText editTextUsername, editTextPassword;
-    private TextView textForgetPass;
+    private TextView textForgetPass, labelTextView;
     private Button loginRegular, signInButtonGoogle, signInButtonFacebook;
-    //private SignInButton signInButtonGoogle;
-    //private LoginButton signInButtonFacebook;
     private LoginPresenter loginPresenter;
-    private CheckBox keepLogBox;
     private FirebaseAuth mAuth;
 
     @Override
@@ -49,12 +44,12 @@ public class LoginTabFragment extends Fragment {
         textForgetPass = root.findViewById(R.id.textForgetPass);
         loginRegular = root.findViewById(R.id.buttonLoginRegular);
         signInButtonFacebook = root.findViewById(R.id.buttonLoginWithFacebook);
-        keepLogBox = root.findViewById(R.id.keepLogBox);
+        labelTextView = root.findViewById(R.id.label);
         loginPresenter = new LoginPresenter(this);
 
-        animatationLogin();
+        animationLogin();
 
-        eventListner();
+        eventListener();
 
         editTextUsername.addTextChangedListener(textWatcher);
         editTextPassword.addTextChangedListener(textWatcher);
@@ -62,8 +57,7 @@ public class LoginTabFragment extends Fragment {
         return root;
     }
 
-    public void eventListner() {
-        //************************************ SOCIAL LOGIN ***********************************/
+    public void eventListener() {
         signInButtonFacebook.setOnClickListener(view ->
                 startActivity(new Intent(getContext(), FacebookActivity.class)));
 
@@ -71,7 +65,6 @@ public class LoginTabFragment extends Fragment {
             mAuth = FirebaseAuth.getInstance();
             startActivity(new Intent(getContext(), GoogleActivity.class));
         });
-        //*************************************************************************************/
 
         textForgetPass.setOnClickListener(view ->
                 startActivity(new Intent(getContext(), ResetPasswordActivity.class)));
@@ -108,26 +101,26 @@ public class LoginTabFragment extends Fragment {
                 (editTextUsername.getText().toString().trim(), editTextPassword.getText().toString().trim()));
     }
 
-    public void animatationLogin() {
+    public void animationLogin() {
         textInputLayoutPassword.setTranslationX(800);
         textInputLayoutUsername.setTranslationX(800);
         textForgetPass.setTranslationX(800);
         loginRegular.setTranslationX(800);
-        keepLogBox.setTranslationX(800);
         editTextUsername.setTranslationX(800);
         editTextPassword.setTranslationX(800);
         signInButtonGoogle.setTranslationY(300);
         signInButtonFacebook.setTranslationY(300);
+        labelTextView.setTranslationY(300);
 
         textInputLayoutPassword.setAlpha(0);
         textInputLayoutUsername.setAlpha(0);
         textForgetPass.setAlpha(0);
         loginRegular.setAlpha(0);
-        keepLogBox.setAlpha(0);
         editTextUsername.setAlpha(0);
         editTextPassword.setAlpha(0);
         signInButtonGoogle.setAlpha(0);
         signInButtonFacebook.setAlpha(0);
+        labelTextView.setAlpha(0);
 
         textInputLayoutUsername.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
         textInputLayoutPassword.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
@@ -135,8 +128,8 @@ public class LoginTabFragment extends Fragment {
         editTextPassword.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(300).start();
         textForgetPass.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
         loginRegular.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(700).start();
-        keepLogBox.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(700).start();
         signInButtonGoogle.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(800).start();
         signInButtonFacebook.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(800).start();
+        labelTextView.animate().translationY(0).alpha(1).setDuration(800).setStartDelay(800).start();
     }
 }

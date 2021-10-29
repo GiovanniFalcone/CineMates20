@@ -6,7 +6,7 @@
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="iscriviti">Iscriviti</string>
-    <string name="conferma_password">Conferma password</string>
+    <string name="conferma_password">Confirm password</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_feed">Feed</string>
@@ -30,13 +30,16 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ora_nelle_sale">Ora nelle sale</string>
     <string name="i_pi_votati">I più votati</string>
-    <string name="mail_inviata">Abbiamo inviato una mail di verifica, controlla la tua posta per confermare l\'account ed effettuare il login</string>
-    <string name="non_verificato">L\'account non è verificato. Controlla la tua posta</string>
-    <string name="credenziali_errate">La mail o la password fornite sono errate. Controlla e riprova</string>
-    <string name="instruction_mail">Istruzioni per il recupero della password inoltrate alla tua casella di posta</string>
-    <string name="something_wrong">Non è stato possibile inviare la mail per il recupero</string>
-    <string name="signup_failed">Autenticazione fallita</string>
-    <string name="conferma_recensione">Sei sicuro di voler salvare questa recensione? In seguito non sarà possibile modificarla o cancellarla o scriverne una nuova per lo stesso titoli</string>
+    <string name="mail_inviata">We have sent you a verification email, please check your mail to confirm your account to login.</string>
+    <string name="non_verificato">The account is not verified. Check your mail.</string>
+    <string name="credenziali_errate">Wrong email or password. Check them and try again.</string>
+    <string name="instruction_mail">Password recovery instructions forwarded to your inbox successfully.</string>
+    <string name="something_wrong">The recovery mail could not be sent </string>
+    <string name="signup_failed">Authentication failed.</string>
+
+    <string name="confirm_review">Are you sure you want to save this review?
+    If you do, it will not be possible to modify it, delete it or write a new one for the same title </string>
+
     <string name="commenti_degli_amici">Commenti degli amici</string>
     <string name="scrivi_un_commento">Scrivi un commento</string>
     <string name="valuta_questa_recensione">Valuta questa recensione</string>
@@ -50,6 +53,9 @@
     <string name="time">Time</string>
     <string name="menu">Menu</string>
     <string name="logout">Logout</string>
+    <string name="long_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="confirm_valuation">Are you sure you want to save this valuation?
+        If you do, it will not be possible to modify it, delete it or write a new one for the same title</string>
     <string-array name="options">
         <item>Le mie recensioni</item>
         <item>Lista Amici</item>

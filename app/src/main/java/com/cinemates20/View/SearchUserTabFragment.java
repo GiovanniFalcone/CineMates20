@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class SearchUserTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         searchUserPresenter = new SearchUserPresenter(this);
-        friendsRequestPresenter = new FriendsRequestPresenter(this);
+        friendsRequestPresenter = new FriendsRequestPresenter(this, getContext());
 
         View root = inflater.inflate(R.layout.fragment_user_tab, container, false);
         recyclerView = root.findViewById(R.id.recyclerViewSearch);
@@ -62,22 +61,19 @@ public class SearchUserTabFragment extends Fragment {
         recyclerView.setVisibility(View.VISIBLE);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        SearchUsersAdapter searchUsersAdapter = new SearchUsersAdapter(getContext(), searchedUserList, sentList, receivedList, friends);
+        SearchUsersAdapter searchUsersAdapter = new SearchUsersAdapter(getContext(), searchedUserList, sentList, receivedList, friends, "");
         recyclerView.setAdapter(searchUsersAdapter);
-        searchUsersAdapter.notifyDataSetChanged();
         clickListener(searchUsersAdapter);
     }
 
     public void clickListener(SearchUsersAdapter searchUserAdapter) {
         searchUserAdapter.setOnItemClickListener((user, buttonState, position, view) -> {
-            Log.d("msg", "mi trovo in clickListner " + user);
             if(buttonState.equals("friend"))
-                friendsRequestPresenter.manageRemoveFriendship(user, getContext());
+                friendsRequestPresenter.manageRemoveFriendship(user);
             else if(buttonState.equals("appendRequestReceived"))
-                friendsRequestPresenter.manageAcceptOrDeclineFriendRequest(user, "confirm", getContext());
+                friendsRequestPresenter.manageAcceptOrDeclineFriendRequest(user, "confirm");
             else
                 friendsRequestPresenter.manageSentOrDeleteFriendRequest(user, buttonState);
         });
-
     }
 }

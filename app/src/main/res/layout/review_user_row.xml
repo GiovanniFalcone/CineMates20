@@ -7,6 +7,8 @@
     android:layout_height="match_parent">
 <!-- -->
     <androidx.cardview.widget.CardView
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,16 +30,17 @@
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:layout_marginStart="30dp"
                 android:fontFamily="@font/nexa_bold"
+                android:text="username"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:textStyle="bold"
+                android:transitionName="authorName"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView5"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintHorizontal_bias="0.2"/>
+                app:layout_constraintVertical_bias="0.5" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/imageView5"
@@ -71,12 +74,28 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:transitionName="authorIcon"
                     android:id="@+id/imageView7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/default_icon" />
 
             </io.github.florent37.shapeofview.shapes.CircleView>
+
+            <TextView
+                android:id="@+id/spoilerWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nexa_regular"
+                android:text="This review may contains spoiler"
+                android:textSize="11sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
+                app:layout_constraintTop_toBottomOf="@+id/txtName"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

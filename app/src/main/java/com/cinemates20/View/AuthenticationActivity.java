@@ -5,7 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
-import com.cinemates20.Utils.Adapters.LoginTabAdapter;
+import com.cinemates20.Utils.Adapters.TabAdapter.LoginTabAdapter;
 import com.cinemates20.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -33,11 +33,11 @@ public class AuthenticationActivity extends AppCompatActivity {
         tabLayout.setAlpha(0);
         tabLayout.animate().translationY(0).alpha(1).setDuration(1000).setStartDelay(100).start();
 
-        selectedListner();
+        selectedListener();
     }
 
 
-    private void selectedListner() {
+    private void selectedListener() {
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -55,8 +55,10 @@ public class AuthenticationActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
 }

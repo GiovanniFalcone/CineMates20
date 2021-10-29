@@ -9,6 +9,8 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+            app:cardBackgroundColor="@color/gold"
+            android:layout_marginTop="10dp"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:cardCornerRadius="16dp"
-            app:cardElevation="16dp">
+            app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -32,6 +34,10 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="14dp"
                     android:text="TextView"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/nexa_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -50,8 +56,8 @@
                     app:layout_constraintStart_toEndOf="@+id/txtNameList"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"
-                    app:tint="@color/gold" />
+                    app:srcCompat="@drawable/ic_baseline_arrow_forward_24"
+                    app:tint="@color/black" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cinemates20.Utils.Adapters.SearchTabAdapter;
+import com.cinemates20.Utils.Adapters.TabAdapter.SearchTabAdapter;
 import com.cinemates20.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -34,12 +34,12 @@ public class SearchFragment extends Fragment {
         viewPager.setAdapter(searchTabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-        selectedListner();
+        selectedListener();
 
         return view;
     }
 
-    private void selectedListner() {
+    private void selectedListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

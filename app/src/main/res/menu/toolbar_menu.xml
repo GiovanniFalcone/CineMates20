@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/addToFavorite"
-        android:title="Aggiungi alla lista dei film preferiti"
+        android:title="Rate this"
+        android:id="@+id/rateReview"
+        android:icon="@drawable/ic_baseline_stars_24"
+        android:iconTint="@color/black"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/reportForSpoiler"
+        android:title="Report for spoiler"
         />
 
     <item
-        android:id="@+id/removeFromFavorite"
-        android:title="Rimuovi dalla lista dei preferiti"/>
-
-    <item
-        android:id="@+id/addToWatch"
-        android:title="Aggiungi alla lista dei film da vedere"
-        />
-
-    <item
-        android:id="@+id/removeFromWatch"
-        android:title="Rimuovi dalla lista dei film da vedere"
-        />
-
-    <item
-        android:id="@+id/addToCustom"
-        android:title="Aggiungi ad una lista personalizzata"/>
-
-    <item
-        android:id="@+id/removeFromCustom"
-        android:title="Rimuovi dalla lista personalizzata"/>
-
+        android:id="@+id/reportForLanguage"
+        android:title="Report for inappropriate language"/>
 
 </menu>

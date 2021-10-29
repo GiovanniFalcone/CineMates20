@@ -37,14 +37,14 @@ public class UsernameActivity extends AppCompatActivity {
         editTextUsername.addTextChangedListener(textWatcher);
     }
 
-    private void eventListner() {
+    private void eventListener() {
         buttonSend.setOnClickListener(v -> {
             usernamePresenter.onChooseUsername();
         });
     }
 
     public String getUsername(){
-        return editTextUsername.getText().toString().trim();
+        return editTextUsername.getText().toString().trim().toLowerCase();
     }
 
     public String getCurrentUser(){
@@ -61,7 +61,7 @@ public class UsernameActivity extends AppCompatActivity {
 
             if(!Utils.checkIfFieldIsEmpty(mail)){
                 buttonSend.setEnabled(true);
-                eventListner();
+                eventListener();
             }else{
                 buttonSend.setEnabled(false);
             }
@@ -72,7 +72,7 @@ public class UsernameActivity extends AppCompatActivity {
     };
 
     public void setErrorUsername() {
-        chooseUsernameLayout.setError("Username già in uso");
+        chooseUsernameLayout.setError("Username already taken.");
     }
 
     public void setErrorToNull(){

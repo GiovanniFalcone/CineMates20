@@ -1,86 +1,83 @@
 package com.cinemates20.Presenter;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import com.cinemates20.DAO.Implements.CommentDAO_Firestore;
-import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Callbacks.CommentCallback;
-import com.cinemates20.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.Model.DAO.DAOFactory;
+import com.cinemates20.Model.DAO.Interface.Callbacks.CommentCallback;
+import com.cinemates20.Model.DAO.Interface.Firestore.CommentDAO;
+import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
 import com.cinemates20.Model.Comment;
-import com.cinemates20.Model.Review;
 import com.cinemates20.Model.User;
+import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.ReactionsTabFragment;
-import com.cinemates20.View.UsersReactionsFragment;
 import com.cinemates20.View.ReviewCardActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class ReviewCardPresenter {
 
     private final ReviewCardActivity reviewCardActivity;
-    private String id;
-    private CommentDAO_Firestore commentDAO;
 
     public ReviewCardPresenter(ReviewCardActivity reviewCardActivity){
         this.reviewCardActivity = reviewCardActivity;
     }
 
     public void viewReview(){
-        ReviewDAO reviewDAO = new ReviewDAO_Firestore(reviewCardActivity.getApplicationContext());
-        String author = reviewCardActivity.getAuthor();
-        String titleMovie = reviewCardActivity.getTitleMovie();
-        Review review = reviewDAO.getReviewByAuthor(author, titleMovie);
-        reviewCardActivity.setReview(review.getTextReview());
-        id = review.getIdReview();
-        UserDAO_Firestore userDao = new UserDAO_Firestore(reviewCardActivity.getApplicationContext());
-        User currentUser = userDao.getUsername(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
-        String reactionType = reviewDAO.getReaction(currentUser.getUsername(), id);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+
+        UserDAO userDAO = daoFactory.getUserDAO();
+        User currentUser = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
+        reviewCardActivity.setUserIcon(currentUser.getIcon());
+
+        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+        String reactionType = reviewDAO.getReaction(currentUser.getUsername(), reviewCardActivity.getReview().getIdReview());
         if(reactionType != null) {
             reviewCardActivity.setColorButton(reactionType);
             reviewCardActivity.setFlag(reactionType);
         }
     }
 
-
-
-    public String getId(){
-        return id;
-    }
-
     /**
-     * If buttonState of buttonType clicked is true add reaction, otherise remove it
-     * @param buttonState
-     * @param buttonType
+     * If buttonState of buttonType clicked is true add reaction, otherwise remove it
+     * @param buttonState the state of button: already selected or not
+     * @param buttonType the reaction that user has clicked
      */
     public void manageReactionClicked(boolean buttonState, String buttonType){
-        ReviewDAO reviewDAO = new ReviewDAO_Firestore(reviewCardActivity.getApplicationContext());
-        UserDAO_Firestore userDao = new UserDAO_Firestore(reviewCardActivity.getApplicationContext());
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
 
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-        String idReview = getId();
+        String idReview = reviewCardActivity.getReview().getIdReview();
 
-        User user = userDao.getUsername(currentUser);
+        String user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
 
         if (!buttonState){
-            reviewDAO.addReaction(idReview, buttonType, user.getUsername());
+            reviewDAO.addReaction(idReview, buttonType, user);
         } else{
-            reviewDAO.removeReaction(idReview, buttonType, user.getUsername());
+            reviewDAO.removeReaction(idReview, buttonType, user);
         }
     }
 
     public void setUserCommentByReview(){
-        commentDAO = new CommentDAO_Firestore(reviewCardActivity.getApplication());
-        List<Comment> commentList = commentDAO.getUserCommentByReview(reviewCardActivity.getIdReview(), reviewCardActivity.getActivityContext());
-        commentDAO.setCommentCallback(new CommentCallback() {
+        List<Comment> commentList = new ArrayList<>();
+
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        CommentDAO commentDAO = daoFactory.getCommentDAO();
+
+        reviewCardActivity.setView(true);
+
+        commentDAO.getUserCommentByReview(reviewCardActivity.getReview().getIdReview(), reviewCardActivity.getActivityContext(), new CommentCallback() {
             @Override
             public void setNewComments(Comment comment) {
-                commentList.add(comment);
-                reviewCardActivity.setRecycler(commentList);
+                if(comment.isVisible()) {
+                    commentList.add(comment);
+                    reviewCardActivity.setRecycler(commentList);
+                    reviewCardActivity.setView(false);
+                }
             }
         });
     }
@@ -90,12 +87,44 @@ public class ReviewCardPresenter {
      */
     public void onClickNumberReactions(){
         //Get id review
-        String id = getId();
-        //Pass the id to fragment dialog and show it
+        String id = reviewCardActivity.getReview().getIdReview();
+
+        //Get sent and received request and friend list
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        UserDAO userDAO = daoFactory.getUserDAO();
+        User user = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
+        List<String> sentList = userDAO.getAllRequestSent(user.getUsername());
+        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        List<String> receivedList = notificationDAO.getRequestReceived("", user.getUsername());
+
+        //Pass the id and user info to fragment dialog and show it
         ReactionsTabFragment reactionsTabFragment = new ReactionsTabFragment();
         Bundle arg = new Bundle();
+        arg.putSerializable("User", user);
+        arg.putStringArrayList("sentList", (ArrayList<String>) sentList);
+        arg.putStringArrayList("receivedList", (ArrayList<String>) receivedList);
         arg.putString("idReview", id);
         reactionsTabFragment.setArguments(arg);
         reactionsTabFragment.show(reviewCardActivity.getSupportFragmentManager(), "TAG");
+    }
+
+    public void rateReview(float valuation) {
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+
+        String idReview = reviewCardActivity.getReview().getIdReview();
+
+        String user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        boolean isExists = reviewDAO.checkIfValuationExists(reviewCardActivity.getReview().getIdReview(), user);
+
+        if (!isExists) {
+            reviewDAO.addValuationToUserReview(valuation, idReview, user);
+            reviewDAO.updateRatingReview(valuation, idReview, user, "new");
+        }else {
+            reviewDAO.updateValuationToUserReview(valuation, idReview, user);
+            reviewDAO.updateRatingReview(valuation, idReview, user, "modified");
+        }
+
+        Utils.showDialog(reviewCardActivity.getActivityContext(), "Done!", "Valuation successfully saved!");
     }
 }

@@ -1,40 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".View.GenresFragment"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
-    android:clipToPadding="false">
+    android:fitsSystemWindows="true">
 
-    <FrameLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:fitsSystemWindows="true">
 
-        <TextView
-            android:id="@+id/genreName"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:text="Genre"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="26sp"
-            android:textStyle="bold"/>
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
+            android:fitsSystemWindows="true"
+            app:collapsedTitleGravity="center_vertical"
+            app:contentScrim="@color/white"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:expandedTitleTextAppearance="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:maxLines="2"
+            app:titleCollapseMode="scale">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/movieListByGenre"
+            <androidx.appcompat.widget.Toolbar
+                app:titleTextAppearance="@style/ExpandedAppBar"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="0dp"
+        android:clipToPadding="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newList" />
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp">
 
-    </FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:padding="10dp"
+                android:id="@+id/movieListByGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                tools:listitem="@layout/genre_movie_layout"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

@@ -2,25 +2,30 @@ package com.cinemates20.View;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import info.movito.themoviedbapi.model.MovieDb;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
+import com.cinemates20.Model.Review;
 import com.cinemates20.Presenter.MyReviewsPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Adapters.MyReviewsAdapter;
+import com.cinemates20.Utils.Adapters.GenericAdapter;
+import com.cinemates20.Utils.Adapters.MovieAdapter;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.List;
 
 public class MyReviewsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private MyReviewsAdapter myReviewsAdapter;
     private MyReviewsPresenter myReviewsPresenter;
 
     @Override
@@ -31,25 +36,35 @@ public class MyReviewsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerReview);
 
+        CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.toolbar_layout);
+        collapsingToolbarLayout.setTitleEnabled(false);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+        collapsingToolbarLayout.setExpandedTitleGravity(Gravity.BOTTOM);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setTitle("Movie lists");
+        toolbar.setNavigationOnClickListener(view13 -> requireActivity().onBackPressed());
+
         myReviewsPresenter = new MyReviewsPresenter(this);
         myReviewsPresenter.myReviewsClicked();
 
         return view;
     }
 
-    public void setRecycler(List<MovieDb> movieDbList) {
+    public void setRecycler(List<Review> reviewList) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        MyReviewsAdapter myReviewsAdapter = new MyReviewsAdapter(getContext(), movieDbList);
-        recyclerView.setAdapter(myReviewsAdapter);
-        clickListener(myReviewsAdapter);
+        GenericAdapter<Review> personalReviewAdapter = new GenericAdapter<>(reviewList, getContext());
+        recyclerView.setAdapter(personalReviewAdapter);
+        clickListener(personalReviewAdapter);
     }
 
-    public void clickListener(MyReviewsAdapter myReviewsAdapter) {
-        myReviewsAdapter.setOnItemClickListener(new MyReviewsAdapter.ClickListener() {
+    public void clickListener(GenericAdapter<Review> personalReviewAdapter) {
+        personalReviewAdapter.setOnItemClickListener(new GenericAdapter.ClickListener() {
             @Override
-            public void onItemClickListener(String movieTitle, int position) {
-                myReviewsPresenter.onClickSeeReview(movieTitle, position);
+            public void onItemClickListener(Review personalReviewClicked) {
+                myReviewsPresenter.onClickSeeReview(personalReviewClicked);
             }
         });
     }

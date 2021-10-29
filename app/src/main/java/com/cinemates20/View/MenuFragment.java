@@ -18,25 +18,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.cinemates20.Presenter.MenuPresenter;
-import com.cinemates20.Presenter.NavigationPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Adapters.NotificationAdapter;
 import com.cinemates20.Utils.Utils;
-
-import java.util.Objects;
 
 public class MenuFragment extends Fragment {
 
     private Uri imageUri;
     private ImageView proPic;
+    private TextView txtUsername;
     private CardView logout, myReviews, friends, myLists;
-    private NavigationPresenter navigationPresenter;
     private MenuPresenter menuPresenter;
 
     @Override
@@ -46,12 +43,12 @@ public class MenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         proPic = view.findViewById(R.id.userPropic);
-        logout = view.findViewById(R.id.notificationCardView);
+        txtUsername = view.findViewById(R.id.txtUsername);
+        logout = view.findViewById(R.id.exitCardView);
         friends = view.findViewById(R.id.friendListCardView);
         myReviews = view.findViewById(R.id.myReviewsCardView);
         myLists = view.findViewById(R.id.myListsCardView);
 
-        navigationPresenter = new NavigationPresenter(this);
         menuPresenter = new MenuPresenter(this);
         menuPresenter.setMenu();
 
@@ -61,16 +58,16 @@ public class MenuFragment extends Fragment {
     }
 
     public void onClickListener() {
-        logout.setOnClickListener(view1 -> navigationPresenter.clickButtonLogout());
+        logout.setOnClickListener(view1 -> menuPresenter.clickButtonLogout());
 
         friends.setOnClickListener(view ->
-                Utils.changeFragment(MenuFragment.this, new FriendListFragment(), R.id.nav_host_fragment_activity_main));
+                Utils.changeFragment_SlideAnim(MenuFragment.this, new FriendListFragment(), R.id.nav_host_fragment_activity_main));
 
         myReviews.setOnClickListener(view ->
-                Utils.changeFragment(MenuFragment.this, new MyReviewsFragment(), R.id.nav_host_fragment_activity_main));
+                Utils.changeFragment_SlideAnim(MenuFragment.this, new MyReviewsFragment(), R.id.nav_host_fragment_activity_main));
 
         myLists.setOnClickListener(view ->
-                Utils.changeFragment(MenuFragment.this, new MyListsFragment(), R.id.nav_host_fragment_activity_main));
+                Utils.changeFragment_SlideAnim(MenuFragment.this, new MyListsFragment(), R.id.nav_host_fragment_activity_main));
 
         proPic.setOnClickListener(view -> {
             if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){
@@ -83,6 +80,10 @@ public class MenuFragment extends Fragment {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         });
+    }
+
+    public void setUsername(String username){
+        txtUsername.setText(String.format("Welcome %s!", username));
     }
 
     public void setPropic(String uri){

@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.128"
         app:layout_constraintWidth_percent=".8"
-        app:startIconDrawable="@drawable/ic_baseline_person_24"
+        app:startIconDrawable="@drawable/ic_baseline_mail_outline_24"
         app:startIconTint="#FFD700">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@drawable/edit_text_bg"
-            android:hint="@string/username"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
@@ -80,7 +80,8 @@
         android:layout_marginEnd="10dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="@string/password_dimenticata"
+        android:text="Forgot password?"
+        android:fontFamily="@font/nexa_bold"
         android:textColor="#00BCD4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/passwordLogin"
@@ -111,86 +112,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/oppure"
+        android:text="Or sign in with"
+        android:fontFamily="@font/nexa_regular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLoginRegular" />
 
-    <!-- <com.facebook.login.widget.LoginButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonLoginWithFacebook"
-        android:layout_width="wrap_content"
-        android:layout_height="51dp"
-        android:layout_gravity="center_horizontal"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="70dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="#2c5494"
+        app:cornerRadius="30dp"
+        app:icon="@drawable/fb_logo"
+        app:iconGravity="textEnd"
+        app:iconSize="40dp"
+        app:iconTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginWithGoogle" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/buttonLoginWithGoogle"
-        android:layout_width="119dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="52dp"
-        app:icon="@drawable/ic_google_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonLoginRegular" />
-    -->
-    <CheckBox
-        android:id="@+id/keepLogBox"
-        android:layout_width="116dp"
-        android:layout_height="30dp"
-        android:text="Ricordami"
-        android:textColor="#5C5C5C"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLoginRegular"
-        app:layout_constraintEnd_toStartOf="@+id/textForgetPass"
-        app:layout_constraintHorizontal_bias="0.432"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLogin"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonLoginWithFacebook"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#3b5998"
-        android:text="Continua con Facebook"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:cornerRadius="20dp"
-        app:icon="@drawable/facebook_logo"
-        app:iconSize="25dp"
-        app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label"
-        app:layout_constraintVertical_bias="0.134"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintTop_toBottomOf="@+id/label" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonLoginWithGoogle"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:backgroundTint="#FFFFFF"
-        android:fontFamily="sans-serif"
-        android:text="Continua con Google"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:cornerRadius="20dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        app:backgroundTint="@color/white"
+        app:cornerRadius="30dp"
         app:icon="@drawable/google_logo"
-        app:iconSize="25dp"
+        app:iconGravity="textEnd"
+        app:iconSize="30dp"
         app:iconTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginWithFacebook"
-        app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintWidth_percent=".8" />
-
+        app:layout_constraintStart_toEndOf="@+id/buttonLoginWithFacebook"
+        app:layout_constraintTop_toBottomOf="@+id/label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

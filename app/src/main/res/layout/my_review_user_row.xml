@@ -33,30 +33,71 @@
 
             <TextView
                 android:id="@+id/txtTitleMovieReview"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="TextView"
-                android:textColor="@color/white"
+                android:layout_marginStart="175dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:fontFamily="@font/nexa_bold"
+                android:text="Movie name"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/seePersonalReviewButton"
                 app:layout_constraintStart_toEndOf="@+id/moviePosterReview"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView5"
+
+            <TextView
+                android:id="@+id/totalReview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/nexa_bold"
+                android:text="Your valuation: "
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/moviePosterReview"
+                app:layout_constraintTop_toBottomOf="@+id/txtTitleMovieReview" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="14dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="20dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="@color/gold"
+                android:rating="0"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:theme="@style/RatingBar"
+                app:layout_constraintEnd_toStartOf="@+id/seePersonalReviewButton"
+                app:layout_constraintStart_toEndOf="@+id/totalReview"
+                app:layout_constraintTop_toBottomOf="@+id/txtTitleMovieReview" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/seePersonalReviewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
+                app:borderWidth="0dp"
+                app:elevation="0dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:state_pressed="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/txtTitleMovieReview"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:tint="@color/gold" />
+                app:pressedTranslationZ="0dp"
+                app:tint="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

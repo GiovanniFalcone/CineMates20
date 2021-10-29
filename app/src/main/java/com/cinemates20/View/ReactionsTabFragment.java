@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cinemates20.R;
-import com.cinemates20.Utils.Adapters.ReactionsTabAdapter;
+import com.cinemates20.Utils.Adapters.TabAdapter.ReactionsTabAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -42,7 +42,10 @@ public class ReactionsTabFragment extends BottomSheetDialogFragment {
                 new ReactionsTabAdapter(getChildFragmentManager(),
                         requireContext(),
                         tabLayout.getTabCount(),
-                        requireArguments().getString("idReview"));
+                        requireArguments().getString("idReview"),
+                        requireArguments().getSerializable("User"),
+                        requireArguments().getStringArrayList("sentList"),
+                        requireArguments().getStringArrayList("receivedList"));
 
         viewPager.setAdapter(reactionsTabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -50,11 +53,11 @@ public class ReactionsTabFragment extends BottomSheetDialogFragment {
         tabLayout.setAlpha(0);
         tabLayout.animate().translationY(0).alpha(1).setDuration(1000).setStartDelay(100).start();
 
-        selectedListner();
+        selectedListener();
         return view;
     }
 
-    private void selectedListner() {
+    private void selectedListener() {
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

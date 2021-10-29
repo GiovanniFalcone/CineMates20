@@ -24,9 +24,9 @@ public class ResetPasswordPresenter {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Utils.showDialog(resetPasswordActivity.getActivityContext(), "Mail inviata", resetPasswordActivity.getString(R.string.instruction_mail));
+                        Utils.showDialog(resetPasswordActivity.getActivityContext(), "Email sent", resetPasswordActivity.getString(R.string.instruction_mail));
                     } else {
-                        Utils.showErrorDialog(resetPasswordActivity.getActivityContext(), "Qualcosa è andato storto...", resetPasswordActivity.getString(R.string.something_wrong));
+                        Utils.showErrorDialog(resetPasswordActivity.getActivityContext(), "Something went wrong ...", resetPasswordActivity.getString(R.string.something_wrong));
                     }
                 });
     }

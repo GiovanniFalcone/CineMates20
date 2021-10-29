@@ -1,51 +1,60 @@
 package com.cinemates20.Presenter;
 
-import com.cinemates20.DAO.Implements.ReviewDAO_Firestore;
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Firestore.ReviewDAO;
-import com.cinemates20.DAO.Interface.Firestore.UserDAO;
-import com.cinemates20.Model.User;
+import com.cinemates20.Model.DAO.DAOFactory;
+import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
+import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.WriteReviewActivity;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Date;
+import java.util.Objects;
 
 public class WriteReviewPresenter {
 
-    private WriteReviewActivity writeReviewActivity;
-    private ReviewDAO reviewDAO;
-    private UserDAO userDAO;
+    private final WriteReviewActivity writeReviewActivity;
 
     public WriteReviewPresenter(WriteReviewActivity writeReviewActivity){
         this.writeReviewActivity = writeReviewActivity;
     }
 
     public void clickAddReview() {
-        reviewDAO = new ReviewDAO_Firestore(writeReviewActivity.getApplication());
-        userDAO = new UserDAO_Firestore(writeReviewActivity.getApplication());
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
 
         int idMovie = writeReviewActivity.getIdMovie();
-        String title = writeReviewActivity.getMovieTitle();
         String textReview = writeReviewActivity.getReviewText();
-        String currentUser = writeReviewActivity.getCurrentUser();
+        String author = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
 
+        new MaterialAlertDialogBuilder(writeReviewActivity.getActivityContext(), R.style.ThemeMyAppDialogAlertDay)
+                .setTitle("Confirm review")
+                .setMessage(R.string.confirm_review)
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    Timestamp dateAndTime =  new Timestamp(new Date());
 
-        User author = userDAO.getUsername(currentUser);
+                    reviewDAO.updateReview(author, textReview, idMovie, dateAndTime, new ReviewCallback() {
+                        @Override
+                        public void onSuccess(String idReview) {
+                            if(idReview != null) {
+                                Utils.showDialog(writeReviewActivity.getActivityContext(), "Done!",
+                                        "Your review has been successfully added.");
 
-        new MaterialAlertDialogBuilder(writeReviewActivity.getActivityContext())
-                .setTitle("Conferma recensione")
-                .setMessage(R.string.conferma_recensione)
-                .setPositiveButton("Si", (dialogInterface, i) -> {
-                    reviewDAO.saveReview(author.getUsername(), textReview, idMovie, title);
-                    Utils.showDialog(writeReviewActivity.getActivityContext(), "Recensione scritta con successo",
-                            "La tua recensione è stata salvata correttamente");
-                    writeReviewActivity.finish();
+                                //save the news into feed
+                                FeedDAO feedDAO = daoFactory.getFeedDAO();
+                                feedDAO.addNews(author, "", String.valueOf(idMovie), idReview, "review", 0f, dateAndTime);
+                            } else
+                                Utils.showErrorDialog(writeReviewActivity.getActivityContext(), "Error", "Something went wrong.");
+                        }
+                    });
+
+                    writeReviewActivity.closeActivity();
                 })
-                .setNegativeButton("Annulla", (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();
-
-
-        //MOSTRARE NEL RECYCLER DELLA MOVIE CARD LA RECENSIONE
-        //AGGIUNGERE LA RECENSIONE NEL RECYCLER DELLE RECENSIONI PERSONALI
     }
 }

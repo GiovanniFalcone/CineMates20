@@ -1,82 +1,104 @@
 package com.cinemates20.Presenter;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 
+import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
+import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
+import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.HomeFragment;
 import com.cinemates20.View.MovieCardFragment;
 
-import org.apache.commons.lang3.tuple.Triple;
 import java.util.List;
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import info.movito.themoviedbapi.model.MovieDb;
 
-public class HomePresenter extends AsyncTask<Void, Void, Triple<List<MovieDb>, List<MovieDb>, List<MovieDb>>> {
-
-    public interface HomeCallback{
-        void setMoviesHome(Triple<List<MovieDb>, List<MovieDb>, List<MovieDb>> ret);
-    }
+public class HomePresenter{
 
     private final HomeFragment homeFragment;
-    private HomeCallback homeCallback;
 
     public HomePresenter(HomeFragment homeFragment) {
         this.homeFragment = homeFragment;
     }
 
-    public void setHomeFragment(HomeCallback homeCallback){
-        this.homeCallback = homeCallback;
-    }
+    /**
+     * This method will get the list of popular, top rated and now playing movie and will set
+     * the lists into home.
+     */
+    public void setHome() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
+            MovieDAO movieDAO = new MovieDAO_TMDB();
+            AtomicInteger idMovie_nowPlaying = new AtomicInteger();
 
-    @Override
-    protected Triple<List<MovieDb>, List<MovieDb>, List<MovieDb>> doInBackground(Void... voids) {
-        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-        TmdbMovies movies = api.getMovies();
-        List<MovieDb> popular = movies.getPopularMovies(null, 0).getResults();
-        List<MovieDb> nowPlaying = movies.getNowPlayingMovies(null, 0, null).getResults();
-        List<MovieDb> topRated = movies.getTopRatedMovies(null, 0).getResults();
+            //Set popularMovie
+            movieDAO.getPopular(new MovieCallback() {
+                @Override
+                public void setMovie(List<MovieDb> movieDbList) {
+                    handler.post(() -> homeFragment.setFeaturedMovie(movieDbList));
+                }
+            });
 
-        return new Triple<List<MovieDb>, List<MovieDb>, List<MovieDb>>() {
-            @Override
-            public List<MovieDb> getLeft() {
-                return popular;
-            }
+            //Set topRatedMovie
+            movieDAO.getTopRated(new MovieCallback() {
+                @Override
+                public void setMovie(List<MovieDb> movieDbList) {
+                    handler.post(() -> homeFragment.setRecycler(movieDbList));
+                }
+            });
 
-            @Override
-            public List<MovieDb> getMiddle() {
-                return nowPlaying;
-            }
+            //Set featured movie
+            movieDAO.getNowPlaying(new MovieCallback() {
+                @Override
+                public void setMovie(List<MovieDb> movieDbList) {
+                    int randomNum = (int) ((Math.random() * (20 - 1)) + 1);
+                    MovieDb movieDb = movieDbList.get(randomNum);
+                    idMovie_nowPlaying.set(movieDb.getId());
 
-            @Override
-            public List<MovieDb> getRight() {
-                return topRated;
-            }
-        };
-    }
+                    handler.post(() ->
+                            homeFragment.setRandomMovie(movieDb));
+                }
+            });
 
-    @Override
-    protected void onPostExecute(Triple<List<MovieDb>, List<MovieDb>, List<MovieDb>> ret) {
-        homeCallback.setMoviesHome(ret);
+            movieDAO.getLogo(idMovie_nowPlaying.get(), new MovieCallback() {
+                @Override
+                public void setLogo(String pathLogo) {
+                    homeFragment.setLogoMovie(pathLogo);
+                }
+            });
+        });
     }
 
     /**
      * Open the movie card of clicked movie
-     * @param movieDbList - the list of movies
-     * @param position - the position of clicked movie
+     * @param movieClicked the movie clicked by user
      */
-    public void onClickMovie(List<MovieDb> movieDbList, int position) {
+    public void onClickMovie(MovieDb movieClicked) {
         MovieCardFragment movieCardFragment = new MovieCardFragment();
-        Bundle args = new Bundle();
-        args.putInt("MovieID", movieDbList.get(position).getId());
-        args.putString("MovieTitle", movieDbList.get(position).getTitle());
-        args.putString("MovieUrl", movieDbList.get(position).getPosterPath());
-        args.putString("MovieOverview", movieDbList.get(position).getOverview());
-        args.putFloat("MovieRating", movieDbList.get(position).getVoteAverage());
-        movieCardFragment.setArguments(args);
-        Utils.changeFragment(homeFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
+        Fragment current = homeFragment.requireActivity()
+                .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+        if (!current.getClass().equals(movieCardFragment.getClass())) {
+            Bundle args = new Bundle();
+            args.putInt("MovieID", movieClicked.getId());
+            args.putString("MovieTitle", movieClicked.getTitle());
+            args.putString("MovieUrl", movieClicked.getPosterPath());
+            args.putString("MovieImg", movieClicked.getPosterPath());
+            args.putString("MovieOverview", movieClicked.getOverview());
+            args.putFloat("MovieRating", movieClicked.getVoteAverage());
+            args.putString("MoviePoster", movieClicked.getPosterPath());
+            movieCardFragment.setArguments(args);
+            Utils.changeFragment_BottomAnim(homeFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
+        } else
+            Toast.makeText(homeFragment.getContext(), "Be patient, the card is loading", Toast.LENGTH_SHORT).show();
     }
 }

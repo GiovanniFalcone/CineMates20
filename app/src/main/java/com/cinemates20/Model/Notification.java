@@ -5,7 +5,7 @@ import java.util.Date;
 public class Notification {
 
     private Date dateAndTime;
-    private String type;
+    private String type, flag;
     private String userWhoReceived, userWhoSent;
 
     public Date getDateAndTime() {
@@ -36,8 +36,16 @@ public class Notification {
         return userWhoSent;
     }
 
-    public void setUserWhoSend(String userWhoSend) {
+    public void setUserWhoSent(String userWhoSent) {
         this.userWhoSent = userWhoSent;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     @Override
@@ -45,6 +53,7 @@ public class Notification {
         return "Notification{" +
                 "dateAndTime=" + dateAndTime +
                 ", type='" + type + '\'' +
+                ", flag='" + flag + '\'' +
                 ", userWhoReceived='" + userWhoReceived + '\'' +
                 ", userWhoSend='" + userWhoSent + '\'' +
                 '}';

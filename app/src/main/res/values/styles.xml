@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:ns2="http://schemas.android.com/apk/res-auto">
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar"/>
 
     <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -50,5 +50,67 @@
     <style name="MyThemeOverlayAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Dialog.Rounded</item>
     </style>
+
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/nexa_bold</item>
+        <item name="android:layout_gravity">bottom|center</item>
+    </style>
+
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/nexa_bold</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+
+    <!-- MATERIAL DIALOG -->
+    <style name="ThemeMyAppDialogAlertDay"
+        parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSecondary">@color/gold</item> <!-- selected -->
+        <item name="colorControlNormal">@color/gold</item> <!-- unselected -->
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="fontFamily">@font/nexa_bold</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MyTitle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
+    </style>
+
+    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+    </style>
+
+    <style name="MyTitle" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/MyTitle_TextAppearance</item>
+    </style>
+    <style name="MyTitle_TextAppearance" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/nexa_bold</item>
+    </style>
+
+    <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/nexa_bold</item>
+    </style>
+    <!--END MATERIAL -->
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/gold</item>
+        <item name="colorControlActivated">@color/gold</item>
+    </style>
+
+    <style name="MyMenu">
+        <item name="android:fontFamily">@font/nexa_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
 
 </resources>

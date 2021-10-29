@@ -11,4 +11,5 @@
     <color name="gold">#FFD700</color>
     <color name="opacity_gold">#80FFD700</color>
     <color name="colorAccent">#FF000000</color>
+    <color name="dark_gray">#a9a9a9</color>
 </resources>

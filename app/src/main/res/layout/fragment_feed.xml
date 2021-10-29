@@ -1,21 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_feed"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedFragment">
+    android:paddingBottom="60dp"
+    android:clipToPadding="true"
+    tools:context=".View.FeedFragment">
 
-    <TextView
-        android:id="@+id/textView5"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/loadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="200dp"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFeed">
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/gold"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textViewFeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/nexa_bold"
+                android:text="Feed"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerFeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFeed" />
+
+            <include
+                android:id="@+id/layout_noResults"
+                layout="@layout/no_feed"
+                android:layout_marginTop="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="@+id/recyclerFeed" />
+
+            <include
+                android:id="@+id/layout_noFriends"
+                layout="@layout/no_friends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:visibility="invisible"
+                android:layout_marginTop="100dp"
+                app:layout_constraintTop_toTopOf="@+id/recyclerFeed" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/onScrollButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:backgroundTint="@color/gold"
+        android:src="@drawable/ic_baseline_arrow_upward_24"
+        app:borderWidth="0dp"
+        app:fabCustomSize="45dp"
+        android:visibility="invisible"/>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

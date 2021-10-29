@@ -57,10 +57,8 @@ dependencies {
     //Remember me function
     implementation 'io.github.pilgr:paperdb:2.7.1'
 
-
     //Facebook login
-    implementation 'com.facebook.android:facebook-android-sdk:5.13.0'
-
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)' //'com.facebook.android:facebook-android-sdk:5.13.0'
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
@@ -103,6 +101,9 @@ dependencies {
     //for Shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    //for refresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    //for animated movie
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
 }

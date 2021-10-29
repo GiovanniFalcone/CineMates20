@@ -1,9 +1,10 @@
 package com.cinemates20.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,22 +15,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+
 import com.cinemates20.Presenter.WriteReviewPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class WriteReviewActivity extends AppCompatActivity {
 
     private EditText textBoxReview;
     private WriteReviewPresenter writeReviewPresenter;
-    private String title, url, overview;
-    private int idMovie;
+    private String title, url;
     private ImageView poster;
-    private TextView titleMovie, overviewMovie;
+    private TextView titleMovie;
+    private FloatingActionButton backButton;
+    private int idMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +38,21 @@ public class WriteReviewActivity extends AppCompatActivity {
         writeReviewPresenter = new WriteReviewPresenter(this);
 
         titleMovie = findViewById(R.id.movieTitle);
-        overviewMovie = findViewById(R.id.movieOverview);
         poster = findViewById(R.id.moviePoster);
         textBoxReview = findViewById(R.id.editTextBoxReview);
+        backButton = findViewById(R.id.backButton);
 
         idMovie = getIntent().getIntExtra("MovieID", 0);
         title = getIntent().getStringExtra("MovieTitle");
         url = getIntent().getStringExtra("MovieUrl");
-        overview = getIntent().getStringExtra("MovieOverview");
 
         titleMovie.setText(title);
         Glide.with(WriteReviewActivity.this.getApplicationContext())
                 .load("http://image.tmdb.org/t/p/original"+ url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(poster);
+
+        backButton.setOnClickListener(view -> onBackPressed());
 
         Button buttonConfirmReview = findViewById(R.id.button2);
         buttonConfirmReview.setEnabled(false);
@@ -86,15 +86,16 @@ public class WriteReviewActivity extends AppCompatActivity {
         return idMovie;
     }
 
-    public String getCurrentUser(){
-        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
-    }
-
     public String getReviewText(){
         return textBoxReview.getText().toString().trim();
     }
 
     public Context getActivityContext(){
         return this;
+    }
+
+    public void closeActivity(){
+        setResult(Activity.RESULT_OK, new Intent().putExtra("written", true));
+        finish();
     }
 }

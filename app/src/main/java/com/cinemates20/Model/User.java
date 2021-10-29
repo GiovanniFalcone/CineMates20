@@ -1,20 +1,20 @@
 package com.cinemates20.Model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private String username, email, icon;
-    private List<String> friends, movieLists;
+    private List<String> friends;
 
     public User(){ }
 
-    public User(String username, String email, String icon, List<String> friends, List<String> movieLists){
+    public User(String username, String email, String icon, List<String> friends){
         this.username = username;
         this.email = email;
         this.icon = icon;
         this.friends = friends;
-        this.movieLists = movieLists;
     }
 
     public String getUsername() {
@@ -49,14 +49,6 @@ public class User {
         this.friends = friends;
     }
 
-    public List<String> getMovieLists() {
-        return movieLists;
-    }
-
-    public void setMovieLists(List<String> movieLists) {
-        this.movieLists = movieLists;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -64,7 +56,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", icon='" + icon + '\'' +
                 ", friends=" + friends + '\'' +
-                ", movieLists=" + movieLists +
                 '}';
     }
 }

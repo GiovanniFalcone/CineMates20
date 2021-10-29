@@ -1,34 +1,27 @@
 package com.cinemates20.Presenter;
 
-import android.util.Log;
-
-import com.cinemates20.DAO.Implements.NotificationDAO_Firestore;
-import com.cinemates20.DAO.Implements.UserDAO_Firestore;
-import com.cinemates20.DAO.Interface.Callbacks.NotificationCallback;
-import com.cinemates20.DAO.Interface.Firestore.NotificationDAO;
+import com.cinemates20.Model.DAO.DAOFactory;
+import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
 import com.cinemates20.Model.Notification;
 import com.cinemates20.View.NotificationFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class NotificationPresenter {
 
-    private NotificationDAO notificationDAO;
-    private NotificationFragment notificationFragment;
-    private UserDAO_Firestore userDAO;
+    private final NotificationFragment notificationFragment;
 
     public NotificationPresenter(NotificationFragment notificationFragment){
         this.notificationFragment = notificationFragment;
     }
 
     public void notificationClicked(){
-        userDAO = new UserDAO_Firestore(notificationFragment.getContext());
-        String currentUser = userDAO.getUsername(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()).getUsername();
+        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
 
-        notificationDAO = new NotificationDAO_Firestore(notificationFragment.getContext());
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
         notificationDAO.changeNotificationState(currentUser);
 
         List<Notification> notificationList = notificationDAO.getNotifications(currentUser);

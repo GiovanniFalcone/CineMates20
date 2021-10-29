@@ -15,10 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cinemates20.Utils.Adapters.SearchMovieAdapter;
+import com.cinemates20.Utils.Adapters.MovieAdapter;
 import com.cinemates20.Presenter.SearchMoviePresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 public class SearchMovieTabFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private SearchMovieAdapter myRecyclerViewAdapter;
+    private MovieAdapter myRecyclerViewAdapter;
     private EditText searchView;
     private CharSequence search = "";
     private SearchMoviePresenter searchMoviePresenter;
@@ -44,8 +43,8 @@ public class SearchMovieTabFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        List<MovieDb> movielist = new ArrayList<>();
-        setUserRecycler(movielist);
+        List<MovieDb> movieList = new ArrayList<>();
+        setMovieRecycler(movieList);
 
         searchView = root.findViewById(R.id.searchView);
 
@@ -127,40 +126,32 @@ public class SearchMovieTabFragment extends Fragment {
 
                 myRecyclerViewAdapter.getFilter().filter(charSequence);
                 search = charSequence;
-                searchMoviePresenter = (SearchMoviePresenter) new SearchMoviePresenter(SearchMovieTabFragment.this)
-                        .execute(searchView.getText().toString().trim());
-                setUpInterface();
+                searchMoviePresenter.onSearchMovie(searchView.getText().toString().trim());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.toString().equals(""))
+                if(editable.toString().equals("")) {
                     gridLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
 
-    public void setUserRecycler(List<MovieDb> myTmdbArrayList) {
-        myRecyclerViewAdapter = new SearchMovieAdapter(getContext(), myTmdbArrayList);
+    public void setMovieRecycler(List<MovieDb> movieDbList) {
+        myRecyclerViewAdapter = new MovieAdapter(movieDbList, getContext(), 2);
         recyclerView.setAdapter(myRecyclerViewAdapter);
         clickListener(myRecyclerViewAdapter);
     }
 
-    public void clickListener(SearchMovieAdapter searchMovieAdapter){
-        searchMovieAdapter.setOnItemClickListener(filteredMovie -> {
-            MovieCardFragment movieCardFragment = new MovieCardFragment();
-            Bundle args = new Bundle();
-            args.putInt("MovieID", filteredMovie.getId());
-            args.putString("MovieTitle", filteredMovie.getTitle());
-            args.putString("MovieUrl", filteredMovie.getPosterPath());
-            args.putString("MovieOverview", filteredMovie.getOverview());
-            args.putFloat("MovieRating", filteredMovie.getVoteAverage());
-            movieCardFragment.setArguments(args);
-            Utils.changeFragment(this, movieCardFragment, R.id.nav_host_fragment_activity_main);
+    public void clickListener(MovieAdapter adapterMovie){
+        adapterMovie.setOnItemClickListener(new MovieAdapter.ClickListener() {
+            @Override
+            public void onItemClickListener(MovieDb filteredMovie) {
+                searchMoviePresenter.onClickMovie(filteredMovie);
+            }
         });
     }
 
-    public void setUpInterface(){
-        searchMoviePresenter.setSearchMoviesCallback(this::setUserRecycler);
-    }
+
 }
