@@ -1,7 +1,9 @@
 package com.cinemates20.Presenter;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.FeedCallback;
@@ -76,9 +78,11 @@ public class FeedPresenter {
     public void onClickItem(Feed object, String iconAuthor, MovieDb movieDb) {
         DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
         ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+        UserDAO userDAO = daoFactory.getUserDAO();
 
         switch (object.getItemNewsType()){
             case "review":
+            case "comment":
                 Review review = reviewDAO.getReviewById(object.getIdItemNews());
 
                 if(review.isIsInappropriate()){
@@ -94,17 +98,23 @@ public class FeedPresenter {
                 builder.setTitle("This review may contains spoiler!");
                 builder.setMessage("Do you wanna see it anyway?");
                 builder.setIcon(R.drawable.ic_baseline_error_24)
-                        .setPositiveButton("Go anyway", (dialogInterface, i) -> startActivity(object, iconAuthor, review))
+                        .setPositiveButton("Go anyway", (dialogInterface, i) -> {
+                            if(!review.getAuthor().equals(object.getUserOfTheNews())){
+                                Uri uri = userDAO.getImageUri(review.getAuthor());
+                                startActivity(object, uri.toString(), review);
+                            } else
+                                startActivity(object, iconAuthor, review);
+                        })
                         .setNegativeButton("Cancel", (dialogInterface, i) ->
                                 dialogInterface.dismiss())
                         .show();
-                } else
-                    startActivity(object, iconAuthor, review);
-                break;
-            case "comment":
-                review = reviewDAO.getReviewById(object.getIdItemNews());
-
-                startActivity(object, iconAuthor, review);
+                } else {
+                    if(!review.getAuthor().equals(object.getUserOfTheNews())){
+                        Uri uri = userDAO.getImageUri(review.getAuthor());
+                        startActivity(object, uri.toString(), review);
+                    } else
+                        startActivity(object, iconAuthor, review);
+                }
                 break;
 
             case "valuation":
