@@ -85,14 +85,14 @@ public class FeedPresenter {
             case "comment":
                 Review review = reviewDAO.getReviewById(object.getIdItemNews());
 
+                List<String> friends = userDAO.getFriends(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
+                if(!friends.contains(review.getAuthor())) {
+                    Utils.showErrorDialog(feedFragment.getContext(), "You can't see this review", "You can't see this review: you must be friends with " + object.getSecondUser() + "!");
+                    break;
+                }
+
                 if(review.isIsInappropriate()){
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(feedFragment.getFragmentContext(), R.style.ThemeMyAppDialogAlertDay);
-                    builder.setTitle("This review is not visible anymore.");
-                    builder.setIcon(R.drawable.ic_baseline_error_24)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.dismiss())
-                            .setNegativeButton("Cancel", (dialogInterface, i) ->
-                                    dialogInterface.dismiss())
-                            .show();
+                    Utils.showErrorDialog(feedFragment.getContext(), "Error", "This review is not visible anymore.");
                 } else if(review.isHasCommentWithSpoiler() || review.getCounterForSpoiler() > 2){
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(feedFragment.getFragmentContext(), R.style.ThemeMyAppDialogAlertDay);
                 builder.setTitle("This review may contains spoiler!");
