@@ -1,5 +1,6 @@
 package com.cinemates20.Presenter;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.cinemates20.Model.DAO.DAOFactory;
@@ -106,7 +107,7 @@ public class ReportPresenter {
         reviewDAO.updateCounter(idReview, reportType);
 
         if(reportType.equals("language")){
-            if(review.getCounterForLanguage() > 2)
+            if(review.getCounterForLanguage() >= 2)
                 reviewDAO.changeState(idReview, reportType);
         }
     }
