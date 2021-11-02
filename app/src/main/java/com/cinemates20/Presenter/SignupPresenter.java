@@ -56,7 +56,7 @@ public class SignupPresenter {
 
     }
 
-    public void createUser(String email, String password, String username){
+    private void createUser(String email, String password, String username){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(signupTabFragment.requireActivity(), task -> {
                     if (task.isSuccessful()) {
@@ -88,7 +88,7 @@ public class SignupPresenter {
                 });
     }
 
-    public void sendEmailVerification() {
+    private void sendEmailVerification() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         assert user != null;
@@ -102,11 +102,11 @@ public class SignupPresenter {
                 });
     }
 
-    public static boolean isValidEmail(CharSequence target) {
+    private static boolean isValidEmail(CharSequence target) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    public static boolean isValidPassword(CharSequence target) {
+    private static boolean isValidPassword(CharSequence target) {
         final Pattern PASSWORD_PATTERN =
                 Pattern.compile("^" +
                         "(?=.*[!@#$%^&+=])" +     // at least 1 special character
@@ -117,7 +117,7 @@ public class SignupPresenter {
         return PASSWORD_PATTERN.matcher(target).matches();
     }
 
-    public static boolean isValidUsername(CharSequence target){
+    private static boolean isValidUsername(CharSequence target){
         final Pattern USERNAME_PATTERN =
                 Pattern.compile("^" +
                         "(?=\\S+$)" +
