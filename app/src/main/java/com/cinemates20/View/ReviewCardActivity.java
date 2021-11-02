@@ -132,14 +132,12 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         ratingBar.setRating(getReview().getRating());
 
         reviewCardPresenter.viewReview();
-        reviewCardPresenter.setUserCommentByReview();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         reviewCardPresenter.viewReview();
-        reviewCardPresenter.setUserCommentByReview();
     }
 
     public Review getReview(){

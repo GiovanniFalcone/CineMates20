@@ -40,6 +40,8 @@ public class ReviewCardPresenter {
             reviewCardActivity.setColorButton(reactionType);
             reviewCardActivity.setFlag(reactionType);
         }
+
+        setUserCommentByReview();
     }
 
     /**
