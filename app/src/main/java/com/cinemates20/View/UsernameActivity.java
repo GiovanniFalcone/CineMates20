@@ -37,16 +37,6 @@ public class UsernameActivity extends AppCompatActivity {
         editTextUsername.addTextChangedListener(textWatcher);
     }
 
-    private void eventListener() {
-        buttonSend.setOnClickListener(v -> {
-            usernamePresenter.onChooseUsername();
-        });
-    }
-
-    public String getUsername(){
-        return editTextUsername.getText().toString().trim().toLowerCase();
-    }
-
     public String getCurrentUser(){
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
     }
@@ -57,11 +47,13 @@ public class UsernameActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            String mail = editTextUsername.getText().toString().trim();
+            String username = editTextUsername.getText().toString().trim();
 
-            if(!Utils.checkIfFieldIsEmpty(mail)){
+            if(!Utils.checkIfFieldIsEmpty(username)){
                 buttonSend.setEnabled(true);
-                eventListener();
+                buttonSend.setOnClickListener(v -> {
+                    usernamePresenter.onChooseUsername(username.toLowerCase());
+                });
             }else{
                 buttonSend.setEnabled(false);
             }
@@ -71,8 +63,8 @@ public class UsernameActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {}
     };
 
-    public void setErrorUsername() {
-        chooseUsernameLayout.setError("Username already taken.");
+    public void setErrorUsername(String s) {
+        chooseUsernameLayout.setError(s);
     }
 
     public void setErrorToNull(){
