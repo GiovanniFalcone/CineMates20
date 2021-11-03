@@ -43,7 +43,7 @@ public class MyReviewsFragment extends Fragment {
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.BOTTOM);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Movie lists");
+        toolbar.setTitle("My reviews");
         toolbar.setNavigationOnClickListener(view13 -> requireActivity().onBackPressed());
 
         myReviewsPresenter = new MyReviewsPresenter(this);

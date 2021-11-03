@@ -38,9 +38,7 @@ public class SearchMoviePresenter {
             movieDAO.getMovies(query, new MovieCallback() {
                 @Override
                 public void setMovie(List<MovieDb> movieDbList) {
-                    handler.post(() -> {
-                        searchMovieTabFragment.setMovieRecycler(movieDbList);
-                    });
+                    handler.post(() -> searchMovieTabFragment.setMovieRecycler(movieDbList));
                 }
             });
         });
