@@ -49,14 +49,7 @@ public class ReportPresenter {
                     ReportDAO reportDAO = daoFactory.getReportDAO();
                     switch (selected.get()){
                         case 0:
-                            //reportDAO.addReport(commentSelected.getIdComment(), commentSelected.getAuthor(), reporter, "spoiler", "comment");
                             commentDAO.updateCounter(commentSelected.getIdComment(), "spoiler");
-                            int counterSpoiler = commentDAO.getCounter(commentSelected.getIdComment(), "spoiler").intValue();
-                            if(counterSpoiler > 2){
-                                ReviewDAO reviewDAO = daoFactory.getReviewDAO();
-                                reviewDAO.updateCommentFlag(commentSelected.getIdComment(), commentSelected.getIdReview());
-                            }
-
                             Toast.makeText(reviewCardActivity.getActivityContext(), "Report for spoiler sent.", Toast.LENGTH_SHORT).show();
                             break;
                         case 1:

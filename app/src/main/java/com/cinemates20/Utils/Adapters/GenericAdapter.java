@@ -254,6 +254,22 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .into(((ViewHolder_Comment) holder).getIconUser());
                 }
 
+                if(comment.getCounterForSpoiler() >= 3){
+                    ((ViewHolder_Comment) holder).getTxtComment().setVisibility(View.GONE);
+                    ((ViewHolder_Comment) holder).getOption().setVisibility(View.GONE);
+                    ((ViewHolder_Comment) holder).getTxtTimeAndDate().setVisibility(View.GONE);
+                    ((ViewHolder_Comment) holder).getButtonViewSpoiler().setVisibility(View.VISIBLE);
+                    ((ViewHolder_Comment) holder).getTxtSpoiler().setVisibility(View.VISIBLE);
+
+                    ((ViewHolder_Comment) holder).getButtonViewSpoiler().setOnClickListener(view -> {
+                        ((ViewHolder_Comment) holder).getTxtComment().setVisibility(View.VISIBLE);
+                        ((ViewHolder_Comment) holder).getOption().setVisibility(View.VISIBLE);
+                        ((ViewHolder_Comment) holder).getTxtTimeAndDate().setVisibility(View.VISIBLE);
+                        ((ViewHolder_Comment) holder).getButtonViewSpoiler().setVisibility(View.GONE);
+                        ((ViewHolder_Comment) holder).getTxtSpoiler().setVisibility(View.GONE);
+                    });
+                }
+
                 ((ViewHolder_Comment) holder).getTxtComment().setText(comment.getTextComment());
 
                 time = Utils.setTime(comment.getDateAndTime().getTime());
@@ -281,7 +297,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .into(((ViewHolder_AllReview)holder).getAuthorIcon());
                 }
 
-                if(authorReview.getCounterForSpoiler() >= 3 || authorReview.isHasCommentWithSpoiler())
+                if(authorReview.getCounterForSpoiler() >= 3)
                     ((ViewHolder_AllReview) holder).getSpoilerText().setVisibility(View.VISIBLE);
 
                 Uri finalUri = uri;
@@ -644,7 +660,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class ViewHolder_Comment extends RecyclerView.ViewHolder{
 
-        private final TextView authorComment, txtComment, txtTimeAndDate;
+        private final TextView authorComment, txtComment, txtTimeAndDate, txtSpoiler, buttonViewSpoiler;
         private final ImageView iconUser, option;
 
         public ViewHolder_Comment(@NonNull View itemView) {
@@ -654,6 +670,8 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
             txtTimeAndDate = itemView.findViewById(R.id.txtDateComment);
             iconUser = itemView.findViewById(R.id.userPropic);
             option = itemView.findViewById(R.id.option);
+            txtSpoiler = itemView.findViewById(R.id.textView5);
+            buttonViewSpoiler = itemView.findViewById(R.id.button3);
         }
 
         public TextView getAuthorComment() {
@@ -674,6 +692,14 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ImageView getOption() {
             return option;
+        }
+
+        public TextView getTxtSpoiler() {
+            return txtSpoiler;
+        }
+
+        public TextView getButtonViewSpoiler() {
+            return buttonViewSpoiler;
         }
     }
 

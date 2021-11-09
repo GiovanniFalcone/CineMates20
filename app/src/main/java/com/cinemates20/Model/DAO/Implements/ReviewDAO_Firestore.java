@@ -54,7 +54,6 @@ public class ReviewDAO_Firestore implements ReviewDAO {
         review.put("counterForSpoiler", 0);
         review.put("counterForLanguage", 0);
         review.put("isInappropriate", false);
-        review.put("hasCommentWithSpoiler", false);
         review.put("dateAndTime", dateAndTime);
 
         // Save data into document
@@ -451,11 +450,5 @@ public class ReviewDAO_Firestore implements ReviewDAO {
         if ("language".equals(reportType)) {
             documentReference.update("isInappropriate", true);
         }
-    }
-
-    @Override
-    public void updateCommentFlag(String idComment, String idReview) {
-        DocumentReference documentReference = reviewCollection.document(idReview);
-        documentReference.update("hasCommentWithSpoiler", true);
     }
 }

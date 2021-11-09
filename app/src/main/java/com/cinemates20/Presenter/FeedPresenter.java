@@ -93,7 +93,7 @@ public class FeedPresenter {
 
                 if(review.isIsInappropriate()){
                     Utils.showErrorDialog(feedFragment.getContext(), "Error", "This review is not visible anymore.");
-                } else if(review.isHasCommentWithSpoiler() || review.getCounterForSpoiler() > 2){
+                } else if(review.getCounterForSpoiler() > 2){
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(feedFragment.getFragmentContext(), R.style.ThemeMyAppDialogAlertDay);
                 builder.setTitle("This review may contains spoiler!");
                 builder.setMessage("Do you wanna see it anyway?");

@@ -42,6 +42,4 @@ public interface ReviewDAO {
     void updateCounter(String idReview, String reportType);
 
     void changeState(String idReview, String reportType);
-
-    void updateCommentFlag(String idComment, String idReview);
 }
