@@ -375,11 +375,11 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case id.reportForSpoiler:
-                reportPresenter.reportForSpoilerClicked("spoiler");
+                reportPresenter.reportClicked("spoiler");
                 break;
 
             case R.id.reportForLanguage:
-                reportPresenter.reportForSpoilerClicked("language");
+                reportPresenter.reportClicked("language");
                 break;
 
             case id.rateReview:

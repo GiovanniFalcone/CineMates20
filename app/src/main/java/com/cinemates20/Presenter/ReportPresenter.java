@@ -49,12 +49,9 @@ public class ReportPresenter {
                     ReportDAO reportDAO = daoFactory.getReportDAO();
                     switch (selected.get()){
                         case 0:
-                            reportDAO.addReport(commentSelected.getIdComment(), commentSelected.getAuthor(), reporter, "spoiler", "comment");
-
+                            //reportDAO.addReport(commentSelected.getIdComment(), commentSelected.getAuthor(), reporter, "spoiler", "comment");
                             commentDAO.updateCounter(commentSelected.getIdComment(), "spoiler");
-
                             int counterSpoiler = commentDAO.getCounter(commentSelected.getIdComment(), "spoiler").intValue();
-
                             if(counterSpoiler > 2){
                                 ReviewDAO reviewDAO = daoFactory.getReviewDAO();
                                 reviewDAO.updateCommentFlag(commentSelected.getIdComment(), commentSelected.getIdReview());
@@ -63,15 +60,15 @@ public class ReportPresenter {
                             Toast.makeText(reviewCardActivity.getActivityContext(), "Report for spoiler sent.", Toast.LENGTH_SHORT).show();
                             break;
                         case 1:
-                            reportDAO.addReport(commentSelected.getIdComment(), commentSelected.getAuthor(), reporter, "language", "comment");
-
+                            boolean reportExist = reportDAO.checkIfReportExist(commentSelected.getIdComment());
+                            if (!reportExist)
+                                reportDAO.addReport(commentSelected.getIdComment(), commentSelected.getAuthor(), reporter, "comment");
+                            else
+                                reportDAO.updateReport(commentSelected.getIdComment(), reporter);
                             commentDAO.updateCounter(commentSelected.getIdComment(), "language");
-
                             int counterLanguage = commentDAO.getCounter(commentSelected.getIdComment(), "language").intValue();
-
                             if(counterLanguage > 2)
                                 commentDAO.changeState(commentSelected.getIdComment(), "language");
-
                             Toast.makeText(reviewCardActivity.getActivityContext(), "Report for inappropriate language successfully send to admin. " +
                                     "We will send you a notification with the result of report.", Toast.LENGTH_SHORT).show();
                             break;
@@ -85,7 +82,7 @@ public class ReportPresenter {
      * This method allows the user to report the review for spoilers and inappropriate language
      * @param reportType the type of report: spoiler/language
      */
-    public void reportForSpoilerClicked(String reportType) {
+    public void reportClicked(String reportType) {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
         String idReview = reviewCardActivity.getReview().getIdReview();
 
@@ -95,14 +92,18 @@ public class ReportPresenter {
         Review review = reviewDAO.getReviewById(idReview);
 
         ReportDAO reportDAO = daoFactory.getReportDAO();
-        reportDAO.addReport(idReview, review.getAuthor(), currentUser, reportType, "review");
+        reportDAO.addReport(idReview, review.getAuthor(), currentUser, "review");
 
         if(reportType.equals("spoiler"))
             Utils.showDialog(reviewCardActivity.getActivityContext(), "Done!", "Report for spoiler successfully added.");
-        else
+        else{
+            if(!reportDAO.checkIfReportExist(idReview))
+                reportDAO.addReport(idReview, review.getAuthor(), currentUser, "review");
+            else
+                reportDAO.updateReport(idReview, currentUser);
             Utils.showDialog(reviewCardActivity.getActivityContext(), "Done!", "Report for inappropriate language successfully send to admin." +
                     "We will send you a notification with the result of report.");
-
+        }
 
         reviewDAO.updateCounter(idReview, reportType);
 
