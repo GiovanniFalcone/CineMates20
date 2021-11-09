@@ -49,13 +49,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
-                android:justificationMode="inter_word"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nexa_bold"
+                android:justificationMode="inter_word"
                 android:text="This comment is hidden for spoiler, do you wanna see it anyway?"
                 android:textColor="@color/black"
                 android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/button3"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
                 app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
@@ -63,16 +63,18 @@
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="See it anyway"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/nexa_bold"
+                android:text="See it anyway"
                 android:textColor="#00BCD4"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/userPropicCircle"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <ImageView
                 android:id="@+id/option"
@@ -90,6 +92,7 @@
                 app:srcCompat="@drawable/ic_baseline_menu_24" />
 
             <TextView
+                android:visibility="visible"
                 android:id="@+id/txtComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,6 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
             <TextView
+                android:visibility="visible"
                 android:id="@+id/txtDateComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
