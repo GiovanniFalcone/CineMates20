@@ -85,7 +85,6 @@ public class ReportPresenter {
         Review review = reviewDAO.getReviewById(idReview);
 
         ReportDAO reportDAO = daoFactory.getReportDAO();
-        reportDAO.addReport(idReview, review.getAuthor(), currentUser, "review");
 
         if(reportType.equals("spoiler"))
             Utils.showDialog(reviewCardActivity.getActivityContext(), "Done!", "Report for spoiler successfully added.");
