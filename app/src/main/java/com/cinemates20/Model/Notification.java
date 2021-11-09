@@ -5,8 +5,20 @@ import java.util.Date;
 public class Notification {
 
     private Date dateAndTime;
-    private String type, flag;
-    private String userWhoReceived, userWhoSent;
+    private String typeNotification;
+    private String userWhoSent, typeUser, typeItem;
+    private boolean resultReport;
+
+    public Notification() {}
+
+    public Notification(Date dateAndTime, String typeNotification, String userWhoSent, String typeUser, String typeItem, boolean resultReport) {
+        this.dateAndTime = dateAndTime;
+        this.typeNotification = typeNotification;
+        this.userWhoSent = userWhoSent;
+        this.typeUser = typeUser;
+        this.typeItem = typeItem;
+        this.resultReport = resultReport;
+    }
 
     public Date getDateAndTime() {
         return (Date)dateAndTime.clone();
@@ -16,20 +28,12 @@ public class Notification {
         this.dateAndTime = dateAndTime;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeNotification() {
+        return typeNotification;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getUserWhoReceived() {
-        return userWhoReceived;
-    }
-
-    public void setUserWhoReceived(String userWhoReceived) {
-        this.userWhoReceived = userWhoReceived;
+    public void setTypeNotification(String typeNotification) {
+        this.typeNotification = typeNotification;
     }
 
     public String getUserWhoSent() {
@@ -40,22 +44,39 @@ public class Notification {
         this.userWhoSent = userWhoSent;
     }
 
-    public String getFlag() {
-        return flag;
+    public String getTypeUser() {
+        return typeUser;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setTypeUser(String typeUser) {
+        this.typeUser = typeUser;
+    }
+
+    public String getTypeItem() {
+        return typeItem;
+    }
+
+    public void setTypeItem(String typeItem) {
+        this.typeItem = typeItem;
+    }
+
+    public boolean isResultReport() {
+        return resultReport;
+    }
+
+    public void setResultReport(boolean resultReport) {
+        this.resultReport = resultReport;
     }
 
     @Override
     public String toString() {
         return "Notification{" +
                 "dateAndTime=" + dateAndTime +
-                ", type='" + type + '\'' +
-                ", flag='" + flag + '\'' +
-                ", userWhoReceived='" + userWhoReceived + '\'' +
-                ", userWhoSend='" + userWhoSent + '\'' +
+                ", typeNotification='" + typeNotification + '\'' +
+                ", userWhoSent='" + userWhoSent + '\'' +
+                ", typeUser='" + typeUser + '\'' +
+                ", typeItem='" + typeItem + '\'' +
+                ", resultReport=" + resultReport +
                 '}';
     }
 }

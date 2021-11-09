@@ -56,6 +56,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final Context context;
     private static final int NOTIFICATION_REQUEST_ACCEPTED = 1;
     private static final int NOTIFICATION_REQUEST_RECEIVED = 2;
+    private static final int NOTIFICATION_REPORT = 16;
     private static final int GENRE = 3;
     private static final int LIST_MOVIE_NAME = 4;
     private static final int COMMENT = 5;
@@ -79,9 +80,11 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         if(list.get(position) instanceof Notification){
-            if(((Notification) list.get(position)).getType().equals("RequestAccepted"))
+            if(((Notification) list.get(position)).getTypeNotification().equals("RequestAccepted"))
                 return NOTIFICATION_REQUEST_ACCEPTED;
-            else return NOTIFICATION_REQUEST_RECEIVED;
+            else if(((Notification) list.get(position)).getTypeNotification().equals("RequestReceived"))
+                return NOTIFICATION_REQUEST_RECEIVED;
+            else return NOTIFICATION_REPORT;
         }
         else if(list.get(position) instanceof Genre)
             return GENRE;
@@ -132,6 +135,10 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.notify_friend_request, parent, false);
                 v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 return new ViewHolder_NotificationReceived(v);
+            case NOTIFICATION_REPORT:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.generic_row, parent, false);
+                v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                return new ViewHolder_NotificationAccepted(v);
             case GENRE:
                 v= LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_row, parent, false);
                 v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 100));
@@ -227,6 +234,35 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .into(((ViewHolder_NotificationReceived)holder).getIcon());
                 ((ViewHolder_NotificationReceived)holder).getButtonConfirm().setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "confirm", position));
                 ((ViewHolder_NotificationReceived)holder).getButtonDelete().setOnClickListener(view -> clickListener.onItemClickListener(userWhoSentRequest, "delete", position));
+                break;
+
+            case NOTIFICATION_REPORT:
+                String typeUser = ((Notification) list.get(position)).getTypeUser();
+                String typeItem = ((Notification)list.get(position)).getTypeItem();
+                boolean resultReport = ((Notification) list.get(position)).isResultReport();
+
+                time = Utils.setTime(((Notification)list.get(position)).getDateAndTime().getTime());
+                ((ViewHolder_NotificationAccepted) holder).getTxtTimeAndDate().setText(time);
+
+                if(resultReport){ // report accepted by admin
+                    if(typeUser.equals("author")) {
+                        if(typeItem.equals("review"))
+                            ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your review has been removed for inappropriate language"));
+                        else
+                            ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your comment has been removed for inappropriate language"));
+                    } else
+                        ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your report has been approved by the administrator."));
+                } else{
+                    if(typeUser.equals("author")) {
+                        if(typeItem.equals("review"))
+                            ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your review is visible again"));
+                        else
+                            ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your comment is visible again"));
+                    } else
+                        ((ViewHolder_NotificationAccepted) holder).getTextNotification().setText(Html.fromHtml("Your report has been rejected by the administrator."));
+                }
+
+                ((ViewHolder_NotificationAccepted) holder).getIcon().setImageResource(R.drawable.report);
                 break;
 
             case GENRE:

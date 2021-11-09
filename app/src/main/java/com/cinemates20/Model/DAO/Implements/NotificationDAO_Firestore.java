@@ -50,7 +50,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     public void addRequest(String currentUser, String userWhoReceived) {
         //Create collection
         Map<String, Object> map = new HashMap<>();
-        map.put("type", "RequestReceived");
+        map.put("typeNotification", "RequestReceived");
         map.put("userWhoSent", currentUser);
         map.put("dateAndTime", new Timestamp(new Date()));
         map.put("userWhoReceived", userWhoReceived);
@@ -68,7 +68,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
         collectionReference
                 .whereEqualTo("userWhoSent", currentUser)
                 .whereEqualTo("userWhoReceived", userWhoReceivedRequest)
-                .whereEqualTo("type", "RequestReceived")
+                .whereEqualTo("typeNotification", "RequestReceived")
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
@@ -88,7 +88,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
 
         collectionReference
                 .whereEqualTo("userWhoSent", userWhoReceivedNotification)
-                .whereEqualTo("type", "RequestAccepted")
+                .whereEqualTo("typeNotification", "RequestAccepted")
                 .get()
                 .addOnCompleteListener(taskRequests -> {
                     if (taskRequests.isSuccessful()){
@@ -109,7 +109,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
 
         // Create a query against the subcollection.
         Query queryRequest =  collectionReference
-                .whereEqualTo("type", "RequestReceived")
+                .whereEqualTo("typeNotification", "RequestReceived")
                 .whereEqualTo("userWhoReceived", currentUser)
                 .orderBy("dateAndTime", Query.Direction.DESCENDING);
 
@@ -130,7 +130,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
     @Override
     public void sendNotificationAccepted(String currentUser, String userAdded, Timestamp dateAndTime) {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", "RequestAccepted");
+        map.put("typeNotification", "RequestAccepted");
         map.put("userWhoSent", userAdded);
         map.put("dateAndTime", dateAndTime);
         map.put("userWhoReceived", currentUser);
@@ -169,7 +169,7 @@ public class NotificationDAO_Firestore implements NotificationDAO, NotificationC
         List<Notification> notificationList = new ArrayList<>();
 
         collectionReference
-                .whereIn("type", Arrays.asList("RequestReceived", "RequestAccepted"))
+                .whereIn("typeNotification", Arrays.asList("RequestReceived", "RequestAccepted", "report"))
                 .whereEqualTo("userWhoReceived", currentUser)
                 .whereEqualTo("flag", "unchecked")
                 .addSnapshotListener((value, error) -> {
