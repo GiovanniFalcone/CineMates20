@@ -40,7 +40,7 @@ public class MovieListDAO_Firestore implements MovieListDAO {
         map.put("username", currentUser);
         map.put("description", description);
         map.put("nameList", nameList);
-        map.put("dateAndTimeCreationList", new Timestamp(new Date()));
+        map.put("dateAndTime", new Timestamp(new Date()));
 
         // Save data into document
         documentReference.set(map)
@@ -55,7 +55,7 @@ public class MovieListDAO_Firestore implements MovieListDAO {
         map.put("idMovie", idMovie);
         map.put("listName", listName);
         map.put("user", currentUser);
-        map.put("dateAndTimeMovieAdded", dateAndTime);
+        map.put("dateAndTime", dateAndTime);
         moviesReference
                 .add(map)
                 .addOnSuccessListener(documentReference -> Log.d("saveData", "DocumentSnapshot added with ID: " + documentReference.getId()))
