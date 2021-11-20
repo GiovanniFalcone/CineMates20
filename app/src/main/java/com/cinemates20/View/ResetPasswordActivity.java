@@ -41,12 +41,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void eventListener() {
         forgot.setOnClickListener(v -> {
-            resetPasswordPresenter.onClickPasswordForgot();
+            resetPasswordPresenter.onClickPasswordForgot(editTextEmail.getText().toString().trim());
         });
-    }
-
-    public String getEmail(){
-        return editTextEmail.getText().toString().trim();
     }
 
     public TextWatcher textWatcher = new TextWatcher() {

@@ -46,14 +46,11 @@ public class UsersReactionsFragment extends Fragment {
 
         arg = getArguments();
 
-        usersReactionPresenter.onClickReactionType();
+        usersReactionPresenter.onClickReactionType(requireArguments().getString("idReview"));
 
         return view;
     }
 
-    public String getIdReview(){
-        return requireArguments().getString("idReview");
-    }
 
     public int getIndexTab(){
         return arg.getInt("index");

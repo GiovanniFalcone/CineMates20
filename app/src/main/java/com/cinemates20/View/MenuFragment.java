@@ -94,10 +94,6 @@ public class MenuFragment extends Fragment {
                 .into(proPic);
     }
 
-    public Uri getImageUri(){
-        return imageUri;
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -117,7 +113,7 @@ public class MenuFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null){
             imageUri = data.getData();
-            menuPresenter.onClickProPic();
+            menuPresenter.onClickProPic(imageUri);
         }
     }
 }

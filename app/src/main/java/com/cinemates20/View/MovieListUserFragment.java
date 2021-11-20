@@ -26,6 +26,7 @@ public class MovieListUserFragment extends Fragment {
 
     private MovieListUserPresenter movieListUserPresenter;
     private RecyclerView recyclerView;
+    private String nameListClicked, descriptionList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,22 +36,25 @@ public class MovieListUserFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.movieListUserRecyclerView);
 
+        nameListClicked = requireArguments().getString("nameListClicked");
+        descriptionList = requireArguments().getString("descriptionListClicked");
+
         CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitleEnabled(false);
-        collapsingToolbarLayout.setTitle(getNameClickedList());
+        collapsingToolbarLayout.setTitle(nameListClicked);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         collapsingToolbarLayout.setExpandedTitleGravity(Gravity.BOTTOM);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(getNameClickedList());
+        toolbar.setTitle(nameListClicked);
         toolbar.setNavigationOnClickListener(view13 -> requireActivity().onBackPressed());
 
         TextView description = view.findViewById(R.id.descriptionTextView);
-        description.setText(getDescriptionClickedList());
+        description.setText(descriptionList);
 
         movieListUserPresenter = new MovieListUserPresenter(this);
-        movieListUserPresenter.seeMovieList();
+        movieListUserPresenter.seeMovieList(nameListClicked);
 
         return view;
     }
@@ -67,7 +71,7 @@ public class MovieListUserFragment extends Fragment {
         movieAdapter.setOnItemClickListener(new MovieAdapter.ClickListener() {
             @Override
             public void onItemClickListener(MovieDb movieClicked, int position) {
-                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getId()), getNameClickedList());
+                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getId()), nameListClicked);
 
                 movieDbList.remove(position);
                 recyclerView.removeViewAt(position);
@@ -76,13 +80,5 @@ public class MovieListUserFragment extends Fragment {
             }
         });
     }
-
-    public String getNameClickedList(){
-        return requireArguments().getString("nameListClicked");
-    }
-
-    public String getIdClickedList(){ return requireArguments().getString("idListClicked"); }
-
-    public String getDescriptionClickedList(){ return requireArguments().getString("descriptionListClicked"); }
 
 }

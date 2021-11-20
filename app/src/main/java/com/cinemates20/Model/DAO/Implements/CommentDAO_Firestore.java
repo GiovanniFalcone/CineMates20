@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.CommentCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.CommentDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.CommentDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Utils.Utils;
 

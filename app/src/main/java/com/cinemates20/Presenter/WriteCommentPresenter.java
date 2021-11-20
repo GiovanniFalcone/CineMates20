@@ -1,14 +1,13 @@
 package com.cinemates20.Presenter;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.CommentDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.CommentDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.View.ReviewCardActivity;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class WriteCommentPresenter {
 
@@ -18,17 +17,14 @@ public class WriteCommentPresenter {
         this.reviewCardActivity = reviewCardActivity;
     }
 
-    public void clickAddComment(String textComment) {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
-        String idReview = reviewCardActivity.getReview().getIdReview();
-        String authorComment = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+    public void clickAddComment(String textComment, String idReview) {
+        String authorComment = User.getCurrentUser();
         Timestamp dateAndTime = new Timestamp(new Date());
-        CommentDAO commentDAO = daoFactory.getCommentDAO();
+        CommentDAO commentDAO = DAOFactory.getCommentDAO(DAOFactory.FIREBASE);
         commentDAO.saveComment(idReview, authorComment, textComment, dateAndTime);
 
         //save comment into feed
-        FeedDAO feedDAO = daoFactory.getFeedDAO();
+        FeedDAO feedDAO = DAOFactory.getFeedDAO(DAOFactory.FIREBASE);
         feedDAO.addNews(authorComment, reviewCardActivity.getReview().getAuthor(), "", idReview, "comment", 0f, dateAndTime);
     }
 }

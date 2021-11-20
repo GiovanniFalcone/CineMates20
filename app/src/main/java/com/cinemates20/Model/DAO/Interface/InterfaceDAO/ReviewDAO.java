@@ -1,4 +1,4 @@
-package com.cinemates20.Model.DAO.Interface.Firestore;
+package com.cinemates20.Model.DAO.Interface.InterfaceDAO;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
 import com.cinemates20.Model.Review;
@@ -11,7 +11,7 @@ public interface ReviewDAO {
 
     void saveReview(String username, float valuation, String text, int idMovie, String titleMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
 
-    void updateReview(String username, String textReview, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
+    void addReview(String username, String textReview, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
 
     List<Review> getUserReviewByMovie(String titleMovie, List<String> friends, String username);
 

@@ -13,10 +13,10 @@ import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.MovieListDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.Model.MovieList;
 import com.cinemates20.Model.Review;
@@ -56,13 +56,17 @@ public class MovieCardPresenter {
     /**
      * After click, open the write review activity and pass
      * movieId, movieTitle, movieUrl and movieOverview to it
+     * @param idMovie id of current movie
+     * @param title title of current movie
+     * @param url image poster of current movie
+     * @param overview plot of current movie
      */
-    public void clickWriteReview(){
+    public void clickWriteReview(int idMovie, String title, String url, String overview){
         Intent intent = new Intent(movieCardFragment.getContext(), WriteReviewActivity.class);
-        intent.putExtra("MovieID", movieCardFragment.getIdMovie());
-        intent.putExtra("MovieTitle", movieCardFragment.getMovieTitle());
-        intent.putExtra("MovieUrl", movieCardFragment.getImageURL());
-        intent.putExtra("MovieOverview", movieCardFragment.getOverview());
+        intent.putExtra("MovieID", idMovie);
+        intent.putExtra("MovieTitle", title);
+        intent.putExtra("MovieUrl", url);
+        intent.putExtra("MovieOverview", overview);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(0);
         movieCardFragment.startActivityForResult(intent, 0);
@@ -98,34 +102,31 @@ public class MovieCardPresenter {
      * This method set the movie card: menu to add/remove the movie, the cast and
      * users who had written a review about it.
      */
-    public void setMovieCard(){
-        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        String idMovie = String.valueOf(movieCardFragment.getIdMovie());
-
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+    public void setMovieCard(int idMovie, String movieTitle){
+        String username = User.getCurrentUser();
 
         /*
          * Check if the movie is saved in at least one list. If it is true enable button to remove it eventually.
          * Then get the cast of current movie.
          */
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
-        List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(idMovie, username);
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
+        List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(String.valueOf(idMovie), username);
         movieCardFragment.setFlag(!nameList.isEmpty());
 
         //set the backdrop into movie card
-        setBackdrop();
+        setBackdrop(idMovie);
 
         //set movie genres
-        setGenres();
+        setGenres(idMovie);
 
         //set cast of current movie
-        setCast();
+        setCast(idMovie);
 
         //set movie's backgrounds
-        setBackgrounds();
+        setBackgrounds(idMovie);
 
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
-        Review review = reviewDAO.getReviewByAuthor(username, movieCardFragment.getIdMovie());
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
+        Review review = reviewDAO.getReviewByAuthor(username, idMovie);
 
         if(review.getIdReview() != null){
             if(!review.getTextReview().equals(""))
@@ -135,25 +136,25 @@ public class MovieCardPresenter {
         } else
             movieCardFragment.setWriteReviewButtonEnable(false);
 
-        reviewDAO.getMovieRating(movieCardFragment.getIdMovie(), new ReviewCallback() {
+        reviewDAO.getMovieRating(idMovie, new ReviewCallback() {
             @Override
             public void setRating(float rating, int total) {
                 movieCardFragment.setMovieRating(rating);
             }
         });
 
-        setUserReviewByMovie();
+        setUserReviewByMovie(movieTitle);
     }
 
     /**
      * This method will get and set the movie's backgrounds
      */
-    private void setBackgrounds() {
+    private void setBackgrounds(int idMovie) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = new MovieDAO_TMDB();
-            movieDAO.getBackdrops(movieCardFragment.getIdMovie(), new MovieCallback() {
+            movieDAO.getBackdrops(idMovie, new MovieCallback() {
                 @Override
                 public void setArtworks(List<Artwork> artworks) {
                     handler.post(() -> movieCardFragment.setRecyclerScreen(artworks));
@@ -165,12 +166,12 @@ public class MovieCardPresenter {
     /**
      * This method will get and set the movie's genres
      */
-    private void setGenres() {
+    private void setGenres(int idMovie) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = new MovieDAO_TMDB();
-            movieDAO.getGenre(movieCardFragment.getIdMovie(), new MovieCallback() {
+            movieDAO.getGenre(idMovie, new MovieCallback() {
                 @Override
                 public void setGenre(List<Genre> genreList) {
                     handler.post(() -> movieCardFragment.setRecyclerViewGenres(genreList));
@@ -182,12 +183,12 @@ public class MovieCardPresenter {
     /**
      * This method will return the cast of the movie.
      */
-    private void setCast (){
+    private void setCast (int idMovie){
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = new MovieDAO_TMDB();
-            movieDAO.getCast(movieCardFragment.getIdMovie(), new MovieCallback() {
+            movieDAO.getCast(idMovie, new MovieCallback() {
                 @Override
                 public void setCast(List<PersonCast> personCast) {
                     handler.post(() -> movieCardFragment.setRecyclerCast(personCast));
@@ -199,12 +200,12 @@ public class MovieCardPresenter {
     /**
      * This method will set the landscape poster of current movie
      */
-    private void setBackdrop(){
+    private void setBackdrop(int idMovies){
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = new MovieDAO_TMDB();
-            movieDAO.getBackdrops(movieCardFragment.getIdMovie(), new MovieCallback() {
+            movieDAO.getBackdrops(idMovies, new MovieCallback() {
                 @Override
                 public void setArtworks(List<Artwork> artworks) {
                     handler.post(() -> {
@@ -226,14 +227,12 @@ public class MovieCardPresenter {
     /**
      * Set all users who has written review about clicked movie and show them
      */
-    public void setUserReviewByMovie() {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
-        UserDAO userDAO = daoFactory.getUserDAO();
+    public void setUserReviewByMovie(String movieTitle) {
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         User user = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
 
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
-        List<Review> listAuthor = reviewDAO.getUserReviewByMovie(movieCardFragment.getMovieTitle(), user.getFriends(), user.getUsername());
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
+        List<Review> listAuthor = reviewDAO.getUserReviewByMovie(movieTitle, user.getFriends(), user.getUsername());
         if(!listAuthor.isEmpty()) {
             movieCardFragment.setLayoutNoReview(false);
             movieCardFragment.setRecycler(listAuthor);
@@ -244,16 +243,13 @@ public class MovieCardPresenter {
     /**
      * Open a dialog which contain all list of the user
      * except the list that already contain the current movie
+     * @param idMovie id of movie to add to list
      */
-    public void onClickAddMovieToList() {
-        String idMovie = String.valueOf(movieCardFragment.getIdMovie());
-        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-
-        // create the required DAO Factory
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
+    public void onClickAddMovieToList(String idMovie) {
+        String username = User.getCurrentUser();
 
         //Get all list of user
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
         List<MovieList> allCustomLists = movieListDAO.getMovieListsNameByUser(username);
 
         //get all list that contains the current movie
@@ -282,8 +278,8 @@ public class MovieCardPresenter {
                         Utils.showDialog(movieCardFragment.getFragmentContext(), "Done!", "Movie successfully added to the list ");
 
                         // save news into feed
-                        FeedDAO feedDAO = daoFactory.getFeedDAO();
-                        feedDAO.addNews(username, "", String.valueOf(movieCardFragment.getIdMovie()), "", "movieList", 0f, dateAndTime);
+                        FeedDAO feedDAO = DAOFactory.getFeedDAO(DAOFactory.FIREBASE);
+                        feedDAO.addNews(username, "", idMovie, "", "movieList", 0f, dateAndTime);
                     })
                     .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
                     .show();
@@ -296,12 +292,10 @@ public class MovieCardPresenter {
      * Open a dialog which contain all list of the user
      * that contains the current movie in order to remove it
      */
-    public void onClickRemoveMovieFromList() {
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        String idMovie = String.valueOf(movieCardFragment.getIdMovie());
+    public void onClickRemoveMovieFromList(String idMovie) {
+        String currentUser = User.getCurrentUser();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
 
         //get all list that contains the current movie
         List<String> nameList = movieListDAO.getListsThatContainsCurrentMovie(idMovie, currentUser);
@@ -324,14 +318,12 @@ public class MovieCardPresenter {
                 .show();
     }
 
-    public void saveValuation(float valuation) {
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+    public void saveValuation(int idMovie, String movieTitle, float valuation) {
+        String currentUser = User.getCurrentUser();
         Timestamp dateAndTime = new Timestamp(new Date());
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
-        reviewDAO.saveReview(currentUser, valuation, "", movieCardFragment.getIdMovie(), movieCardFragment.getMovieTitle(), dateAndTime, new ReviewCallback() {
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
+        reviewDAO.saveReview(currentUser, valuation, "", idMovie, movieTitle, dateAndTime, new ReviewCallback() {
             @Override
             public void onSuccess(String idReview) {
                 movieCardFragment.setWriteReviewButtonEnable(true);
@@ -341,8 +333,8 @@ public class MovieCardPresenter {
                         "Your valuation has been successfully added.");
 
                 // add to feed
-                FeedDAO feedDAO = daoFactory.getFeedDAO();
-                feedDAO.addNews(currentUser, "", String.valueOf(movieCardFragment.getIdMovie()), idReview, "valuation", valuation, dateAndTime);
+                FeedDAO feedDAO = DAOFactory.getFeedDAO(DAOFactory.FIREBASE);
+                feedDAO.addNews(currentUser, "", String.valueOf(idMovie), idReview, "valuation", valuation, dateAndTime);
             }
         });
     }

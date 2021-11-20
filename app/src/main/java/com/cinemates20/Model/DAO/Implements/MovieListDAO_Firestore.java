@@ -2,7 +2,7 @@ package com.cinemates20.Model.DAO.Implements;
 
 import android.util.Log;
 
-import com.cinemates20.Model.DAO.Interface.Firestore.MovieListDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
 import com.cinemates20.Model.MovieList;
 import com.cinemates20.Utils.Utils;
 

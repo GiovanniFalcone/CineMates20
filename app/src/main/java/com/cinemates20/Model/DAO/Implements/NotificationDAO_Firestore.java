@@ -3,7 +3,7 @@ package com.cinemates20.Model.DAO.Implements;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.NotificationCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
 import com.cinemates20.Model.Notification;
 import com.cinemates20.Utils.Utils;
 import com.google.android.gms.tasks.Task;

@@ -3,7 +3,7 @@ package com.cinemates20.Model.DAO.Implements;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
 import com.cinemates20.Model.Review;
 import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
@@ -66,7 +66,7 @@ public class ReviewDAO_Firestore implements ReviewDAO {
     }
 
     @Override
-    public void updateReview(String username, String textReview, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback) {
+    public void addReview(String username, String textReview, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback) {
         Task<QuerySnapshot> task = reviewCollection
                 .whereEqualTo("author", username)
                 .whereEqualTo("idMovie", idMovie)

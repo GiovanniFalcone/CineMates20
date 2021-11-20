@@ -3,7 +3,8 @@ package com.cinemates20.Presenter;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.R;
 
 import com.cinemates20.View.SignupTabFragment;
@@ -17,20 +18,13 @@ import java.util.regex.Pattern;
 public class SignupPresenter {
 
     private final SignupTabFragment signupTabFragment;
-    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public SignupPresenter(SignupTabFragment signupTabFragment) {
         this.signupTabFragment = signupTabFragment;
     }
 
-    public void onClickSignUp()  {
-        String username = signupTabFragment.getUsername().toLowerCase();
-        String mail = signupTabFragment.getEmail();
-        String psw = signupTabFragment.getPassword();
-        String confirmPsw = signupTabFragment.getConfirmPsw();
-
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+    public void onClickSignUp(String username, String mail, String psw, String confirmPsw)  {
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
         signupTabFragment.setErrorToNull();
 
@@ -57,6 +51,8 @@ public class SignupPresenter {
     }
 
     private void createUser(String email, String password, String username){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(signupTabFragment.requireActivity(), task -> {
                     if (task.isSuccessful()) {
@@ -64,14 +60,13 @@ public class SignupPresenter {
                         Log.d("success", "createUserWithEmail:success");
                         sendEmailVerification();
 
-                        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-                        UserDAO userDAO = daoFactory.getUserDAO();
+                        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
                         userDAO.saveUser(username, email);
 
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(signupTabFragment.getUsername())
+                                .setDisplayName(username)
                                 .build();
 
                         user.updateProfile(profileUpdates)
@@ -80,6 +75,8 @@ public class SignupPresenter {
                                         Log.d("SignUpPresenter", "User profile updated.");
                                     }
                                 });
+
+                        User.setCurrentUser(username);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("failure", "createUserWithEmail:failure", task.getException());
@@ -106,7 +103,7 @@ public class SignupPresenter {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    private static boolean isValidPassword(CharSequence target) {
+    public static boolean isValidPassword(CharSequence target) {
         final Pattern PASSWORD_PATTERN =
                 Pattern.compile("^" +
                         "(?=.*[!@#$%^&+=])" +     // at least 1 special character
@@ -117,7 +114,7 @@ public class SignupPresenter {
         return PASSWORD_PATTERN.matcher(target).matches();
     }
 
-    private static boolean isValidUsername(CharSequence target){
+    public static boolean isValidUsername(CharSequence target){
         final Pattern USERNAME_PATTERN =
                 Pattern.compile("^" +
                         "(?=\\S+$)" +

@@ -1,4 +1,4 @@
-package com.cinemates20.Model.DAO.Interface.Firestore;
+package com.cinemates20.Model.DAO.Interface.InterfaceDAO;
 
 import android.net.Uri;
 
@@ -38,4 +38,6 @@ public interface UserDAO {
     List<String> getAllRequestSent(String currentUser);
 
     void addFriend(String currentUser, String userWhoSentRequest);
+
+    void updateLastLogin(String currentUser);
 }

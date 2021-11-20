@@ -1,13 +1,14 @@
 package com.cinemates20.Presenter;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.CommentCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.CommentDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.CommentDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
@@ -28,13 +29,11 @@ public class ReviewCardPresenter {
     }
 
     public void viewReview(){
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         User currentUser = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
         reviewCardActivity.setUserIcon(currentUser.getIcon());
 
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
         String reactionType = reviewDAO.getReaction(currentUser.getUsername(), reviewCardActivity.getReview().getIdReview());
         if(reactionType != null) {
             reviewCardActivity.setColorButton(reactionType);
@@ -49,13 +48,10 @@ public class ReviewCardPresenter {
      * @param buttonState the state of button: already selected or not
      * @param buttonType the reaction that user has clicked
      */
-    public void manageReactionClicked(boolean buttonState, String buttonType){
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+    public void manageReactionClicked(String idReview, boolean buttonState, String buttonType){
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
 
-        String idReview = reviewCardActivity.getReview().getIdReview();
-
-        String user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String user = User.getCurrentUser();
 
         if (!buttonState){
             reviewDAO.addReaction(idReview, buttonType, user);
@@ -67,8 +63,7 @@ public class ReviewCardPresenter {
     public void setUserCommentByReview(){
         List<Comment> commentList = new ArrayList<>();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        CommentDAO commentDAO = daoFactory.getCommentDAO();
+        CommentDAO commentDAO = DAOFactory.getCommentDAO(DAOFactory.FIREBASE);
 
         reviewCardActivity.setView(true);
 
@@ -87,16 +82,12 @@ public class ReviewCardPresenter {
     /**
      * Open bottom sheet dialog and pass idReview to it
      */
-    public void onClickNumberReactions(){
-        //Get id review
-        String id = reviewCardActivity.getReview().getIdReview();
-
+    public void onClickNumberReactions(String idReview){
         //Get sent and received request and friend list
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         User user = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
         List<String> sentList = userDAO.getAllRequestSent(user.getUsername());
-        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
         List<String> receivedList = notificationDAO.getRequestReceived("", user.getUsername());
 
         //Pass the id and user info to fragment dialog and show it
@@ -105,18 +96,15 @@ public class ReviewCardPresenter {
         arg.putSerializable("User", user);
         arg.putStringArrayList("sentList", (ArrayList<String>) sentList);
         arg.putStringArrayList("receivedList", (ArrayList<String>) receivedList);
-        arg.putString("idReview", id);
+        arg.putString("idReview", idReview);
         reactionsTabFragment.setArguments(arg);
         reactionsTabFragment.show(reviewCardActivity.getSupportFragmentManager(), "TAG");
     }
 
-    public void rateReview(float valuation) {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+    public void rateReview(float valuation, String idReview) {
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
 
-        String idReview = reviewCardActivity.getReview().getIdReview();
-
-        String user = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String user = User.getCurrentUser();
         boolean isExists = reviewDAO.checkIfValuationExists(reviewCardActivity.getReview().getIdReview(), user);
 
         if (!isExists) {

@@ -114,32 +114,32 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:transitionName="authorIcon"
                             android:id="@+id/authorPropic"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center"
-                            android:layout_marginStart="100dp"
+                            android:layout_marginStart="85dp"
                             android:layout_marginTop="5dp"
                             android:src="@drawable/default_icon"
+                            android:transitionName="authorIcon"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0" />
 
                         <TextView
-                            android:transitionName="authorName"
                             android:id="@+id/authorName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginStart="5dp"
-                            android:gravity="right|top"
-                            android:text="Author's review"
                             android:fontFamily="@font/nexa_regular"
+                            android:gravity="right|top"
+                            android:text="Author"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:textStyle="bold"
+                            android:transitionName="authorName"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/authorPropic"
                             app:layout_constraintTop_toTopOf="parent" />

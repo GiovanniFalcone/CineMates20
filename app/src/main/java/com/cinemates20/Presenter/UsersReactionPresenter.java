@@ -1,7 +1,7 @@
 package com.cinemates20.Presenter;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
 import com.cinemates20.Model.User;
 import com.cinemates20.View.UsersReactionsFragment;
 
@@ -21,30 +21,28 @@ public class UsersReactionPresenter {
      * depending on the selected tab.
      * The user can also send a friend request to them.
      */
-    public void onClickReactionType(){
+    public void onClickReactionType(String idReview){
         List<User> userList = new ArrayList<>();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
 
-        String id = usersReactionsFragment.getIdReview();
         int index = usersReactionsFragment.getIndexTab();
 
         switch (index) {
             case 0:
-                userList = reviewDAO.getListNumberReactions("like", id);
+                userList = reviewDAO.getListNumberReactions("like", idReview);
                 break;
             case 1:
-                userList = reviewDAO.getListNumberReactions("dislike", id);
+                userList = reviewDAO.getListNumberReactions("dislike", idReview);
                 break;
             case 2:
-                userList = reviewDAO.getListNumberReactions("love", id);
+                userList = reviewDAO.getListNumberReactions("love", idReview);
                 break;
             case 3:
-                userList = reviewDAO.getListNumberReactions("clap", id);
+                userList = reviewDAO.getListNumberReactions("clap", idReview);
                 break;
             case 4:
-                userList = reviewDAO.getListNumberReactions("grrr", id);
+                userList = reviewDAO.getListNumberReactions("grrr", idReview);
                 break;
         }
 

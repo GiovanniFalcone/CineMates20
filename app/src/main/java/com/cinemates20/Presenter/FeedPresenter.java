@@ -3,13 +3,13 @@ package com.cinemates20.Presenter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.FeedCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.View.FeedFragment;
 import com.cinemates20.Model.Feed;
 import com.cinemates20.Model.Review;
@@ -39,12 +39,11 @@ public class FeedPresenter {
     public void onClickFeed() {
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         List<String> friends = userDAO.getFriends(currentUser);
 
         if(!friends.isEmpty()){
-            FeedDAO feedDAO = daoFactory.getFeedDAO();
+            FeedDAO feedDAO = DAOFactory.getFeedDAO(DAOFactory.FIREBASE);
 
             feedDAO.getNews(friends, new FeedCallback() {
                 @Override
@@ -76,16 +75,16 @@ public class FeedPresenter {
      * @param movieDb the movie that will be shown in the movie card
      */
     public void onClickItem(Feed object, String iconAuthor, MovieDb movieDb) {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        ReviewDAO reviewDAO = daoFactory.getReviewDAO();
-        UserDAO userDAO = daoFactory.getUserDAO();
+        ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
         switch (object.getItemNewsType()){
             case "review":
             case "comment":
                 Review review = reviewDAO.getReviewById(object.getIdItemNews());
 
-                List<String> friends = userDAO.getFriends(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
+                List<String> friends = userDAO.getFriends(User.getCurrentUser());
+                friends.add(User.getCurrentUser());
                 if(!friends.contains(review.getAuthor())) {
                     Utils.showErrorDialog(feedFragment.getContext(), "You can't see this review", "You can't see this review: you must be friends with " + object.getSecondUser() + "!");
                     break;
@@ -139,7 +138,7 @@ public class FeedPresenter {
         intent.putExtra("idMovie", object.getMovie());
         intent.putExtra("Review", review);
 
-        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String username = User.getCurrentUser();
 
         if(Objects.requireNonNull(username).equals(object.getUserOfTheNews()))
             intent.putExtra("PersonalReview", true);

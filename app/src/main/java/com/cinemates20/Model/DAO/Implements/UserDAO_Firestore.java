@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.UserCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
 
@@ -46,6 +46,7 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
         user.put("email", email.toLowerCase());
         user.put("friends", Collections.emptyList());
         user.put("icon", "");
+        user.put("last_login", new Timestamp(new Date()));
 
         // Add a new document with a generated ID
         collectionReference
@@ -236,6 +237,23 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
                                     .document(idUserDocument)
                                     .update("friends", FieldValue.arrayUnion(userWhoSentRequest));
                         }
+                    }
+                });
+    }
+
+    @Override
+    public void updateLastLogin(String currentUser) {
+        collectionReference.whereEqualTo("username", currentUser).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())){
+                            String idUserDocument = documentSnapshot.getId();
+                            collectionReference
+                                    .document(idUserDocument)
+                                    .update("last_login", new Timestamp(new Date()));
+                        }
+                    } else {
+                        Log.d("UserDAO", "Error getting documents: ", task.getException());
                     }
                 });
     }

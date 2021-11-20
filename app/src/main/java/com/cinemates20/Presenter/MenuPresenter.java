@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.User;
 import com.cinemates20.View.AuthenticationActivity;
 import com.cinemates20.View.MenuFragment;
@@ -26,8 +26,7 @@ public class MenuPresenter {
      * Get user data and set icon into the menu
      */
     public void setMenu() {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
         User currentUser = userDAO.getUser((Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()));
 
@@ -41,14 +40,12 @@ public class MenuPresenter {
      * The user can change his icon.
      * After selecting an image from the gallery, a check is made to see if the user already has an icon.
      * Then the new image is loaded into the storage and set in the user's menu.
+     * @param imageUri the image selected from gallery
      */
-    public void onClickProPic() {
-        Uri imageUri = menuFragment.getImageUri();
+    public void onClickProPic(Uri imageUri) {
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
-
-        String currentUsername = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String currentUsername = User.getCurrentUser();
         Uri previousUri = userDAO.getImageUri(currentUsername);
 
         if (!previousUri.toString().equals(""))

@@ -109,7 +109,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
     }
 
     private void setReviewCard() {
-        nameAuthorView.setText(String.format("%s's review", getReview().getAuthor()));
+        nameAuthorView.setText(String.format("%s", getReview().getAuthor()));
         Glide.with(this)
                 .load(getIntent().getStringExtra("Icon"))
                 .listener(new RequestListener<Drawable>() {
@@ -248,7 +248,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         toolbar.setNavigationOnClickListener(view13 -> onBackPressed());
 
         numberReactionView.setOnClickListener(view ->
-                reviewCardPresenter.onClickNumberReactions());
+                reviewCardPresenter.onClickNumberReactions(getReview().getIdReview()));
 
         buttonSend.setEnabled(false);
         writeComment.addTextChangedListener(new TextWatcher() {
@@ -271,7 +271,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         });
 
         buttonSend.setOnClickListener(view -> {
-            writeCommentPresenter.clickAddComment(String.valueOf(writeComment.getText()));
+            writeCommentPresenter.clickAddComment(String.valueOf(writeComment.getText()), getReview().getIdReview());
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(writeComment.getWindowToken(), 0);
             writeComment.setFocusable(false);
@@ -288,7 +288,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         else
             buttonSelected.setBackgroundTintList(ColorStateList.valueOf(this.getResources().getColor(color.white, getTheme())));
 
-        reviewCardPresenter.manageReactionClicked(state, buttonClicked);
+        reviewCardPresenter.manageReactionClicked(getReview().getIdReview(), state, buttonClicked);
     }
 
     public void setColorButton(String buttonType){
@@ -375,11 +375,11 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case id.reportForSpoiler:
-                reportPresenter.reportClicked("spoiler");
+                reportPresenter.reportClicked(getReview().getIdReview(), "spoiler");
                 break;
 
             case R.id.reportForLanguage:
-                reportPresenter.reportClicked("language");
+                reportPresenter.reportClicked(getReview().getIdReview(), "language");
                 break;
 
             case id.rateReview:
@@ -390,7 +390,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
                 builder.setView(viewDialog);
                 builder.setMessage(R.string.confirm_valuation);
                 builder.setPositiveButton("Rate", (dialogInterface, i) -> {
-                    reviewCardPresenter.rateReview(ratingBar.getRating());
+                    reviewCardPresenter.rateReview(ratingBar.getRating(), getReview().getIdReview());
                 })
                         .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
 

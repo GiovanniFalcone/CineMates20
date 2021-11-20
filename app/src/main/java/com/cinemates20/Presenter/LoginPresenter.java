@@ -12,7 +12,6 @@ import java.util.Objects;
 
 public class LoginPresenter {
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final LoginTabFragment loginTabFragment;
 
     public LoginPresenter(LoginTabFragment loginTabFragment) {
@@ -24,7 +23,9 @@ public class LoginPresenter {
      * @param email the email of current user
      * @param password the password of current user
      */
-    public void checkIfTheAccountExists(String email, String password) {
+    public void signIn(String email, String password) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 if(Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified()){
@@ -40,5 +41,4 @@ public class LoginPresenter {
             }
         });
     }
-
 }

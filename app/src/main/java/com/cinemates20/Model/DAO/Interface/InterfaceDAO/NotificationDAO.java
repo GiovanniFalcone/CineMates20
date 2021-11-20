@@ -1,4 +1,4 @@
-package com.cinemates20.Model.DAO.Interface.Firestore;
+package com.cinemates20.Model.DAO.Interface.InterfaceDAO;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.NotificationCallback;
 import com.cinemates20.Model.Notification;

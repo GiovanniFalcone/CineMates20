@@ -20,7 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
 import com.cinemates20.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -89,8 +89,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final int itemType = getItemViewType(position);
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
         switch (itemType){
             case MOVIE_FEATURE_HOME:
                 MovieDb movieDb = movieDbList.get(position);
@@ -142,7 +140,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             .into(((ViewHolder_Search) holder).getMoviePoster());
                 }
 
-                ReviewDAO reviewDAO = daoFactory.getReviewDAO();
+                ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
                 reviewDAO.getMovieRating(movie.getId(), new ReviewCallback() {
                     @Override
                     public void setRating(float rating, int total) {

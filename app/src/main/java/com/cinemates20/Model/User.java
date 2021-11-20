@@ -7,6 +7,7 @@ public class User implements Serializable {
 
     private String username, email, icon;
     private List<String> friends;
+    private static String currentUser;
 
     public User(){ }
 
@@ -47,6 +48,14 @@ public class User implements Serializable {
 
     public void setFriends(List<String> friends) {
         this.friends = friends;
+    }
+
+    public static void setCurrentUser(String user){
+        currentUser = user;
+    }
+
+    public static String getCurrentUser(){
+        return currentUser;
     }
 
     @Override

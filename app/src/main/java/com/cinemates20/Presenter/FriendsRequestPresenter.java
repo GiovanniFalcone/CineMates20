@@ -3,18 +3,17 @@ package com.cinemates20.Presenter;
 import android.content.Context;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.View.FriendListFragment;
 import com.cinemates20.View.NotificationFragment;
 import com.cinemates20.View.SearchUserTabFragment;
 import com.cinemates20.View.UsersReactionsFragment;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class FriendsRequestPresenter {
 
@@ -50,11 +49,10 @@ public class FriendsRequestPresenter {
      * @param buttonState the flag associated to the button: "notFriend"/"appendRequest"
      */
     public void manageSentOrDeleteFriendRequest(String userWhoReceivedRequest, String buttonState) {
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
-        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
+        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
 
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String currentUser = User.getCurrentUser();
 
         if (buttonState.equals("notFriend")) {
             notificationDAO.addRequest(currentUser, userWhoReceivedRequest);
@@ -71,11 +69,10 @@ public class FriendsRequestPresenter {
      * @param friendToRemove  the user to remove from friend list
      */
     public void manageRemoveFriendship(String friendToRemove){
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
-        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
+        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
 
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String currentUser = User.getCurrentUser();
 
         userDAO.removeFriend(currentUser, friendToRemove);
         userDAO.removeFriend(friendToRemove, currentUser);
@@ -95,11 +92,10 @@ public class FriendsRequestPresenter {
      */
     public void manageAcceptOrDeclineFriendRequest(String userWhoSentRequest, String buttonType){
         // create the required DAO Factory
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
-        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
+        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
 
-        String userWhoReceivedRequest = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String userWhoReceivedRequest = User.getCurrentUser();
 
         if (buttonType.equals("confirm")){
             Timestamp dateAndTime = new Timestamp(new Date());
@@ -108,7 +104,7 @@ public class FriendsRequestPresenter {
             userDAO.addFriend(userWhoReceivedRequest, userWhoSentRequest);
             userDAO.addFriend(userWhoSentRequest, userWhoReceivedRequest);
 
-            FeedDAO feedDAO = daoFactory.getFeedDAO();
+            FeedDAO feedDAO = DAOFactory.getFeedDAO(DAOFactory.FIREBASE);
             feedDAO.addNews(userWhoReceivedRequest, userWhoSentRequest, "", "", "friendship", 0f, dateAndTime);
         }
 

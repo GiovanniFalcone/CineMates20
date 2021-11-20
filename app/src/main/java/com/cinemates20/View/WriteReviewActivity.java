@@ -16,16 +16,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
 import com.cinemates20.Presenter.WriteReviewPresenter;
 import com.cinemates20.R;
-import com.cinemates20.Utils.Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
-
-import java.util.Date;
 
 public class WriteReviewActivity extends AppCompatActivity {
 
@@ -86,23 +80,10 @@ public class WriteReviewActivity extends AppCompatActivity {
                 new MaterialAlertDialogBuilder(getActivityContext(), R.style.ThemeMyAppDialogAlertDay)
                 .setTitle("Confirm review")
                 .setMessage(R.string.confirm_review)
-                .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    writeReviewPresenter.clickAddReview();
-                })
+                .setPositiveButton("Yes", (dialogInterface, i) ->
+                        writeReviewPresenter.clickAddReview(idMovie, textBoxReview.getText().toString().trim()))
                 .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss())
                 .show());
-    }
-
-    public String getMovieTitle(){
-        return title;
-    }
-
-    public int getIdMovie(){
-        return idMovie;
-    }
-
-    public String getReviewText(){
-        return textBoxReview.getText().toString().trim();
     }
 
     public Context getActivityContext(){

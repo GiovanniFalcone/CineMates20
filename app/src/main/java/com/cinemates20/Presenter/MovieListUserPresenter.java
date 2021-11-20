@@ -2,14 +2,12 @@ package com.cinemates20.Presenter;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
-import com.cinemates20.Model.DAO.Interface.Firestore.MovieListDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.View.MovieListUserFragment;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.List;
-import java.util.Objects;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
@@ -21,14 +19,11 @@ public class MovieListUserPresenter {
         this.movieListUserFragment = movieListUserFragment;
     }
 
-    public void seeMovieList() {
-        String nameList = movieListUserFragment.getNameClickedList();
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+    public void seeMovieList(String nameListClicked) {
+        String currentUser = User.getCurrentUser();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
-        List<Integer> idMoviesList = movieListDAO.getMoviesByList(nameList, currentUser);
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
+        List<Integer> idMoviesList = movieListDAO.getMoviesByList(nameListClicked, currentUser);
 
         MovieDAO movieDAO = new MovieDAO_TMDB();
         List<MovieDb> movieDbList = movieDAO.getMoviesOfList(idMoviesList);
@@ -37,10 +32,9 @@ public class MovieListUserPresenter {
     }
 
     public void removeMovieFromList(String idMovie, String clickedList) {
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String currentUser = User.getCurrentUser();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
         movieListDAO.removeMovieFromList(idMovie, clickedList, currentUser);
     }
 }

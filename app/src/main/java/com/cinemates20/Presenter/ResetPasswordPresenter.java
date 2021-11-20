@@ -17,9 +17,8 @@ public class ResetPasswordPresenter {
      * If the email inserted by the user exists in Firebase then send an email to reset the password,
      * error otherwise
      */
-    public void onClickPasswordForgot() {
+    public void onClickPasswordForgot(String email) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        String email = resetPasswordActivity.getEmail();
 
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {

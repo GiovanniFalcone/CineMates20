@@ -2,7 +2,7 @@ package com.cinemates20.Model.DAO.Implements;
 
 import android.util.Log;
 
-import com.cinemates20.Model.DAO.Interface.Firestore.ReportDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReportDAO;
 import com.cinemates20.Utils.Utils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -14,12 +14,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

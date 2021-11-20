@@ -97,8 +97,8 @@ public class LoginTabFragment extends Fragment {
     };
 
     public void onClickRegularLogin(){
-        loginRegular.setOnClickListener(view -> loginPresenter.checkIfTheAccountExists
-                (editTextUsername.getText().toString().trim(), editTextPassword.getText().toString().trim()));
+        loginRegular.setOnClickListener(view ->
+                loginPresenter.signIn(editTextUsername.getText().toString().trim(), editTextPassword.getText().toString().trim()));
     }
 
     public void animationLogin() {

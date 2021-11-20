@@ -1,4 +1,4 @@
-package com.cinemates20.Model.DAO.Interface.Firestore;
+package com.cinemates20.Model.DAO.Interface.InterfaceDAO;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.FeedCallback;
 import com.google.firebase.Timestamp;

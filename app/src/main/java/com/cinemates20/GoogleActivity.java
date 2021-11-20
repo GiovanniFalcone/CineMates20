@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.UserCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.View.NavigationActivity;
 import com.cinemates20.View.UsernameActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -104,8 +104,7 @@ public class GoogleActivity extends Activity {
                         If the email already exists in the db then the user goes directly to the home,
                         otherwise it is a new user and must choose a username before accessing the home
                          */
-                        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-                        UserDAO userDAO = daoFactory.getUserDAO();
+                        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
                         userDAO.checkIfEmailExists_Firestore(Objects.requireNonNull(user).getEmail(), new UserCallback() {
                             @Override
                             public void isExists(boolean b) {

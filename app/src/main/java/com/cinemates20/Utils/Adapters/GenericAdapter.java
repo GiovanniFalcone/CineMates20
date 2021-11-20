@@ -27,7 +27,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Model.Feed;
@@ -196,8 +196,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final int itemType = getItemViewType(position);
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
         switch (itemType){
             case NOTIFICATION_REQUEST_ACCEPTED:

@@ -18,7 +18,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.NotificationCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.R;
 
 import com.cinemates20.Utils.Utils;
@@ -58,8 +60,10 @@ public class NavigationActivity extends AppCompatActivity{
 
         Log.d("NavigationActivity", "Welcome " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        NotificationDAO notificationDAO = daoFactory.getNotificationDAO();
+        User.setCurrentUser(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        Log.d("CurrentUser", User.getCurrentUser());
+
+        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
         String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
         notificationDAO.updateNotifications(currentUser,  new NotificationCallback() {
             @Override
@@ -70,6 +74,9 @@ public class NavigationActivity extends AppCompatActivity{
                     navView.clearCount(4);
             }
         });
+
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
+        userDAO.updateLastLogin(currentUser);
 
 
         //Fragment default

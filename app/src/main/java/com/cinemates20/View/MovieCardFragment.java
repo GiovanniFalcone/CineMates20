@@ -113,14 +113,14 @@ public class MovieCardFragment extends Fragment{
         backButton.setOnClickListener(view15 -> requireActivity().onBackPressed());
 
         shimmerFrameLayout.startShimmer();
-        movieCardPresenter.setMovieCard();
+        movieCardPresenter.setMovieCard(idMovie, title);
 
-        writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview());
+        writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview(idMovie, title, url, overview));
 
         overviewMovie.setText(overview);
 
-        buttonAddToList.setOnClickListener(view1 -> movieCardPresenter.onClickAddMovieToList());
-        buttonRemoveFromList.setOnClickListener(view12 -> movieCardPresenter.onClickRemoveMovieFromList());
+        buttonAddToList.setOnClickListener(view1 -> movieCardPresenter.onClickAddMovieToList(String.valueOf(idMovie)));
+        buttonRemoveFromList.setOnClickListener(view12 -> movieCardPresenter.onClickRemoveMovieFromList(String.valueOf(idMovie)));
 
         rateButton.setOnClickListener(view14 -> {
             AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMyAppDialogAlertDay);
@@ -129,7 +129,7 @@ public class MovieCardFragment extends Fragment{
             RatingBar ratingBar = viewDialog.findViewById(R.id.ratingBar);
             builder.setView(viewDialog);
             builder.setMessage(R.string.confirm_valuation);
-            builder.setPositiveButton("Rate", (dialogInterface, i) -> movieCardPresenter.saveValuation(ratingBar.getRating()))
+            builder.setPositiveButton("Rate", (dialogInterface, i) -> movieCardPresenter.saveValuation(idMovie, title, ratingBar.getRating()))
                     .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
 
             AlertDialog alertDialog = builder.create();
@@ -157,24 +157,9 @@ public class MovieCardFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        movieCardPresenter.setUserReviewByMovie();
+        movieCardPresenter.setUserReviewByMovie(title);
     }
 
-    public String getMovieTitle(){
-        return title;
-    }
-
-    public String getImageURL(){
-        return url;
-    }
-
-    public String getOverview(){
-        return overview;
-    }
-
-    public int getIdMovie(){
-        return idMovie;
-    }
 
     public void setHeader(String url){
         Glide.with(requireContext())

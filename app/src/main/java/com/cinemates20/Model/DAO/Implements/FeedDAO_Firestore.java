@@ -3,7 +3,7 @@ package com.cinemates20.Model.DAO.Implements;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.FeedCallback;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
 import com.cinemates20.Model.Feed;
 
 import com.google.firebase.Timestamp;

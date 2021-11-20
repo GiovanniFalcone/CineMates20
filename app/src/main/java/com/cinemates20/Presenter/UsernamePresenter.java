@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.NavigationActivity;
 import com.cinemates20.View.UsernameActivity;
@@ -27,8 +27,7 @@ public class UsernamePresenter {
      * If it doesn't exists, save user Data into Firestore db and show the home
      */
     public void onChooseUsername(String username){
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        UserDAO userDAO = daoFactory.getUserDAO();
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
 
         boolean isExists = userDAO.checkIfUsernameExists(username);
         usernameActivity.setErrorToNull();

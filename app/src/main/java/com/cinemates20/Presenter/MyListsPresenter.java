@@ -3,16 +3,15 @@ package com.cinemates20.Presenter;
 import android.os.Bundle;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Firestore.MovieListDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
 import com.cinemates20.Model.MovieList;
+import com.cinemates20.Model.User;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.MovieListUserFragment;
 import com.cinemates20.View.MyListsFragment;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MyListsPresenter {
 
@@ -24,10 +23,9 @@ public class MyListsPresenter {
     }
 
     public void myListClicked() {
-        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String username = User.getCurrentUser();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
         movieLists = movieListDAO.getMovieListsNameByUser(username);
 
         myListsFragment.setRecycler(movieLists);
@@ -50,10 +48,9 @@ public class MyListsPresenter {
 
 
     public void onClickNewList(String newNameList, String description) {
-        String username = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
+        String username = User.getCurrentUser();
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.FIREBASE);
-        MovieListDAO movieListDAO = daoFactory.getMovieListDAO();
+        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
         boolean isExists = movieListDAO.checkIfListAlreadyExists(newNameList, username);
         if(!isExists) {
             movieListDAO.addCustomList(newNameList, description, username);

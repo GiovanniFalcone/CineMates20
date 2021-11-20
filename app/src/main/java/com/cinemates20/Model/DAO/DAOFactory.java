@@ -1,37 +1,86 @@
 package com.cinemates20.Model.DAO;
 
-import com.cinemates20.Model.DAO.Interface.Firestore.CommentDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.FeedDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.MovieListDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.NotificationDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReportDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.ReviewDAO;
-import com.cinemates20.Model.DAO.Interface.Firestore.UserDAO;
+import com.cinemates20.Model.DAO.Implements.CommentDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.FeedDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.MovieListDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.NotificationDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.ReportDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.ReviewDAO_Firestore;
+import com.cinemates20.Model.DAO.Implements.UserDAO_Firestore;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.CommentDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReportDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
+import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 
-abstract public class DAOFactory {
+import java.util.Locale;
 
-    // List of DAO types supported by the factory
-    public static final int FIREBASE = 1;
-    //...
+public class DAOFactory {
 
-    // There will be a method for each DAO that can be
-    // created. The concrete factories will have to
-    // implement these methods.
-    public abstract UserDAO getUserDAO();
-    public abstract ReviewDAO getReviewDAO();
-    public abstract NotificationDAO getNotificationDAO();
-    public abstract CommentDAO getCommentDAO();
-    public abstract MovieListDAO getMovieListDAO();
-    public abstract ReportDAO getReportDAO();
-    public abstract FeedDAO getFeedDAO();
+    public static final String FIREBASE = "firebase";
 
-    public static DAOFactory getDAOFactory(int whichFactory) {
-
-        switch (whichFactory) {
-            case FIREBASE:
-                return new FirebaseDAOFactory();
+    public static UserDAO getUserDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case "firebase":
+                return new UserDAO_Firestore();
             default:
-                return null;
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static ReviewDAO getReviewDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new ReviewDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static NotificationDAO getNotificationDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new NotificationDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static CommentDAO getCommentDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new CommentDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static FeedDAO getFeedDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new FeedDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static ReportDAO getReportDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new ReportDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
+        }
+    }
+
+    public static MovieListDAO getMovieListDAO(String type) {
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case FIREBASE:
+                return new MovieListDAO_Firestore();
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
     }
 }

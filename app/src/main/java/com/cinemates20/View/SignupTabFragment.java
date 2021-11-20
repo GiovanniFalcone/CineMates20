@@ -16,10 +16,12 @@ import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Locale;
+
 public class SignupTabFragment extends Fragment {
 
     private TextInputLayout textInputLayoutUsername, textInputLayoutEmail, textInputLayoutPassword, textInputLayoutConfermaPassword;
-    private EditText editTextUsername, editTextEmail, editTextPassword, editTextConfermaPassword;
+    private EditText editTextUsername, editTextEmail, editTextPassword, editTextConfirmPassword;
     private Button signupButton;
     private SignupPresenter signupPresenter;
 
@@ -36,20 +38,15 @@ public class SignupTabFragment extends Fragment {
         textInputLayoutEmail = root.findViewById(R.id.emailSignup);
         editTextEmail = root.findViewById(R.id.textEmailSignup);
         textInputLayoutConfermaPassword = root.findViewById(R.id.confermaPasswordSignup);
-        editTextConfermaPassword = root.findViewById(R.id.textConfermaPasswordSignup);
+        editTextConfirmPassword = root.findViewById(R.id.textConfermaPasswordSignup);
         signupButton = root.findViewById(R.id.buttonSignup);
 
         editTextUsername.addTextChangedListener(textWatcher);
         editTextEmail.addTextChangedListener(textWatcher);
         editTextPassword.addTextChangedListener(textWatcher);
-        editTextConfermaPassword.addTextChangedListener(textWatcher);
+        editTextConfirmPassword.addTextChangedListener(textWatcher);
 
         return root;
-    }
-
-    private void onClickListner() {
-        signupButton.setOnClickListener(view -> { signupPresenter.onClickSignUp();
-        });
     }
 
     public TextWatcher textWatcher = new TextWatcher() {
@@ -60,14 +57,15 @@ public class SignupTabFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            String user = editTextUsername.getText().toString().trim();
+            String username = editTextUsername.getText().toString().trim().toLowerCase();
             String mail = editTextEmail.getText().toString().trim();
             String psw = editTextPassword.getText().toString().trim();
-            String confirmPsw = editTextConfermaPassword.getText().toString().trim();
+            String confirmPsw = editTextConfirmPassword.getText().toString().trim();
 
-            if(!Utils.checkIfFieldIsEmpty(user, mail, psw, confirmPsw)){
+            if(!Utils.checkIfFieldIsEmpty(username, mail, psw, confirmPsw)){
                 signupButton.setEnabled(true);
-                onClickListner();
+                signupButton.setOnClickListener(view -> { signupPresenter.onClickSignUp(username, mail, psw, confirmPsw);
+                });
             }else{
                 signupButton.setEnabled(false);
             }
@@ -78,22 +76,6 @@ public class SignupTabFragment extends Fragment {
 
         }
     };
-
-    public String getUsername(){
-        return editTextUsername.getText().toString().trim();
-    }
-
-    public String getEmail(){
-        return editTextEmail.getText().toString().trim();
-    }
-
-    public String getPassword(){
-        return editTextPassword.getText().toString().trim();
-    }
-
-    public String getConfirmPsw(){
-        return editTextConfermaPassword.getText().toString().trim();
-    }
 
     public void setErrorInvalidPassword(){
         textInputLayoutPassword.setError("Invalid password");
