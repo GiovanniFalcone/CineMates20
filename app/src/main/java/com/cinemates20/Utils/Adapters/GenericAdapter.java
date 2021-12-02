@@ -349,7 +349,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Handler handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
-                    MovieDAO movieDAO = new MovieDAO_TMDB();
+                    MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
                     movieDAO.getMovieById(review.getIdMovie(), new MovieCallback() {
                         @Override
                         public void setResult(MovieDb movieDb) {
@@ -438,7 +438,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 executor = Executors.newSingleThreadExecutor();
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
-                    MovieDAO movieDAO = new MovieDAO_TMDB();
+                    MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
                     movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
                         @Override
                         public void setResult(MovieDb movieDb) {
@@ -531,7 +531,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 executor = Executors.newSingleThreadExecutor();
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
-                    MovieDAO movieDAO = new MovieDAO_TMDB();
+                    MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
                     movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
                         @Override
                         public void setResult(MovieDb movieDb) {
@@ -563,7 +563,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 executor = Executors.newSingleThreadExecutor();
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
-                    MovieDAO movieDAO = new MovieDAO_TMDB();
+                    MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
                     movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
                         @Override
                         public void setResult(MovieDb movieDb) {

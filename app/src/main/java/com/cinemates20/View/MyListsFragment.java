@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.cinemates20.Model.MovieList;
 import com.cinemates20.Presenter.MyListsPresenter;
@@ -61,6 +59,21 @@ public class MyListsFragment extends Fragment {
         toolbar.setTitle("Movie lists");
         toolbar.setNavigationOnClickListener(view13 -> requireActivity().onBackPressed());
 
+        showDialog();
+
+        buttonNewList = view.findViewById(R.id.newList);
+        buttonNewList.setOnClickListener(view1 -> {
+            description.addTextChangedListener(new EditTextListener());
+            editTextChooseNameList.addTextChangedListener(new EditTextListener());
+
+            alertDialog.show();
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        });
+
+        return view;
+    }
+
+    private void showDialog() {
         AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMyAppDialogAlertDay);
         builder.setTitle("List creation");
         View viewDialog = LayoutInflater.from(getContext()).inflate(R.layout.dialog_create_new_list, (ViewGroup) getView(), false);
@@ -81,36 +94,7 @@ public class MyListsFragment extends Fragment {
                 });
 
         alertDialog = builder.create();
-
-        buttonNewList = view.findViewById(R.id.newList);
-        buttonNewList.setOnClickListener(view1 -> {
-            description.addTextChangedListener(textWatcher);
-            editTextChooseNameList.addTextChangedListener(textWatcher);
-
-            alertDialog.show();
-            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        });
-
-        return view;
     }
-
-    public TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            String descriptionText = description.getText().toString().trim();
-            String nameList = editTextChooseNameList.getText().toString().trim();
-
-            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(!Utils.checkIfFieldIsEmpty(nameList, descriptionText));
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-        }
-    };
 
     public void setRecycler(List<MovieList> movieList) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
@@ -131,5 +115,23 @@ public class MyListsFragment extends Fragment {
 
     public void updateRecycler() {
         myListsAdapter.notifyItemInserted(myListsAdapter.getItemCount() + 1);
+    }
+
+    private class EditTextListener implements TextWatcher{
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            String descriptionText = description.getText().toString().trim();
+            String nameList = editTextChooseNameList.getText().toString().trim();
+
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(!Utils.checkIfFieldIsEmpty(nameList, descriptionText));
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
     }
 }

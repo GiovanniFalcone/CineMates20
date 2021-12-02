@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,23 +13,17 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Callbacks.NotificationCallback;
-import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
-import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
-import com.cinemates20.Model.User;
+import com.cinemates20.Presenter.NavigationPresenter;
 import com.cinemates20.R;
 
-import com.cinemates20.Utils.Utils;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity{
 
+    private NavigationPresenter navigationPresenter;
     private final Fragment mHomeFragment = new HomeFragment();
     private final Fragment mSearchFragment = new SearchFragment();
     private final Fragment mFeedFragment = new FeedFragment();
@@ -43,7 +36,8 @@ public class NavigationActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        //BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
+        navigationPresenter = new NavigationPresenter(this);
+
         MeowBottomNavigation navView = findViewById(R.id.bottom_nav_view);
 
         navView.add(new MeowBottomNavigation.Model(1, R.drawable.ic_baseline_movie_24));
@@ -52,63 +46,22 @@ public class NavigationActivity extends AppCompatActivity{
         navView.add(new MeowBottomNavigation.Model(4, R.drawable.ic_baseline_notifications_black_24));
         navView.add(new MeowBottomNavigation.Model(5, R.drawable.ic_baseline_menu_24));
 
-        if(!Utils.isNetworkConnected(this)) {
-            Utils.showErrorDialog(this, "Network error", "Seems that there isn't stable connection to internet, try again.");
-            Log.d("NavigationActivity", "No connection, app closed");
-            finish();
-        }
+        navigationPresenter.isConnected();
 
-        Log.d("NavigationActivity", "Welcome " + Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
+        navigationPresenter.initUser();
 
-        User.setCurrentUser(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        Log.d("CurrentUser", User.getCurrentUser());
+        navigationPresenter.listerNotification(navView);
 
-        NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName();
-        notificationDAO.updateNotifications(currentUser,  new NotificationCallback() {
-            @Override
-            public void numberNotification(int n) {
-                if (n > 0)
-                    navView.setCount(4, String.valueOf(n));
-                else
-                    navView.clearCount(4);
-            }
-        });
-
-        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
-        userDAO.updateLastLogin(currentUser);
-
+        navigationPresenter.updateLastLogin();
 
         //Fragment default
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
         transaction.commit();
 
-
         navView.setOnShowListener(item -> {
-            Fragment fragment = null;
-            switch (item.getId()) {
-                case 1:
-                    fragment = mHomeFragment;
-                    break;
-                case 2:
-                    fragment = mSearchFragment;
-                    break;
-                case 3:
-                    fragment = mFeedFragment;
-                    break;
-                case 4:
-                    navView.clearCount(R.id.navigation_notification);
-                    fragment = mNotificationFragment;
-                    break;
-                case 5:
-                    fragment = mUserProfileFragment;
-                    break;
-            }
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.nav_host_fragment_activity_main, Objects.requireNonNull(fragment))
-                    .commit();
+            navigationPresenter.onClickNavigation(navView, item, mHomeFragment,
+                    mSearchFragment, mFeedFragment, mNotificationFragment, mUserProfileFragment);
         });
 
         navView.setOnClickMenuListener(item -> {
@@ -147,6 +100,19 @@ public class NavigationActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
+        // if there is a fragment and the back stack of this fragment is not empty,
+        // then emulate 'onBackPressed' behaviour, because in default, it is not working
+        FragmentManager fm = getSupportFragmentManager();
+        for (Fragment frag : fm.getFragments()) {
+            if (frag.isVisible()) {
+                FragmentManager childFm = frag.getChildFragmentManager();
+                if (childFm.getBackStackEntryCount() > 0) {
+                    childFm.popBackStack();
+                    return;
+                }
+            }
+        }
+
         super.onBackPressed();
     }
 }

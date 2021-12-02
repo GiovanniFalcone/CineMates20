@@ -51,26 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/newList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/button_bg"
-                android:fontFamily="@font/nexa_bold"
-                android:text="Create new list"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.recyclerview.widget.RecyclerView
-                tools:listitem="@layout/my_lists_row"
-                android:id="@+id/myListRecyclerView"
+                tools:listitem="@layout/review_user_row"
+                android:id="@+id/recyclerSeeAllReview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
@@ -79,7 +62,7 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newList" />
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

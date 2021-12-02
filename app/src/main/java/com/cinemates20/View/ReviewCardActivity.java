@@ -15,22 +15,18 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -65,6 +61,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
     private RatingBar ratingBar;
     private Toolbar toolbar;
     private View layout_noResults;
+    private Review review;
     private ReviewCardPresenter reviewCardPresenter;
     private WriteCommentPresenter writeCommentPresenter;
     private ReportPresenter reportPresenter;
@@ -101,15 +98,19 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
             toolbar.setOnMenuItemClickListener(this);
         }
 
-        setReviewCard();
+        review = getIntent().getParcelableExtra("Review");
+        reviewCardPresenter.viewReview(review);
 
         reviewView.setMovementMethod(new ScrollingMovementMethod());
 
         onClickEvents();
     }
 
-    private void setReviewCard() {
-        nameAuthorView.setText(String.format("%s", getReview().getAuthor()));
+    public void setNameAuthorView(String author){
+        nameAuthorView.setText(author);
+    }
+
+    public void setAuthorIcon(){
         Glide.with(this)
                 .load(getIntent().getStringExtra("Icon"))
                 .listener(new RequestListener<Drawable>() {
@@ -128,27 +129,29 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new CircleCrop())
                 .into(authorIcon);
-        reviewView.setText(getReview().getTextReview());
-        ratingBar.setRating(getReview().getRating());
-
-        reviewCardPresenter.viewReview();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        reviewCardPresenter.viewReview();
-    }
-
-    public Review getReview(){
-        return (Review) getIntent().getParcelableExtra("Review");
+    public void setRatingReview(float rating){
+        ratingBar.setRating(rating);
     }
 
     public void setReview(String review){
         reviewView.setText(review);
     }
 
-    public void setUserIcon(String url){
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        reviewCardPresenter.viewReview(review);
+    }
+
+    public Review getReview(){
+        return review;
+    }
+
+    public void setUserIcon(){
+        String url = getIntent().getStringExtra("Icon");
+
         if(!url.equals("")) {
             Glide.with(getApplicationContext())
                     .load(url)
@@ -248,7 +251,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         toolbar.setNavigationOnClickListener(view13 -> onBackPressed());
 
         numberReactionView.setOnClickListener(view ->
-                reviewCardPresenter.onClickNumberReactions(getReview().getIdReview()));
+                reviewCardPresenter.onClickNumberReactions(review.getIdReview()));
 
         buttonSend.setEnabled(false);
         writeComment.addTextChangedListener(new TextWatcher() {
@@ -271,7 +274,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         });
 
         buttonSend.setOnClickListener(view -> {
-            writeCommentPresenter.clickAddComment(String.valueOf(writeComment.getText()), getReview().getIdReview());
+            writeCommentPresenter.clickAddComment(String.valueOf(writeComment.getText()), review.getIdReview());
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(writeComment.getWindowToken(), 0);
             writeComment.setFocusable(false);
@@ -288,7 +291,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         else
             buttonSelected.setBackgroundTintList(ColorStateList.valueOf(this.getResources().getColor(color.white, getTheme())));
 
-        reviewCardPresenter.manageReactionClicked(getReview().getIdReview(), state, buttonClicked);
+        reviewCardPresenter.manageReactionClicked(review.getIdReview(), state, buttonClicked);
     }
 
     public void setColorButton(String buttonType){
@@ -375,37 +378,38 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case id.reportForSpoiler:
-                reportPresenter.reportClicked(getReview().getIdReview(), "spoiler");
+                reportPresenter.reportClicked(review.getIdReview(), "spoiler");
                 break;
 
             case R.id.reportForLanguage:
-                reportPresenter.reportClicked(getReview().getIdReview(), "language");
+                reportPresenter.reportClicked(review.getIdReview(), "language");
                 break;
 
             case id.rateReview:
-                AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this, R.style.ThemeMyAppDialogAlertDay);
-                builder.setTitle("Rate this review");
-                View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_rate, (ViewGroup) findViewById(android.R.id.content),false);
-                RatingBar ratingBar = viewDialog.findViewById(R.id.ratingBar);
-                builder.setView(viewDialog);
-                builder.setMessage(R.string.confirm_valuation);
-                builder.setPositiveButton("Rate", (dialogInterface, i) -> {
-                    reviewCardPresenter.rateReview(ratingBar.getRating(), getReview().getIdReview());
-                })
-                        .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
-
-                AlertDialog alertDialog = builder.create();
-                ratingBar.setOnRatingBarChangeListener((ratingBar1, v, b) ->
-                        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(ratingBar1.getRating() != 0.0));
-                alertDialog.show();
-                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+                showDialog();
                 break;
         }
         return false;
     }
 
-    public void setRating(float rating) {
-        ratingBar.setRating(rating);
+    private void showDialog() {
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this, R.style.ThemeMyAppDialogAlertDay);
+        builder.setTitle("Rate this review");
+
+        View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_rate, findViewById(android.R.id.content),false);
+        RatingBar ratingBar = viewDialog.findViewById(R.id.ratingBar);
+
+        builder.setView(viewDialog);
+        builder.setMessage(R.string.confirm_valuation);
+        builder.setPositiveButton("Rate", (dialogInterface, i) ->
+                reviewCardPresenter.rateReview(ratingBar.getRating(), review.getIdReview()))
+                .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        AlertDialog alertDialog = builder.create();
+        ratingBar.setOnRatingBarChangeListener((ratingBar1, v, b) ->
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(ratingBar1.getRating() != 0.0));
+        alertDialog.show();
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
     }
 
     /*This method will clear focus of edit text if user touch screen outside of editText*/

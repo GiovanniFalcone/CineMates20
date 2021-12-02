@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
+import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.R;
@@ -38,7 +38,7 @@ public class HomePresenter{
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            MovieDAO movieDAO = new MovieDAO_TMDB();
+            MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
             AtomicInteger idMovie_nowPlaying = new AtomicInteger();
 
             //Set popularMovie

@@ -6,9 +6,14 @@ import android.net.Uri;
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.User;
+import com.cinemates20.R;
+import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.AuthenticationActivity;
+import com.cinemates20.View.FriendListFragment;
 import com.cinemates20.View.MenuFragment;
 
+import com.cinemates20.View.MyListsFragment;
+import com.cinemates20.View.MyReviewsFragment;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -59,5 +64,17 @@ public class MenuPresenter {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
         menuFragment.startActivity(new Intent(menuFragment.getContext(), AuthenticationActivity.class));
+    }
+
+    public void clickButtonFriendList() {
+        Utils.changeFragment_SlideAnim(menuFragment, new FriendListFragment(), R.id.container);
+    }
+
+    public void clickButtonMyReviews() {
+        Utils.changeFragment_SlideAnim(menuFragment, new MyReviewsFragment(), R.id.container);
+    }
+
+    public void clickButtonMovieList() {
+        Utils.changeFragment_SlideAnim(menuFragment, new MyListsFragment(), R.id.container);
     }
 }

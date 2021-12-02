@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class NotificationDAO_Firestore implements NotificationDAO, NotificationCallback {
+public class NotificationDAO_Firestore implements NotificationDAO {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Create a reference to the users collection

@@ -32,7 +32,7 @@ public class ReviewDAO_Firestore implements ReviewDAO {
     private final CollectionReference reviewCollection = db.collection("reviews");
 
     @Override
-    public void saveReview(String currentUser, float valuation, String text, int idMovie, String titleMovie, Timestamp dateAndTime, ReviewCallback reviewCallback) {
+    public void saveReview(String currentUser, float valuation, String text, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback) {
         // Add a new document with a generated ID
         DocumentReference documentReference = reviewCollection.document();
 
@@ -43,14 +43,8 @@ public class ReviewDAO_Firestore implements ReviewDAO {
         review.put("movieValuation", valuation);
         review.put("textReview", text);
         review.put("idMovie", idMovie);
-        review.put("titleMovie", titleMovie);
-        review.put("totalLike", 0);
-        review.put("totalDislike", 0);
-        review.put("totalLove", 0);
-        review.put("totalGrrr", 0);
-        review.put("totalClap", 0);
         review.put("totalValuation", 0);
-        review.put("rating", 0);
+        review.put("rating", -1);
         review.put("counterForSpoiler", 0);
         review.put("counterForLanguage", 0);
         review.put("isInappropriate", false);
@@ -81,6 +75,7 @@ public class ReviewDAO_Firestore implements ReviewDAO {
                 idDocument = document.getId();
                 reviewCollection.document(idDocument).update("textReview", textReview);
                 reviewCollection.document(idDocument).update("dateAndTime", dateAndTime);
+                reviewCollection.document(idDocument).update("rating", 0);
             }
             reviewCallback.onSuccess(idDocument);
         }
@@ -90,18 +85,33 @@ public class ReviewDAO_Firestore implements ReviewDAO {
     }
 
     @Override
-    public List<Review> getUserReviewByMovie(String titleMovie, List<String> friends, String username) {
+    public List<Review> getUserReviewByMovie(int idMovie, List<String> friends, String username, boolean seeAllReviewClicked) {
         List<Review> listAuthor = new ArrayList<>();
         friends.add(username);
 
-        Task<QuerySnapshot> task = db.collection("reviews")
-                .whereEqualTo("titleMovie", titleMovie)
-                .whereEqualTo("isInappropriate", false)
-                .whereIn("author", friends)
-                .whereNotEqualTo("textReview", "")
-                .orderBy("textReview")
-                .get()
-                .addOnCompleteListener(task1 -> { });
+        Task<QuerySnapshot> task;
+
+        if(!seeAllReviewClicked){
+           task = db.collection("reviews")
+                    .whereEqualTo("idMovie", idMovie)
+                    .whereEqualTo("isInappropriate", false)
+                    .whereIn("author", friends)
+                    .whereGreaterThanOrEqualTo("rating", 0)
+                    .orderBy("rating")
+                    .limit(5)
+                    .get()
+                    .addOnCompleteListener(task1 -> { });
+         } else {
+            task = db.collection("reviews")
+                    .whereEqualTo("idMovie", idMovie)
+                    .whereEqualTo("isInappropriate", false)
+                    .whereIn("author", friends)
+                    .whereNotEqualTo("textReview", "")
+                    .orderBy("textReview")
+                    .get()
+                    .addOnCompleteListener(task1 -> { });
+        }
+
         Utils.waitTask(task);
 
         if (task.isSuccessful()) {
@@ -165,50 +175,10 @@ public class ReviewDAO_Firestore implements ReviewDAO {
 
         reviewCollection.document(idReview)
                 .collection("feedback").document().set(map);
-
-        DocumentReference feedbackRef = reviewCollection.document(idReview);
-        switch (buttonType) {
-            case "like":
-                feedbackRef.update("totalLike", FieldValue.increment(1));
-                break;
-            case "dislike":
-                feedbackRef.update("totalDislike", FieldValue.increment(1));
-                break;
-            case "love":
-                feedbackRef.update("totalLove", FieldValue.increment(1));
-                break;
-            case "clap":
-                feedbackRef.update("totalClap", FieldValue.increment(1));
-                break;
-            case "grrr":
-                feedbackRef.update("totalGrrr", FieldValue.increment(1));
-                break;
-        }
     }
 
     @Override
     public void removeReaction(String idReview, String buttonType, String username) {
-        DocumentReference feedbackRef = reviewCollection.document(idReview);
-
-        //Decrement total of reactionType into review collection
-        switch (buttonType) {
-            case "like":
-                feedbackRef.update("totalLike", FieldValue.increment(-1));
-                break;
-            case "dislike":
-                feedbackRef.update("totalDislike", FieldValue.increment(-1));
-                break;
-            case "love":
-                feedbackRef.update("totalLove", FieldValue.increment(-1));
-                break;
-            case "clap":
-                feedbackRef.update("totalClap", FieldValue.increment(-1));
-                break;
-            case "grrr":
-                feedbackRef.update("totalGrrr", FieldValue.increment(-1));
-                break;
-        }
-
         //delete document of feedback of reaction deselected
         reviewCollection
                 .document(idReview)

@@ -2,6 +2,7 @@ package com.cinemates20.Presenter;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
@@ -25,6 +25,7 @@ import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.MovieCardFragment;
 import com.cinemates20.View.ReviewCardActivity;
+import com.cinemates20.View.SeeAllReviewFragment;
 import com.cinemates20.View.WriteReviewActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -40,6 +41,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import androidx.fragment.app.Fragment;
 
 import info.movito.themoviedbapi.model.Artwork;
 import info.movito.themoviedbapi.model.Genre;
@@ -80,8 +83,8 @@ public class MovieCardPresenter {
      * @param authorIcon the image of review's author, it's used for animation
      * @param authorName the name of review's author, it's used for animation
      */
-    public void onClickSeeReview(Review reviewClicked, String iconAuthor, ImageView authorIcon, TextView authorName) {
-        Intent intent = new Intent(movieCardFragment.getContext(), ReviewCardActivity.class);
+    public void onClickSeeReview(Review reviewClicked, String iconAuthor, ImageView authorIcon, TextView authorName, Fragment fragment) {
+        Intent intent = new Intent(fragment.getContext(), ReviewCardActivity.class);
         intent.putExtra("Icon", iconAuthor);
         intent.putExtra("Review", reviewClicked);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -94,15 +97,15 @@ public class MovieCardPresenter {
         pairs[0] = new Pair<View, String> (authorIcon, "authorIcon");
         pairs[1] = new Pair<View, String>(authorName, "authorName");
 
-        ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation(movieCardFragment.requireActivity(), pairs);
-        movieCardFragment.startActivity(intent, optionsCompat.toBundle());
+        ActivityOptions optionsCompat = ActivityOptions.makeSceneTransitionAnimation(fragment.requireActivity(), pairs);
+        fragment.startActivity(intent, optionsCompat.toBundle());
     }
 
     /**
      * This method set the movie card: menu to add/remove the movie, the cast and
      * users who had written a review about it.
      */
-    public void setMovieCard(int idMovie, String movieTitle){
+    public void setMovieCard(int idMovie){
         String username = User.getCurrentUser();
 
         /*
@@ -143,7 +146,7 @@ public class MovieCardPresenter {
             }
         });
 
-        setUserReviewByMovie(movieTitle);
+        setUserReviewByMovie(idMovie);
     }
 
     /**
@@ -153,7 +156,7 @@ public class MovieCardPresenter {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            MovieDAO movieDAO = new MovieDAO_TMDB();
+            MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
             movieDAO.getBackdrops(idMovie, new MovieCallback() {
                 @Override
                 public void setArtworks(List<Artwork> artworks) {
@@ -170,7 +173,7 @@ public class MovieCardPresenter {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            MovieDAO movieDAO = new MovieDAO_TMDB();
+            MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
             movieDAO.getGenre(idMovie, new MovieCallback() {
                 @Override
                 public void setGenre(List<Genre> genreList) {
@@ -187,7 +190,7 @@ public class MovieCardPresenter {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            MovieDAO movieDAO = new MovieDAO_TMDB();
+            MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
             movieDAO.getCast(idMovie, new MovieCallback() {
                 @Override
                 public void setCast(List<PersonCast> personCast) {
@@ -204,7 +207,7 @@ public class MovieCardPresenter {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
-            MovieDAO movieDAO = new MovieDAO_TMDB();
+            MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
             movieDAO.getBackdrops(idMovies, new MovieCallback() {
                 @Override
                 public void setArtworks(List<Artwork> artworks) {
@@ -227,15 +230,16 @@ public class MovieCardPresenter {
     /**
      * Set all users who has written review about clicked movie and show them
      */
-    public void setUserReviewByMovie(String movieTitle) {
+    public void setUserReviewByMovie(int idMovie) {
         UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         User user = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
 
         ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
-        List<Review> listAuthor = reviewDAO.getUserReviewByMovie(movieTitle, user.getFriends(), user.getUsername());
+        List<Review> listAuthor = reviewDAO.getUserReviewByMovie(idMovie, user.getFriends(), user.getUsername(), false);
         if(!listAuthor.isEmpty()) {
             movieCardFragment.setLayoutNoReview(false);
             movieCardFragment.setRecycler(listAuthor);
+            movieCardFragment.setSeeAllReviewButton(true);
         } else
             movieCardFragment.setLayoutNoReview(true);
     }
@@ -272,7 +276,7 @@ public class MovieCardPresenter {
                     .setPositiveButton("Add", (dialogInterface, i) -> {
                         Timestamp dateAndTime = new Timestamp(new Date());
 
-                        movieListDAO.addMovieToList(username, customLists[selected.get()], idMovie, dateAndTime);
+                        movieListDAO.addMovieToList(username, customLists[selected.get()], idMovie);
                         movieCardFragment.setFlag(true);
                         dialogInterface.dismiss();
                         Utils.showDialog(movieCardFragment.getFragmentContext(), "Done!", "Movie successfully added to the list ");
@@ -318,12 +322,12 @@ public class MovieCardPresenter {
                 .show();
     }
 
-    public void saveValuation(int idMovie, String movieTitle, float valuation) {
+    public void saveValuation(int idMovie, float valuation) {
         String currentUser = User.getCurrentUser();
         Timestamp dateAndTime = new Timestamp(new Date());
 
         ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
-        reviewDAO.saveReview(currentUser, valuation, "", idMovie, movieTitle, dateAndTime, new ReviewCallback() {
+        reviewDAO.saveReview(currentUser, valuation, "", idMovie, dateAndTime, new ReviewCallback() {
             @Override
             public void onSuccess(String idReview) {
                 movieCardFragment.setWriteReviewButtonEnable(true);
@@ -337,5 +341,15 @@ public class MovieCardPresenter {
                 feedDAO.addNews(currentUser, "", String.valueOf(idMovie), idReview, "valuation", valuation, dateAndTime);
             }
         });
+    }
+
+    public void seeAllReviewClicked(int idMovie) {
+        SeeAllReviewFragment seeAllReviewFragment = new SeeAllReviewFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("MovieID", idMovie);
+        seeAllReviewFragment.setArguments(args);
+
+        Utils.changeFragment_SlideAnim(movieCardFragment.getFragment(), seeAllReviewFragment, R.id.fragment);
     }
 }

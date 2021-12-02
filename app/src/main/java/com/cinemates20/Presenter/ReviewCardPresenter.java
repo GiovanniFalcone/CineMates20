@@ -1,7 +1,6 @@
 package com.cinemates20.Presenter;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.CommentCallback;
@@ -10,6 +9,7 @@ import com.cinemates20.Model.DAO.Interface.InterfaceDAO.NotificationDAO;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.Comment;
+import com.cinemates20.Model.Review;
 import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.ReactionsTabFragment;
@@ -28,19 +28,24 @@ public class ReviewCardPresenter {
         this.reviewCardActivity = reviewCardActivity;
     }
 
-    public void viewReview(){
-        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
-        User currentUser = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
-        reviewCardActivity.setUserIcon(currentUser.getIcon());
+    public void viewReview(Review review){
+        reviewCardActivity.setNameAuthorView(review.getAuthor());
+        reviewCardActivity.setRatingReview(review.getRating());
+        reviewCardActivity.setReview(review.getTextReview());
+        //Set icon on toolbar
+        reviewCardActivity.setUserIcon();
+        //Set icon for comment
+        reviewCardActivity.setAuthorIcon();
 
+        //Check if the user reacted to the review
         ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
-        String reactionType = reviewDAO.getReaction(currentUser.getUsername(), reviewCardActivity.getReview().getIdReview());
+        String reactionType = reviewDAO.getReaction(User.getCurrentUser(), review.getIdReview());
         if(reactionType != null) {
             reviewCardActivity.setColorButton(reactionType);
             reviewCardActivity.setFlag(reactionType);
         }
 
-        setUserCommentByReview();
+        setUserCommentByReview(review.getIdReview());
     }
 
     /**
@@ -60,14 +65,14 @@ public class ReviewCardPresenter {
         }
     }
 
-    public void setUserCommentByReview(){
+    public void setUserCommentByReview(String idReview){
         List<Comment> commentList = new ArrayList<>();
 
         CommentDAO commentDAO = DAOFactory.getCommentDAO(DAOFactory.FIREBASE);
 
         reviewCardActivity.setView(true);
 
-        commentDAO.getUserCommentByReview(reviewCardActivity.getReview().getIdReview(), reviewCardActivity.getActivityContext(), new CommentCallback() {
+        commentDAO.getUserCommentByReview(idReview, reviewCardActivity.getActivityContext(), new CommentCallback() {
             @Override
             public void setNewComments(Comment comment) {
                 if(comment.isVisible()) {
@@ -105,7 +110,7 @@ public class ReviewCardPresenter {
         ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
 
         String user = User.getCurrentUser();
-        boolean isExists = reviewDAO.checkIfValuationExists(reviewCardActivity.getReview().getIdReview(), user);
+        boolean isExists = reviewDAO.checkIfValuationExists(idReview, user);
 
         if (!isExists) {
             reviewDAO.addValuationToUserReview(valuation, idReview, user);

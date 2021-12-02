@@ -20,6 +20,7 @@ import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.MovieAdapter;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieListUserFragment extends Fragment {
@@ -27,6 +28,7 @@ public class MovieListUserFragment extends Fragment {
     private MovieListUserPresenter movieListUserPresenter;
     private RecyclerView recyclerView;
     private String nameListClicked, descriptionList;
+    private List<Integer> listIDMovie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +40,7 @@ public class MovieListUserFragment extends Fragment {
 
         nameListClicked = requireArguments().getString("nameListClicked");
         descriptionList = requireArguments().getString("descriptionListClicked");
+        listIDMovie = requireArguments().getIntegerArrayList("idMovieList");
 
         CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitleEnabled(false);
@@ -54,7 +57,7 @@ public class MovieListUserFragment extends Fragment {
         description.setText(descriptionList);
 
         movieListUserPresenter = new MovieListUserPresenter(this);
-        movieListUserPresenter.seeMovieList(nameListClicked);
+        movieListUserPresenter.seeMovieList(listIDMovie);
 
         return view;
     }

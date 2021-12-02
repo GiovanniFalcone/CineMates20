@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
+import com.cinemates20.Model.User;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.NavigationActivity;
 import com.cinemates20.View.UsernameActivity;
@@ -51,6 +52,8 @@ public class UsernamePresenter {
                                 Log.d("UsernamePresenter", "User profile updated.");
                             }
                         });
+
+                User.setCurrentUser(username);
 
                 usernameActivity.startActivity(new Intent(usernameActivity.getActivityContext(), NavigationActivity.class));
             }

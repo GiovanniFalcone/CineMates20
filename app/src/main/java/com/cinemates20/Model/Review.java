@@ -6,25 +6,24 @@ import android.os.Parcelable;
 import java.util.Date;
 
 public class Review implements Parcelable {
+
     private String textReview, author, titleMovie, idReview;
     private Date dateAndTime;
     private boolean isInappropriate;
-    private int totalLike, totalDislike, totalLove, totalClap, totalGrrr, idMovie, totalValuation, counterForSpoiler, counterForLanguage;
+    private int idMovie, totalValuation, counterForSpoiler, counterForLanguage;
     private float movieValuation, rating;
 
     public Review() {}
 
-    public Review(String textReview, String author, String titleMovie, String idReview, Date dateAndTime, int totalLike, int totalDislike, int totalLove, int totalClap, int totalGrrr, int idMovie, float movieValuation, float rating, int totalValuation, int counterForSpoiler, int counterForLanguage, boolean isInappropriate) {
+    public Review(String textReview, String author, String titleMovie, String idReview,
+                  Date dateAndTime, int idMovie, float movieValuation, float rating,
+                  int totalValuation, int counterForSpoiler, int counterForLanguage,
+                  boolean isInappropriate) {
         this.textReview = textReview;
         this.author = author;
         this.titleMovie = titleMovie;
         this.idReview = idReview;
         this.dateAndTime = dateAndTime;
-        this.totalLike = totalLike;
-        this.totalDislike = totalDislike;
-        this.totalLove = totalLove;
-        this.totalClap = totalClap;
-        this.totalGrrr = totalGrrr;
         this.idMovie = idMovie;
         this.movieValuation = movieValuation;
         this.rating = rating;
@@ -41,11 +40,6 @@ public class Review implements Parcelable {
         idReview = parcel.readString();
         long tmpDate = parcel.readLong();
         dateAndTime = tmpDate == -1 ? null : new Date(tmpDate);
-        totalLike = parcel.readInt();
-        totalDislike = parcel.readInt();
-        totalLove = parcel.readInt();
-        totalClap = parcel.readInt();
-        totalGrrr = parcel.readInt();
         idMovie = parcel.readInt();
         movieValuation = parcel.readFloat();
         rating = parcel.readFloat();
@@ -93,46 +87,6 @@ public class Review implements Parcelable {
 
     public void setDateAndTime(Date dateAndTime) {
         this.dateAndTime = dateAndTime;
-    }
-
-    public int getTotalLike() {
-        return totalLike;
-    }
-
-    public void setTotalLike(int totalLike) {
-        this.totalLike = totalLike;
-    }
-
-    public int getTotalDislike() {
-        return totalDislike;
-    }
-
-    public void setTotalDislike(int totalDislike) {
-        this.totalDislike = totalDislike;
-    }
-
-    public int getTotalLove() {
-        return totalLove;
-    }
-
-    public void setTotalLove(int totalLove) {
-        this.totalLove = totalLove;
-    }
-
-    public int getTotalClap() {
-        return totalClap;
-    }
-
-    public void setTotalClap(int totalClap) {
-        this.totalClap = totalClap;
-    }
-
-    public int getTotalGrrr() {
-        return totalGrrr;
-    }
-
-    public void setTotalGrrr(int totalGrrr) {
-        this.totalGrrr = totalGrrr;
     }
 
     public int getIdMovie() {
@@ -199,11 +153,6 @@ public class Review implements Parcelable {
                 ", titleMovie='" + titleMovie + '\'' +
                 ", idReview='" + idReview + '\'' +
                 ", dateAndTime=" + dateAndTime + '\'' +
-                ", totalLike=" + totalLike + '\'' +
-                ", totalDislike=" + totalDislike + '\'' +
-                ", totalLove=" + totalLove + '\'' +
-                ", totalClap=" + totalClap + '\'' +
-                ", totalGrrr=" + totalGrrr + '\'' +
                 ", idMovie=" + idMovie + '\'' +
                 ", movieValuation=" + movieValuation + '\'' +
                 ", rating=" + rating + '\'' +
@@ -226,11 +175,6 @@ public class Review implements Parcelable {
         parcel.writeString(titleMovie);
         parcel.writeString(idReview);
         parcel.writeLong(dateAndTime != null ? dateAndTime.getTime() : -1);
-        parcel.writeInt(totalLike);
-        parcel.writeInt(totalDislike);
-        parcel.writeInt(totalLove);
-        parcel.writeInt(totalClap);
-        parcel.writeInt(totalGrrr);
         parcel.writeInt(idMovie);
         parcel.writeFloat(movieValuation);
         parcel.writeFloat(rating);

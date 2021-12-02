@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,7 @@ import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.GenericAdapter;
 import com.cinemates20.Utils.Adapters.ScreenAdapter;
 
+import com.cinemates20.Utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -46,7 +46,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
-import java.util.Objects;
 
 import info.movito.themoviedbapi.model.Artwork;
 import info.movito.themoviedbapi.model.Genre;
@@ -57,7 +56,7 @@ public class MovieCardFragment extends Fragment{
     private View layoutNoReview;
     private ImageView background;
     private FloatingActionButton writeReviewButton, rateButton;
-    private TextView overviewMovie , castTextView, moviePlotTextView;
+    private TextView overviewMovie , castTextView, moviePlotTextView, seeAllReviewButton;
     private MovieCardPresenter movieCardPresenter;
     private String title, url, overview;
     private ShimmerFrameLayout shimmerFrameLayout;
@@ -101,6 +100,7 @@ public class MovieCardFragment extends Fragment{
         rateButton = view.findViewById(R.id.rateThis);
         layoutNoReview = view.findViewById(R.id.no_review_layout);
         movieRating = view.findViewById(R.id.valuationMovie);
+        seeAllReviewButton = view.findViewById(R.id.seeAllReview);
 
         CollapsingToolbarLayout collapsingToolbarLayout = view.findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitle(title);
@@ -113,37 +113,46 @@ public class MovieCardFragment extends Fragment{
         backButton.setOnClickListener(view15 -> requireActivity().onBackPressed());
 
         shimmerFrameLayout.startShimmer();
-        movieCardPresenter.setMovieCard(idMovie, title);
 
-        writeReviewButton.setOnClickListener(view2 -> movieCardPresenter.clickWriteReview(idMovie, title, url, overview));
+        movieCardPresenter.setMovieCard(idMovie);
+
+        writeReviewButton.setOnClickListener(view2 ->
+                movieCardPresenter.clickWriteReview(idMovie, title, url, overview));
 
         overviewMovie.setText(overview);
+        seeAllReviewButton.setVisibility(View.GONE);
 
-        buttonAddToList.setOnClickListener(view1 -> movieCardPresenter.onClickAddMovieToList(String.valueOf(idMovie)));
-        buttonRemoveFromList.setOnClickListener(view12 -> movieCardPresenter.onClickRemoveMovieFromList(String.valueOf(idMovie)));
+        buttonAddToList.setOnClickListener(view1 ->
+                movieCardPresenter.onClickAddMovieToList(String.valueOf(idMovie)));
 
-        rateButton.setOnClickListener(view14 -> {
-            AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMyAppDialogAlertDay);
-            builder.setTitle("Rate this movie");
-            View viewDialog = LayoutInflater.from(getContext()).inflate(R.layout.dialog_rate, (ViewGroup) getView(), false);
-            RatingBar ratingBar = viewDialog.findViewById(R.id.ratingBar);
-            builder.setView(viewDialog);
-            builder.setMessage(R.string.confirm_valuation);
-            builder.setPositiveButton("Rate", (dialogInterface, i) -> movieCardPresenter.saveValuation(idMovie, title, ratingBar.getRating()))
-                    .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
+        buttonRemoveFromList.setOnClickListener(view12 ->
+                movieCardPresenter.onClickRemoveMovieFromList(String.valueOf(idMovie)));
 
-            AlertDialog alertDialog = builder.create();
-            ratingBar.setOnRatingBarChangeListener((ratingBar1, v, b) ->
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(ratingBar1.getRating() != 0.0));
-            alertDialog.show();
-            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        });
+        rateButton.setOnClickListener(view14 -> showDialog());
+
+        seeAllReviewButton.setOnClickListener(view13 ->
+                movieCardPresenter.seeAllReviewClicked(idMovie));
 
         animationItem();
 
-
-
         return view;
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeMyAppDialogAlertDay);
+        builder.setTitle("Rate this movie");
+        View viewDialog = LayoutInflater.from(getContext()).inflate(R.layout.dialog_rate, (ViewGroup) getView(), false);
+        RatingBar ratingBar = viewDialog.findViewById(R.id.ratingBar);
+        builder.setView(viewDialog);
+        builder.setMessage(R.string.confirm_valuation);
+        builder.setPositiveButton("Rate", (dialogInterface, i) -> movieCardPresenter.saveValuation(idMovie, ratingBar.getRating()))
+                .setNegativeButton("Back", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        AlertDialog alertDialog = builder.create();
+        ratingBar.setOnRatingBarChangeListener((ratingBar1, v, b) ->
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(ratingBar1.getRating() != 0.0));
+        alertDialog.show();
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
     }
 
     public void setWriteReviewButtonEnable(boolean value){
@@ -154,10 +163,17 @@ public class MovieCardFragment extends Fragment{
         rateButton.setEnabled(value);
     }
 
+    public void setSeeAllReviewButton(boolean value){
+        if(value)
+            seeAllReviewButton.setVisibility(View.VISIBLE);
+        else
+            seeAllReviewButton.setVisibility(View.GONE);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        movieCardPresenter.setUserReviewByMovie(title);
+        movieCardPresenter.setUserReviewByMovie(idMovie);
     }
 
 
@@ -236,9 +252,13 @@ public class MovieCardFragment extends Fragment{
         reviewUserAdapter.setOnItemClickListener(new GenericAdapter.ClickListener() {
             @Override
             public void onItemClickListener(Review review, String iconAuthor, ImageView authorIcon, TextView authorName) {
-                movieCardPresenter.onClickSeeReview(review, iconAuthor, authorIcon, authorName);
+                movieCardPresenter.onClickSeeReview(review, iconAuthor, authorIcon, authorName, MovieCardFragment.this);
             }
         });
+    }
+
+    public Fragment getFragment(){
+        return this;
     }
 
     public Context getFragmentContext(){

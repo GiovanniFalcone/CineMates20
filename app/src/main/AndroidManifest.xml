@@ -38,7 +38,7 @@
             android:noHistory="true"/>
         <activity
             android:name=".View.NavigationActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".View.ResetPasswordActivity"
             android:noHistory="true"/>
         <activity

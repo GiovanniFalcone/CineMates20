@@ -5,16 +5,16 @@ import java.util.List;
 public class MovieList {
 
     private String idMovieList, nameList, description, username;
-    private List<Integer> idMovie;
+    private List<Integer> listIDMovie;
 
     public MovieList(){}
 
-    public MovieList(String idMovieList, String nameList, String description, String username, List<Integer> idMovie) {
+    public MovieList(String idMovieList, String nameList, String description, String username, List<Integer> listIDMovie) {
         this.idMovieList = idMovieList;
         this.nameList = nameList;
         this.description = description;
         this.username = username;
-        this.idMovie = idMovie;
+        this.listIDMovie = listIDMovie;
     }
 
     public String getIdMovieList() {
@@ -49,12 +49,12 @@ public class MovieList {
         this.username = username;
     }
 
-    public List<Integer> getIdMovies() {
-        return idMovie;
+    public List<Integer> getListIDMovie() {
+        return listIDMovie;
     }
 
-    public void setIdMovies(List<Integer> idMovies) {
-        this.idMovie = idMovies;
+    public void setListIDMovie(List<Integer> listIDMovie) {
+        this.listIDMovie = listIDMovie;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MovieList {
                 ", nameList='" + nameList + '\'' +
                 ", description='" + description + '\'' +
                 ", username='" + username + '\'' +
-                ", idMovies=" + idMovie +
+                ", listIDMovie=" + listIDMovie +
                 '}';
     }
 }

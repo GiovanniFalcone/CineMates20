@@ -49,15 +49,6 @@ public class LoginTabFragment extends Fragment {
 
         animationLogin();
 
-        eventListener();
-
-        editTextUsername.addTextChangedListener(textWatcher);
-        editTextPassword.addTextChangedListener(textWatcher);
-
-        return root;
-    }
-
-    public void eventListener() {
         signInButtonFacebook.setOnClickListener(view ->
                 startActivity(new Intent(getContext(), FacebookActivity.class)));
 
@@ -68,12 +59,17 @@ public class LoginTabFragment extends Fragment {
 
         textForgetPass.setOnClickListener(view ->
                 startActivity(new Intent(getContext(), ResetPasswordActivity.class)));
+
+        editTextUsername.addTextChangedListener(new EditTextListener());
+        editTextPassword.addTextChangedListener(new EditTextListener());
+
+        return root;
     }
 
     /*
     If the fields are empty the use can't click the regular login button
      */
-    public TextWatcher textWatcher = new TextWatcher() {
+    private class EditTextListener implements TextWatcher{
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
@@ -94,11 +90,12 @@ public class LoginTabFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable editable) {
         }
-    };
+    }
 
     public void onClickRegularLogin(){
         loginRegular.setOnClickListener(view ->
-                loginPresenter.signIn(editTextUsername.getText().toString().trim(), editTextPassword.getText().toString().trim()));
+                loginPresenter.signIn(editTextUsername.getText().toString().trim(),
+                        editTextPassword.getText().toString().trim()));
     }
 
     public void animationLogin() {

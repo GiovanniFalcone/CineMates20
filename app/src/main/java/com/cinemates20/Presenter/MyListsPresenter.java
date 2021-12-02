@@ -11,6 +11,7 @@ import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.MovieListUserFragment;
 import com.cinemates20.View.MyListsFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyListsPresenter {
@@ -37,6 +38,7 @@ public class MyListsPresenter {
         args.putString("nameListClicked", listClicked.getNameList());
         args.putString("descriptionListClicked", listClicked.getDescription());
         args.putString("idListClicked", listClicked.getIdMovieList());
+        args.putIntegerArrayList("idMovieList", (ArrayList<Integer>) listClicked.getListIDMovie());
         movieListUserFragment.setArguments(args);
         myListsFragment.requireActivity()
                 .getSupportFragmentManager()

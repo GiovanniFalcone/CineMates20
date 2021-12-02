@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class UserDAO_Firestore implements UserDAO, UserCallback {
+public class UserDAO_Firestore implements UserDAO {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Create a reference to the users collection
@@ -47,6 +47,7 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
         user.put("friends", Collections.emptyList());
         user.put("icon", "");
         user.put("last_login", new Timestamp(new Date()));
+        user.put("first_login", new Timestamp(new Date()));
 
         // Add a new document with a generated ID
         collectionReference
@@ -66,6 +67,7 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
         favorite.put("description", "Your favorite list.");
         favorite.put("nameList", "Favorite list");
         favorite.put("dateAndTimeCreationList", new Timestamp(new Date()));
+        favorite.put("listIDMovie", Collections.emptyList());
 
         // Save data into document
         documentReferenceFavorite.set(favorite)
@@ -80,6 +82,7 @@ public class UserDAO_Firestore implements UserDAO, UserCallback {
         watch.put("description", "Your watch list.");
         watch.put("nameList", "Watch list");
         watch.put("dateAndTimeCreationList", new Timestamp(new Date()));
+        watch.put("listIDMovie", Collections.emptyList());
 
         // Save data into document
         documentReferenceWatch.set(watch)

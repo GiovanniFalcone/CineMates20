@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ReviewDAO {
 
-    void saveReview(String username, float valuation, String text, int idMovie, String titleMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
+    void saveReview(String username, float valuation, String text, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
 
     void addReview(String username, String textReview, int idMovie, Timestamp dateAndTime, ReviewCallback reviewCallback);
 
-    List<Review> getUserReviewByMovie(String titleMovie, List<String> friends, String username);
+    List<Review> getUserReviewByMovie(int idMovie, List<String> friends, String username, boolean seeAllReviewClicked);
 
     Review getReviewByAuthor(String author, int idMovie);
 

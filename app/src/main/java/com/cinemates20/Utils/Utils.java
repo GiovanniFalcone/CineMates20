@@ -51,15 +51,6 @@ public class Utils {
         return false;
     }
 
-    public static void putImage(Context context, String url, ImageView poster){
-        Glide.with(context.getApplicationContext())
-                .load("http://image.tmdb.org/t/p/original"+ url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(200, 300)
-                .transform(new RoundedCorners(30))
-                .into(poster);
-    }
-
     public static void changeFragment_BottomAnim(Fragment currentFragment, Fragment newFragment, int idLayout){
         currentFragment.requireActivity()
                 .getSupportFragmentManager()
@@ -75,8 +66,7 @@ public class Utils {
     }
 
     public static void changeFragment_SlideAnim(Fragment currentFragment, Fragment newFragment, int idLayout){
-        currentFragment.requireActivity()
-                .getSupportFragmentManager()
+        currentFragment.getChildFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in,  // enter
                         R.anim.fade_out,  // exit

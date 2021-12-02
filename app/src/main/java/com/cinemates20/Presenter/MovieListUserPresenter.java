@@ -1,7 +1,6 @@
 package com.cinemates20.Presenter;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.Model.User;
@@ -19,14 +18,9 @@ public class MovieListUserPresenter {
         this.movieListUserFragment = movieListUserFragment;
     }
 
-    public void seeMovieList(String nameListClicked) {
-        String currentUser = User.getCurrentUser();
-
-        MovieListDAO movieListDAO = DAOFactory.getMovieListDAO(DAOFactory.FIREBASE);
-        List<Integer> idMoviesList = movieListDAO.getMoviesByList(nameListClicked, currentUser);
-
-        MovieDAO movieDAO = new MovieDAO_TMDB();
-        List<MovieDb> movieDbList = movieDAO.getMoviesOfList(idMoviesList);
+    public void seeMovieList(List<Integer> listIDMovie) {
+        MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
+        List<MovieDb> movieDbList = movieDAO.getMoviesOfList(listIDMovie);
 
         movieListUserFragment.setRecycler(movieDbList);
     }

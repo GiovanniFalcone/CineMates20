@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +62,11 @@ public class MenuFragment extends Fragment {
     public void onClickListener() {
         logout.setOnClickListener(view1 -> menuPresenter.clickButtonLogout());
 
-        friends.setOnClickListener(view ->
-                Utils.changeFragment_SlideAnim(MenuFragment.this, new FriendListFragment(), R.id.nav_host_fragment_activity_main));
+        friends.setOnClickListener(view -> menuPresenter.clickButtonFriendList());
 
-        myReviews.setOnClickListener(view ->
-                Utils.changeFragment_SlideAnim(MenuFragment.this, new MyReviewsFragment(), R.id.nav_host_fragment_activity_main));
+        myReviews.setOnClickListener(view -> menuPresenter.clickButtonMyReviews());
 
-        myLists.setOnClickListener(view ->
-                Utils.changeFragment_SlideAnim(MenuFragment.this, new MyListsFragment(), R.id.nav_host_fragment_activity_main));
+        myLists.setOnClickListener(view -> menuPresenter.clickButtonMovieList());
 
         proPic.setOnClickListener(view -> {
             if(Build.VERSION.SDK_INT>Build.VERSION_CODES.M){

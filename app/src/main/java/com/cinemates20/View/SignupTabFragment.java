@@ -41,15 +41,15 @@ public class SignupTabFragment extends Fragment {
         editTextConfirmPassword = root.findViewById(R.id.textConfermaPasswordSignup);
         signupButton = root.findViewById(R.id.buttonSignup);
 
-        editTextUsername.addTextChangedListener(textWatcher);
-        editTextEmail.addTextChangedListener(textWatcher);
-        editTextPassword.addTextChangedListener(textWatcher);
-        editTextConfirmPassword.addTextChangedListener(textWatcher);
+        editTextUsername.addTextChangedListener(new EditTextListener());
+        editTextEmail.addTextChangedListener(new EditTextListener());
+        editTextPassword.addTextChangedListener(new EditTextListener());
+        editTextConfirmPassword.addTextChangedListener(new EditTextListener());
 
         return root;
     }
 
-    public TextWatcher textWatcher = new TextWatcher() {
+    private class EditTextListener implements TextWatcher{
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -75,7 +75,7 @@ public class SignupTabFragment extends Fragment {
         public void afterTextChanged(Editable editable) {
 
         }
-    };
+    }
 
     public void setErrorInvalidPassword(){
         textInputLayoutPassword.setError("Invalid password");

@@ -34,6 +34,7 @@ public class SearchUserTabFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recyclerViewSearch);
         searchView = root.findViewById(R.id.searchView);
         searchView.setOnClickListener(v -> searchView.onActionViewExpanded());
+
         searchViewPopulation();
         return root;
     }
