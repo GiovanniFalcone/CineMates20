@@ -4,10 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.List;
 
 public class Review implements Parcelable {
 
-    private String textReview, author, titleMovie, idReview;
+    private String textReview, author, idReview;
     private Date dateAndTime;
     private boolean isInappropriate;
     private int idMovie, totalValuation, counterForSpoiler, counterForLanguage;
@@ -15,13 +16,12 @@ public class Review implements Parcelable {
 
     public Review() {}
 
-    public Review(String textReview, String author, String titleMovie, String idReview,
+    public Review(String textReview, String author, String idReview,
                   Date dateAndTime, int idMovie, float movieValuation, float rating,
                   int totalValuation, int counterForSpoiler, int counterForLanguage,
                   boolean isInappropriate) {
         this.textReview = textReview;
         this.author = author;
-        this.titleMovie = titleMovie;
         this.idReview = idReview;
         this.dateAndTime = dateAndTime;
         this.idMovie = idMovie;
@@ -36,7 +36,6 @@ public class Review implements Parcelable {
     public Review(Parcel parcel) {
         textReview = parcel.readString();
         author = parcel.readString();
-        titleMovie = parcel.readString();
         idReview = parcel.readString();
         long tmpDate = parcel.readLong();
         dateAndTime = tmpDate == -1 ? null : new Date(tmpDate);
@@ -63,14 +62,6 @@ public class Review implements Parcelable {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getTitleMovie() {
-        return titleMovie;
-    }
-
-    public void setTitleMovie(String titleMovie) {
-        this.titleMovie = titleMovie;
     }
 
     public String getIdReview() {
@@ -150,7 +141,6 @@ public class Review implements Parcelable {
         return "Review{" +
                 "textReview='" + textReview + '\'' +
                 ", author='" + author + '\'' +
-                ", titleMovie='" + titleMovie + '\'' +
                 ", idReview='" + idReview + '\'' +
                 ", dateAndTime=" + dateAndTime + '\'' +
                 ", idMovie=" + idMovie + '\'' +
@@ -172,7 +162,6 @@ public class Review implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(textReview);
         parcel.writeString(author);
-        parcel.writeString(titleMovie);
         parcel.writeString(idReview);
         parcel.writeLong(dateAndTime != null ? dateAndTime.getTime() : -1);
         parcel.writeInt(idMovie);
