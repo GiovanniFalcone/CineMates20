@@ -36,7 +36,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         back.setOnClickListener(view -> finish());
 
-        editTextEmail.addTextChangedListener(textWatcher);
+        editTextEmail.addTextChangedListener(new EditTextListener());
     }
 
     private void eventListener() {
@@ -45,7 +45,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
 
-    public TextWatcher textWatcher = new TextWatcher() {
+    private class EditTextListener implements TextWatcher{
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
 
         }
-    };
+    }
 
     public Context getActivityContext(){
         return this;

@@ -34,14 +34,14 @@ public class UsernameActivity extends AppCompatActivity {
         editTextUsername = findViewById(R.id.chooseUsername);
         buttonSend = findViewById(R.id.buttonSend);
 
-        editTextUsername.addTextChangedListener(textWatcher);
+        editTextUsername.addTextChangedListener(new EditTextListener());
     }
 
     public String getCurrentUser(){
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
     }
 
-    public TextWatcher textWatcher = new TextWatcher() {
+    private class EditTextListener implements TextWatcher{
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
@@ -61,7 +61,7 @@ public class UsernameActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {}
-    };
+    }
 
     public void setErrorUsername(String s) {
         chooseUsernameLayout.setError(s);
