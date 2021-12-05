@@ -68,4 +68,8 @@ public class MyReviewsFragment extends Fragment {
             }
         });
     }
+
+    public String getUserIcon() {
+        return requireArguments().getString("Icon");
+    }
 }

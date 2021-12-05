@@ -2,6 +2,7 @@ package com.cinemates20.Presenter;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
@@ -35,8 +36,10 @@ public class MenuPresenter {
 
         User currentUser = userDAO.getUser((Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()));
 
-        if(!currentUser.getIcon().equals(""))
+        if(!currentUser.getIcon().equals("")) {
             menuFragment.setPropic(currentUser.getIcon());
+            menuFragment.setImageUri(Uri.parse(currentUser.getIcon()));
+        }
 
         menuFragment.setUsername(currentUser.getUsername());
     }
@@ -71,7 +74,11 @@ public class MenuPresenter {
     }
 
     public void clickButtonMyReviews() {
-        Utils.changeFragment_SlideAnim(menuFragment, new MyReviewsFragment(), R.id.container);
+        MyReviewsFragment myReviewsFragment = new MyReviewsFragment();
+        Bundle args = new Bundle();
+        args.putString("Icon", menuFragment.getImageUri().toString());
+        myReviewsFragment.setArguments(args);
+        Utils.changeFragment_SlideAnim(menuFragment, myReviewsFragment, R.id.container);
     }
 
     public void clickButtonMovieList() {

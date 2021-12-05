@@ -34,6 +34,7 @@ public class MyReviewsPresenter {
         Intent intent = new Intent(myReviewsFragment.getContext(), ReviewCardActivity.class);
         intent.putExtra("Review", personalReviewClicked);
         intent.putExtra("idMovie", personalReviewClicked.getIdMovie());
+        intent.putExtra("Icon", myReviewsFragment.getUserIcon());
         intent.putExtra("PersonalReview", true);
         myReviewsFragment.startActivity(intent);
     }

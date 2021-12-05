@@ -93,6 +93,14 @@ public class MenuFragment extends Fragment {
                 .into(proPic);
     }
 
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
