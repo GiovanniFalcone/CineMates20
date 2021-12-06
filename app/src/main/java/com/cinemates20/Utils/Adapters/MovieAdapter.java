@@ -21,6 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.ReviewDAO;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -31,8 +32,8 @@ import info.movito.themoviedbapi.model.MovieDb;
 
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<MovieDb> filteredMovie; //for movie search
-    private final List<MovieDb> movieDbList;
+    private List<Movie> filteredMovie; //for movie search
+    private final List<Movie> movieDbList;
     private final Context context;
     private final int FLAG;
     private final static int MOVIE_FEATURE_HOME = 0;
@@ -43,7 +44,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     //interface for click item
     private ClickListener clickListener;
 
-    public MovieAdapter(List<MovieDb> movieDbList, Context context, int FLAG){
+    public MovieAdapter(List<Movie> movieDbList, Context context, int FLAG){
         this.movieDbList = movieDbList;
         this.filteredMovie = movieDbList;
         this.context = context;
@@ -91,16 +92,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         switch (itemType){
             case MOVIE_FEATURE_HOME:
-                MovieDb movieDb = movieDbList.get(position);
+                Movie movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(750, 850)
                         .transform(new RoundedCorners(30))
                         .into(((ViewHolder)holder).getMoviePoster());
 
-                ViewCompat.setTransitionName(((ViewHolder) holder).getMoviePoster(), movieDb.getTitle());
+                ViewCompat.setTransitionName(((ViewHolder) holder).getMoviePoster(), movieDb.getMovieDb().getTitle());
 
                 ((ViewHolder)holder).getMoviePoster().setOnClickListener(view -> clickListener.onItemClickListener(movieDb));
                 break;
@@ -108,10 +109,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case MOVIE_RECYCLER_HOME:
                 movieDb = movieDbList.get(position);
 
-                ((ViewHolder)holder).getMovieTitle().setText(movieDb.getTitle());
+                ((ViewHolder)holder).getMovieTitle().setText(movieDb.getMovieDb().getTitle());
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getBackdropPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getBackdropPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(400, 250)
                         .transform(new RoundedCorners(30))
@@ -122,12 +123,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
 
             case MOVIE_SEARCH:
-                MovieDb movie = filteredMovie.get(position);
-                ((ViewHolder_Search)holder).getMovieTitle().setText(movie.getTitle());
+                Movie movie = filteredMovie.get(position);
+                ((ViewHolder_Search)holder).getMovieTitle().setText(movie.getMovieDb().getTitle());
 
-                if(movie.getPosterPath() != null) {
+                if(movie.getMovieDb().getPosterPath() != null) {
                     Glide.with(this.context)
-                            .load("http://image.tmdb.org/t/p/original" + movie.getPosterPath())
+                            .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .override(250, 350)
                             .transform(new RoundedCorners(30))
@@ -141,7 +142,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
-                reviewDAO.getMovieRating(movie.getId(), new ReviewCallback() {
+                reviewDAO.getMovieRating(movie.getMovieDb().getId(), new ReviewCallback() {
                     @Override
                     public void setRating(float rating, int total) {
                         ((ViewHolder_Search) holder).getRatingBar().setRating(rating);
@@ -156,7 +157,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(350, 450)
                         .transform(new RoundedCorners(30))
@@ -170,7 +171,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(350, 450)
                         .transform(new RoundedCorners(30))
@@ -270,9 +271,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 if(key.isEmpty())
                     filteredMovie = movieDbList;
                 else{
-                    List<MovieDb> stdFiltered = new ArrayList<>();
-                    for(MovieDb row: movieDbList){
-                        if (row.getTitle().toLowerCase().contains(key.toLowerCase()))
+                    List<Movie> stdFiltered = new ArrayList<>();
+                    for(Movie row: movieDbList){
+                        if (row.getMovieDb().getTitle().toLowerCase().contains(key.toLowerCase()))
                             stdFiltered.add(row);
                     }
                     filteredMovie = stdFiltered;
@@ -285,7 +286,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredMovie = (List<MovieDb>)filterResults.values;
+                filteredMovie = (List<Movie>)filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -296,7 +297,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public interface ClickListener {
-        default void onItemClickListener(MovieDb movieClicked) {}
-        default void onItemClickListener(MovieDb movieClicked, int position) {}
+        default void onItemClickListener(Movie movieClicked) {}
+        default void onItemClickListener(Movie movieClicked, int position) {}
     }
 }

@@ -1,6 +1,7 @@
 package com.cinemates20.Presenter;
 
 import android.app.ActivityOptions;
+import android.app.Person;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -157,12 +158,8 @@ public class MovieCardPresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getBackdrops(idMovie, new MovieCallback() {
-                @Override
-                public void setArtworks(List<Artwork> artworks) {
-                    handler.post(() -> movieCardFragment.setRecyclerScreen(artworks));
-                }
-            });
+            List<Artwork> artworks = movieDAO.getBackdrops(idMovie);
+            handler.post(() -> movieCardFragment.setRecyclerScreen(artworks));
         });
     }
 
@@ -174,12 +171,8 @@ public class MovieCardPresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getGenre(idMovie, new MovieCallback() {
-                @Override
-                public void setGenre(List<Genre> genreList) {
-                    handler.post(() -> movieCardFragment.setRecyclerViewGenres(genreList));
-                }
-            });
+            List<Genre> genreList = movieDAO.getGenre(idMovie);
+            handler.post(() -> movieCardFragment.setRecyclerViewGenres(genreList));
         });
     }
 
@@ -191,12 +184,8 @@ public class MovieCardPresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getCast(idMovie, new MovieCallback() {
-                @Override
-                public void setCast(List<PersonCast> personCast) {
-                    handler.post(() -> movieCardFragment.setRecyclerCast(personCast));
-                }
-            });
+            List<PersonCast> personCast = movieDAO.getCast(idMovie);
+            handler.post(() -> movieCardFragment.setRecyclerCast(personCast));
         });
     }
 
@@ -208,20 +197,17 @@ public class MovieCardPresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getBackdrops(idMovies, new MovieCallback() {
-                @Override
-                public void setArtworks(List<Artwork> artworks) {
-                    handler.post(() -> {
-                        if(artworks.size() > 1){
-                            int randomNum = (int) ((Math.random() * (artworks.size() - 1)) + 1);
-                            Artwork artwork = artworks.get(randomNum);
-                            movieCardFragment.setHeader("http://image.tmdb.org/t/p/original" + artwork.getFilePath());
-                        }
-                        else if(artworks.size() == 1){
-                            Artwork artwork = artworks.get(0);
-                            movieCardFragment.setHeader("http://image.tmdb.org/t/p/original" + artwork.getFilePath());
-                        }
-                    });
+            List<Artwork> artworks = movieDAO.getBackdrops(idMovies);
+
+            handler.post(() -> {
+                if(artworks.size() > 1){
+                    int randomNum = (int) ((Math.random() * (artworks.size() - 1)) + 1);
+                    Artwork artwork = artworks.get(randomNum);
+                    movieCardFragment.setHeader("http://image.tmdb.org/t/p/original" + artwork.getFilePath());
+                }
+                else if(artworks.size() == 1){
+                    Artwork artwork = artworks.get(0);
+                    movieCardFragment.setHeader("http://image.tmdb.org/t/p/original" + artwork.getFilePath());
                 }
             });
         });

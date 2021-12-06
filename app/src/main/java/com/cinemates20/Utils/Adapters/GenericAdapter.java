@@ -31,6 +31,7 @@ import com.cinemates20.Model.DAO.Interface.InterfaceDAO.UserDAO;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.Model.Comment;
 import com.cinemates20.Model.Feed;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.Model.MovieList;
 import com.cinemates20.Model.Notification;
 import com.cinemates20.Model.Review;
@@ -350,20 +351,16 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 Handler handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
                     MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-                    movieDAO.getMovieById(review.getIdMovie(), new MovieCallback() {
-                        @Override
-                        public void setResult(MovieDb movieDb) {
-                            handler.post(() -> {
-                                ((ViewHolder_PersonalReview)holder).getMovieTitle().setText(movieDb.getTitle());
+                    Movie movie = movieDAO.getMovieById(review.getIdMovie());
+                    handler.post(() -> {
+                        ((ViewHolder_PersonalReview)holder).getMovieTitle().setText(movie.getMovieDb().getTitle());
 
-                                Glide.with(context)
-                                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .override(200, 300)
-                                        .transform(new RoundedCorners(30))
-                                        .into(((ViewHolder_PersonalReview)holder).getMoviePoster());
-                            });
-                        }
+                        Glide.with(context)
+                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .override(200, 300)
+                                .transform(new RoundedCorners(30))
+                                .into(((ViewHolder_PersonalReview)holder).getMoviePoster());
                     });
                 });
 
@@ -439,21 +436,17 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
                     MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-                    movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
-                        @Override
-                        public void setResult(MovieDb movieDb) {
-                            handler.post(() -> {
-                                //set the type of the news
-                                ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews()
-                                        + "</b> has reviewed <b>" + movieDb.getTitle() + "</b>"));
-                                Glide.with(context)
-                                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .override(800, 900)
-                                        .transform(new RoundedCorners(30))
-                                        .into(((ViewHolder_FeedWithPoster)holder).getMoviePoster());
-                            });
-                        }
+                    Movie movie = movieDAO.getMovieById(Integer.parseInt(feed.getMovie()));
+                    handler.post(() -> {
+                        //set the type of the news
+                        ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews()
+                                + "</b> has reviewed <b>" + movie.getMovieDb().getTitle() + "</b>"));
+                        Glide.with(context)
+                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .override(800, 900)
+                                .transform(new RoundedCorners(30))
+                                .into(((ViewHolder_FeedWithPoster)holder).getMoviePoster());
                     });
                 });
 
@@ -532,18 +525,14 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
                     MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-                    movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
-                        @Override
-                        public void setResult(MovieDb movieDb) {
-                            handler.post(() -> {
-                                ((ViewHolder_FeedValuation) holder).getTextView().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews() +
-                                        "</b> has valuated <b>" + movieDb.getTitle() + "</b> with rating"));
+                    Movie movie = movieDAO.getMovieById(Integer.parseInt(feed.getMovie()));
+                    handler.post(() -> {
+                        ((ViewHolder_FeedValuation) holder).getTextView().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews() +
+                                "</b> has valuated <b>" + movie.getMovieDb().getTitle() + "</b> with rating"));
 
-                                ((ViewHolder_FeedValuation) holder).getValuation().setRating(feed.getValuation());
+                        ((ViewHolder_FeedValuation) holder).getValuation().setRating(feed.getValuation());
 
-                                holder.itemView.setOnClickListener(view -> clickListener.onItemClickListener(feed, "", movieDb));
-                            });
-                        }
+                        holder.itemView.setOnClickListener(view -> clickListener.onItemClickListener(feed, "", movie));
                     });
                 });
                 break;
@@ -564,24 +553,20 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                 handler = new Handler(Looper.getMainLooper());
                 executor.execute(() -> {
                     MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-                    movieDAO.getMovieById(Integer.parseInt(feed.getMovie()), new MovieCallback() {
-                        @Override
-                        public void setResult(MovieDb movieDb) {
-                            handler.post(() -> {
-                                //set the type of the news
-                                ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml(feed.getUserOfTheNews() + " has reviewed <b>" + movieDb.getTitle() + "</b>"));
-                                Glide.with(context)
-                                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .override(800, 900)
-                                        .transform(new RoundedCorners(30))
-                                        .into(((ViewHolder_FeedWithPoster)holder).getMoviePoster());
+                    Movie movie = movieDAO.getMovieById(Integer.parseInt(feed.getMovie()));
+                    handler.post(() -> {
+                        //set the type of the news
+                        ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml(feed.getUserOfTheNews() + " has reviewed <b>" + movie.getMovieDb().getTitle() + "</b>"));
+                        Glide.with(context)
+                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .override(800, 900)
+                                .transform(new RoundedCorners(30))
+                                .into(((ViewHolder_FeedWithPoster)holder).getMoviePoster());
 
-                                ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html
-                                        .fromHtml("<b>" + feed.getUserOfTheNews() + "</b> has added <b>"
-                                                + movieDb.getTitle() + "</b> into a list."));
-                            });
-                        }
+                        ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html
+                                .fromHtml("<b>" + feed.getUserOfTheNews() + "</b> has added <b>"
+                                        + movie.getMovieDb().getTitle() + "</b> into a list."));
                     });
                 });
 
@@ -979,7 +964,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
         default void onItemClickListener(Comment commentSelected) {}
         default void onItemClickListener(MovieList listClicked) {}
         default void onItemClickListener(Review personalReviewClicked) {}
-        default void onItemClickListener(Feed object, String iconAuthor, MovieDb movieDb) {}
+        default void onItemClickListener(Feed object, String iconAuthor, Movie movieDb) {}
         default void onItemClickListener(Review review, String iconAuthor, ImageView authorIcon, TextView authorName) {}
         default void onItemClickListener(String friend, int position) {}
     }

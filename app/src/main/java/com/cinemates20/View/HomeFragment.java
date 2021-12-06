@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.Utils.Adapters.MovieAdapter;
 import com.cinemates20.Presenter.HomePresenter;
 import com.cinemates20.R;
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public void setFeaturedMovie(List<MovieDb> movieDbList){
+    public void setFeaturedMovie(List<Movie> movieDbList){
         adapterMovie = new MovieAdapter(movieDbList, getContext(), 0);
 
         mostPopular.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment {
         clickListener(adapterMovie);
     }
 
-    public void setRecycler(List<MovieDb> movieDbList){
+    public void setRecycler(List<Movie> movieDbList){
         adapterMovie = new MovieAdapter(movieDbList, getContext(), 1);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         topRated.setLayoutManager(horizontalLayoutManager);
@@ -77,17 +78,17 @@ public class HomeFragment extends Fragment {
     public void clickListener(MovieAdapter adapterMovie){
         adapterMovie.setOnItemClickListener(new MovieAdapter.ClickListener() {
             @Override
-            public void onItemClickListener(MovieDb movieClicked) {
+            public void onItemClickListener(Movie movieClicked) {
                 homePresenter.onClickMovie(movieClicked);
             }
         });
     }
 
-    public void setRandomMovie(MovieDb movieDb){
+    public void setRandomMovie(Movie movieDb){
         if(isAdded()) {
             Glide.with(requireContext())
                     .asBitmap()
-                    .load("http://image.tmdb.org/t/p/original" + movieDb.getBackdropPath())
+                    .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getBackdropPath())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new CustomTarget<Bitmap>() {

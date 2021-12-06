@@ -1,32 +1,34 @@
 package com.cinemates20.Model.DAO.Interface.TMDB;
 
-import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
+import com.cinemates20.Model.Movie;
 
 import java.util.List;
 
-import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.Artwork;
+import info.movito.themoviedbapi.model.Genre;
+import info.movito.themoviedbapi.model.people.PersonCast;
 
 public interface MovieDAO {
 
-    void getMovieById(int idMovie, MovieCallback movieCallback);
+    Movie getMovieById(int idMovie);
 
-    void getMovies(String query, MovieCallback movieCallback);
+    List<Movie> getMovies(String query);
 
-    void getPopular(MovieCallback movieCallback);
+    List<Movie> getPopular();
 
-    void getNowPlaying(MovieCallback movieCallback);
+    List<Movie> getNowPlaying();
 
-    void getTopRated(MovieCallback movieCallback);
+    List<Movie> getTopRated();
 
-    void getGenre(int idMovie, MovieCallback movieCallback);
+    List<Genre> getGenre(int idMovie);
 
-    void getListMovieByGenre(int idGenre, int page, MovieCallback movieCallback);
+    List<Movie> getListMovieByGenre(int idGenre, int page);
 
-    void getBackdrops(int idMovie, MovieCallback movieCallback);
+    List<Artwork> getBackdrops(int idMovie);
 
-    void getCast(int idMovie, MovieCallback movieCallback);
+    List<PersonCast> getCast(int idMovie);
 
-    List<MovieDb> getMoviesOfList(List<Integer> idMoviesList);
+    List<Movie> getMoviesOfList(List<Integer> idMoviesList);
 
-    void getLogo(int idMovie, MovieCallback movieCallback);
+    String getLogo(int idMovie);
 }

@@ -18,7 +18,7 @@ public class MovieTest {
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
     private static final int ID_MOVIE_THE_AVENGERS = 24428;
     private List<Integer> list;
-
+/*
     @BeforeEach
     public void setUp(){
         list = new ArrayList<>();
@@ -41,5 +41,5 @@ public class MovieTest {
         List<MovieDb> movieDbList = movieDAO.getMoviesOfList(list);
 
         Assertions.assertFalse( movieDbList.size() > 0);
-    }
+    }*/
 }

@@ -11,6 +11,7 @@ import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.MovieAdapter;
 import com.cinemates20.Utils.Utils;
@@ -27,7 +28,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 public class GenresPresenter {
 
     private final GenresFragment genresFragment;
-    private List<MovieDb> newMovieList = new ArrayList<>();
+    private List<Movie> newMovieList = new ArrayList<>();
 
     public GenresPresenter(GenresFragment genresFragment) {
         this.genresFragment  = genresFragment;
@@ -38,18 +39,14 @@ public class GenresPresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getListMovieByGenre(genresFragment.idGenre(), page, new MovieCallback() {
-                @Override
-                public void setMovie(List<MovieDb> movieDbList) {
-                    handler.post(() -> {
-                        if(movieDbList != null)
-                            newMovieList.addAll(movieDbList);
-                        if(page  == 1)
-                            genresFragment.setRecycler(newMovieList);
-                        else
-                            movieAdapter.notifyDataSetChanged();
-                    });
-                }
+            List<Movie> movieDbList = movieDAO.getListMovieByGenre(genresFragment.idGenre(), page);
+            handler.post(() -> {
+                if(movieDbList != null)
+                    newMovieList.addAll(movieDbList);
+                if(page  == 1)
+                    genresFragment.setRecycler(newMovieList);
+                else
+                    movieAdapter.notifyDataSetChanged();
             });
         });
     }
@@ -58,17 +55,17 @@ public class GenresPresenter {
      * Open the movie card of clicked movie
      * @param movieDb the movie clicked by user
      */
-    public void onMovieClicked(MovieDb movieDb) {
+    public void onMovieClicked(Movie movieDb) {
         MovieCardFragment movieCardFragment = new MovieCardFragment();
         Fragment current = genresFragment.requireActivity()
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", movieDb.getId());
-            args.putString("MovieTitle", movieDb.getTitle());
-            args.putString("MovieUrl", movieDb.getPosterPath());
-            args.putString("MovieOverview", movieDb.getOverview());
-            args.putFloat("MovieRating", movieDb.getVoteAverage() / 2);
+            args.putInt("MovieID", movieDb.getMovieDb().getId());
+            args.putString("MovieTitle", movieDb.getMovieDb().getTitle());
+            args.putString("MovieUrl", movieDb.getMovieDb().getPosterPath());
+            args.putString("MovieOverview", movieDb.getMovieDb().getOverview());
+            args.putFloat("MovieRating", movieDb.getMovieDb().getVoteAverage() / 2);
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(genresFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

@@ -2,6 +2,7 @@ package com.cinemates20.Model.DAO.Implements;
 
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
+import com.cinemates20.Model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,17 +32,18 @@ import info.movito.themoviedbapi.model.people.PersonCast;
 public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
 
     @Override
-    public void getMovieById(int idMovie, MovieCallback movieCallback) {
+    public Movie getMovieById(int idMovie) {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies tmdbMovies = api.getMovies();
 
-        MovieDb movieDb = tmdbMovies.getMovie(idMovie, "en");
+        Movie movie = new Movie();
+        movie.setMovieDb(tmdbMovies.getMovie(idMovie, "en"));
 
-        movieCallback.setResult(movieDb);
+        return movie;
     }
 
     @Override
-    public void getMovies(String query, MovieCallback movieCallback) {
+    public List<Movie> getMovies(String query) {
         List<MovieDb> movieList = new ArrayList<>();
 
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
@@ -50,50 +52,83 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         if (!query.isEmpty())
             movieList = search.searchMovie(query, 0, "", false, 0).getResults();
 
+        List<Movie> myMovieList = new ArrayList<>();
+        if(!movieList.isEmpty()){
+            for(MovieDb movieDb: movieList){
+                Movie movie = new Movie();
+                movie.setMovieDb(movieDb);
+                myMovieList.add(movie);
+            }
+        }
 
-        movieCallback.setMovie(movieList);
+        return myMovieList;
     }
 
     @Override
-    public void getPopular(MovieCallback movieCallback) {
+    public List<Movie> getPopular() {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies movies = api.getMovies();
         List<MovieDb> popular = movies.getPopularMovies(null, 0).getResults();
 
-        movieCallback.setMovie(popular);
+        List<Movie> movieDbList = new ArrayList<>();
+        for(MovieDb movieDb: popular){
+            Movie movie = new Movie();
+            movie.setMovieDb(movieDb);
+            movieDbList.add(movie);
+        }
+
+        return movieDbList;
     }
 
     @Override
-    public void getNowPlaying(MovieCallback movieCallback) {
+    public List<Movie> getNowPlaying() {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies movies = api.getMovies();
         List<MovieDb> nowPlaying = movies.getNowPlayingMovies(null, 0, null).getResults();
 
-        movieCallback.setMovie(nowPlaying);
+        List<Movie> movieDbList = new ArrayList<>();
+        for(MovieDb movieDb: nowPlaying){
+            Movie movie = new Movie();
+            movie.setMovieDb(movieDb);
+
+            movieDbList.add(movie);
+        }
+
+        return movieDbList;
     }
 
     @Override
-    public void getTopRated(MovieCallback movieCallback) {
+    public List<Movie> getTopRated() {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies movies = api.getMovies();
         List<MovieDb> topRated = movies.getTopRatedMovies(null, 0).getResults();
 
-        movieCallback.setMovie(topRated);
+        List<Movie> movieDbList = new ArrayList<>();
+        for(MovieDb movieDb: topRated){
+            Movie movie = new Movie();
+            movie.setMovieDb(movieDb);
+
+            movieDbList.add(movie);
+        }
+
+        return movieDbList;
     }
 
     @Override
-    public void getGenre(int idMovie, MovieCallback movieCallback) {
+    public List<Genre> getGenre(int idMovie) {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies movies = api.getMovies();
 
         MovieDb movieDb = movies.getMovie(idMovie, "en", TmdbMovies.MovieMethod.lists);
-        List<Genre> genres = movieDb.getGenres();
 
-        movieCallback.setGenre(genres);
+        Movie movie = new Movie();
+        movie.setGenreList(movieDb.getGenres());
+
+        return movie.getGenreList();
     }
 
     @Override
-    public void getListMovieByGenre(int idGenre, int page, MovieCallback movieCallback) {
+    public List<Movie> getListMovieByGenre(int idGenre, int page) {
         List<MovieDb> movieDbList;
 
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
@@ -101,53 +136,57 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
                 .getGenreMovies(idGenre, "en", page, Boolean.TRUE)
                 .getResults();
 
-        movieCallback.setMovie(movieDbList);
-    }
-
-    @Override
-    public void getBackdrops(int idMovie, MovieCallback movieCallback) {
-        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-        MovieImages res = api.getMovies().getImages(idMovie, "");
-        List<Artwork> artworks = res.getBackdrops();
-
-        movieCallback.setArtworks(artworks);
-    }
-
-    @Override
-    public void getCast(int idMovie, MovieCallback movieCallback) {
-        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-        MovieDb result = api.getMovies().getMovie(idMovie, "en", TmdbMovies.MovieMethod.credits);
-        List<PersonCast> personCast = result.getCast();
-
-        movieCallback.setCast(personCast);
-    }
-
-    @Override
-    public List<MovieDb> getMoviesOfList(List<Integer> idMoviesList) {
-        List<MovieDb> movieDbList = new ArrayList<>();
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<?> future = executorService.submit(() -> {
-            TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
-
-            for (int i = 0; i < idMoviesList.size(); i++)
-                movieDbList.add(api.getMovies()
-                        .getMovie(idMoviesList.get(i), "en"));
-
-        });
-
-        //Waits for the computation to complete, and then retrieves its result.
-        try {
-            future.get();
-        }catch (InterruptedException | ExecutionException e){
-            e.printStackTrace();
+        List<Movie> movieList = new ArrayList<>();
+        for(MovieDb movieDb: movieDbList){
+            Movie movie = new Movie();
+            movie.setMovieDb(movieDb);
+            movieList.add(movie);
         }
 
-        return movieDbList;
+        return movieList;
     }
 
     @Override
-    public void getLogo(int idMovie, MovieCallback movieCallback) {
+    public List<Artwork> getBackdrops(int idMovie) {
+        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
+        MovieImages res = api.getMovies().getImages(idMovie, "");
+
+        return res.getBackdrops();
+    }
+
+    @Override
+    public List<PersonCast> getCast(int idMovie) {
+        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
+        MovieDb result = api.getMovies().getMovie(idMovie, "en", TmdbMovies.MovieMethod.credits);
+
+        Movie movie = new Movie();
+        movie.setPersonCasts(result.getCast());
+
+        return movie.getPersonCasts();
+    }
+
+    @Override
+    public List<Movie> getMoviesOfList(List<Integer> idMoviesList) {
+        List<MovieDb> movieDbList = new ArrayList<>();
+        List<Movie> movieList = new ArrayList<>();
+
+        TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
+
+        for (int i = 0; i < idMoviesList.size(); i++)
+            movieDbList.add(api.getMovies()
+                    .getMovie(idMoviesList.get(i), "en"));
+
+        for(MovieDb movieDb: movieDbList){
+            Movie movie = new Movie();
+            movie.setMovieDb(movieDb);
+            movieList.add(movie);
+        }
+
+        return movieList;
+    }
+
+    @Override
+    public String getLogo(int idMovie) {
         String urlJason = "https://api.themoviedb.org/3/movie/" + idMovie +
                 "/images?api_key=d33171b7b477fa9a989fcc5e242feec3&language=en";
 
@@ -189,10 +228,13 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
             JSONObject jsonObject1 = jsonArray.getJSONObject(0);
 
             String logoPath = jsonObject1.getString("file_path");
-            movieCallback.setLogo("https://www.themoviedb.org/t/p/original" + logoPath);
+            return "https://www.themoviedb.org/t/p/original" + logoPath;
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
+
 
 }

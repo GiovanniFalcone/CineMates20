@@ -11,6 +11,7 @@ import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Implements.MovieDAO_TMDB;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.GenresFragment;
@@ -36,12 +37,8 @@ public class SearchMoviePresenter {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
-            movieDAO.getMovies(query, new MovieCallback() {
-                @Override
-                public void setMovie(List<MovieDb> movieDbList) {
-                    handler.post(() -> searchMovieTabFragment.setMovieRecycler(movieDbList));
-                }
-            });
+            List<Movie> movieDbList = movieDAO.getMovies(query);
+            handler.post(() -> searchMovieTabFragment.setMovieRecycler(movieDbList));
         });
     }
 
@@ -64,17 +61,17 @@ public class SearchMoviePresenter {
      * Open the movie card of clicked movie.
      * @param filteredMovie the movie searched that user clicked
      */
-    public void onClickMovie(MovieDb filteredMovie) {
+    public void onClickMovie(Movie filteredMovie) {
         MovieCardFragment movieCardFragment = new MovieCardFragment();
         Fragment current = searchMovieTabFragment.requireActivity()
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", filteredMovie.getId());
-            args.putString("MovieTitle", filteredMovie.getTitle());
-            args.putString("MovieUrl", filteredMovie.getPosterPath());
-            args.putString("MovieOverview", filteredMovie.getOverview());
-            args.putFloat("MovieRating", filteredMovie.getVoteAverage());
+            args.putInt("MovieID", filteredMovie.getMovieDb().getId());
+            args.putString("MovieTitle", filteredMovie.getMovieDb().getTitle());
+            args.putString("MovieUrl", filteredMovie.getMovieDb().getPosterPath());
+            args.putString("MovieOverview", filteredMovie.getMovieDb().getOverview());
+            args.putFloat("MovieRating", filteredMovie.getMovieDb().getVoteAverage());
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(searchMovieTabFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

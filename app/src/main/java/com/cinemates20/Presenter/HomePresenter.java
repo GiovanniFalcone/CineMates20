@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import com.cinemates20.Model.DAO.DAOFactory;
 import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Utils;
 import com.cinemates20.View.HomeFragment;
@@ -42,40 +43,24 @@ public class HomePresenter{
             AtomicInteger idMovie_nowPlaying = new AtomicInteger();
 
             //Set popularMovie
-            movieDAO.getPopular(new MovieCallback() {
-                @Override
-                public void setMovie(List<MovieDb> movieDbList) {
-                    handler.post(() -> homeFragment.setFeaturedMovie(movieDbList));
-                }
-            });
+            List<Movie> popular = movieDAO.getPopular();
+            handler.post(() -> homeFragment.setFeaturedMovie(popular));
 
             //Set topRatedMovie
-            movieDAO.getTopRated(new MovieCallback() {
-                @Override
-                public void setMovie(List<MovieDb> movieDbList) {
-                    handler.post(() -> homeFragment.setRecycler(movieDbList));
-                }
-            });
+            List<Movie> topRated = movieDAO.getTopRated();
+            handler.post(() -> homeFragment.setRecycler(topRated));
 
             //Set featured movie
-            movieDAO.getNowPlaying(new MovieCallback() {
-                @Override
-                public void setMovie(List<MovieDb> movieDbList) {
-                    int randomNum = (int) ((Math.random() * (20 - 1)) + 1);
-                    MovieDb movieDb = movieDbList.get(randomNum);
-                    idMovie_nowPlaying.set(movieDb.getId());
+            List<Movie> nowPlaying = movieDAO.getNowPlaying();
+            int randomNum = (int) ((Math.random() * (20 - 1)) + 1);
+            Movie movieDb = nowPlaying.get(randomNum);
+            idMovie_nowPlaying.set(movieDb.getMovieDb().getId());
+            handler.post(() -> homeFragment.setRandomMovie(movieDb));
 
-                    handler.post(() ->
-                            homeFragment.setRandomMovie(movieDb));
-                }
-            });
 
-            movieDAO.getLogo(idMovie_nowPlaying.get(), new MovieCallback() {
-                @Override
-                public void setLogo(String pathLogo) {
-                    homeFragment.setLogoMovie(pathLogo);
-                }
-            });
+            String pathLogo = movieDAO.getLogo(idMovie_nowPlaying.get());
+            if(pathLogo != null)
+                homeFragment.setLogoMovie(pathLogo);
         });
     }
 
@@ -83,19 +68,19 @@ public class HomePresenter{
      * Open the movie card of clicked movie
      * @param movieClicked the movie clicked by user
      */
-    public void onClickMovie(MovieDb movieClicked) {
+    public void onClickMovie(Movie movieClicked) {
         MovieCardFragment movieCardFragment = new MovieCardFragment();
         Fragment current = homeFragment.requireActivity()
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", movieClicked.getId());
-            args.putString("MovieTitle", movieClicked.getTitle());
-            args.putString("MovieUrl", movieClicked.getPosterPath());
-            args.putString("MovieImg", movieClicked.getPosterPath());
-            args.putString("MovieOverview", movieClicked.getOverview());
-            args.putFloat("MovieRating", movieClicked.getVoteAverage());
-            args.putString("MoviePoster", movieClicked.getPosterPath());
+            args.putInt("MovieID", movieClicked.getMovieDb().getId());
+            args.putString("MovieTitle", movieClicked.getMovieDb().getTitle());
+            args.putString("MovieUrl", movieClicked.getMovieDb().getPosterPath());
+            args.putString("MovieImg", movieClicked.getMovieDb().getPosterPath());
+            args.putString("MovieOverview", movieClicked.getMovieDb().getOverview());
+            args.putFloat("MovieRating", movieClicked.getMovieDb().getVoteAverage());
+            args.putString("MoviePoster", movieClicked.getMovieDb().getPosterPath());
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(homeFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

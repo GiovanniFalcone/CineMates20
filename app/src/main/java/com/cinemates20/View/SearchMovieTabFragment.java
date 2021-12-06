@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cinemates20.Model.Movie;
 import com.cinemates20.Utils.Adapters.MovieAdapter;
 import com.cinemates20.Presenter.SearchMoviePresenter;
 import com.cinemates20.R;
@@ -43,7 +44,7 @@ public class SearchMovieTabFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        List<MovieDb> movieList = new ArrayList<>();
+        List<Movie> movieList = new ArrayList<>();
         setMovieRecycler(movieList);
 
         searchView = root.findViewById(R.id.searchView);
@@ -138,7 +139,7 @@ public class SearchMovieTabFragment extends Fragment {
         });
     }
 
-    public void setMovieRecycler(List<MovieDb> movieDbList) {
+    public void setMovieRecycler(List<Movie> movieDbList) {
         myRecyclerViewAdapter = new MovieAdapter(movieDbList, getContext(), 2);
         recyclerView.setAdapter(myRecyclerViewAdapter);
         clickListener(myRecyclerViewAdapter);
@@ -147,7 +148,7 @@ public class SearchMovieTabFragment extends Fragment {
     public void clickListener(MovieAdapter adapterMovie){
         adapterMovie.setOnItemClickListener(new MovieAdapter.ClickListener() {
             @Override
-            public void onItemClickListener(MovieDb filteredMovie) {
+            public void onItemClickListener(Movie filteredMovie) {
                 searchMoviePresenter.onClickMovie(filteredMovie);
             }
         });

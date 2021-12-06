@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cinemates20.Model.Movie;
 import com.cinemates20.Presenter.MovieListUserPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.MovieAdapter;
@@ -62,7 +63,7 @@ public class MovieListUserFragment extends Fragment {
         return view;
     }
 
-    public void setRecycler(List<MovieDb> movieDbList) {
+    public void setRecycler(List<Movie> movieDbList) {
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         MovieAdapter movieAdapter = new MovieAdapter(movieDbList, getContext(), 3);
@@ -70,11 +71,11 @@ public class MovieListUserFragment extends Fragment {
         clickListener(movieAdapter, movieDbList);
     }
 
-    private void clickListener(MovieAdapter movieAdapter, List<MovieDb> movieDbList) {
+    private void clickListener(MovieAdapter movieAdapter, List<Movie> movieDbList) {
         movieAdapter.setOnItemClickListener(new MovieAdapter.ClickListener() {
             @Override
-            public void onItemClickListener(MovieDb movieClicked, int position) {
-                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getId()), nameListClicked);
+            public void onItemClickListener(Movie movieClicked, int position) {
+                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getMovieDb().getId()), nameListClicked);
 
                 movieDbList.remove(position);
                 recyclerView.removeViewAt(position);

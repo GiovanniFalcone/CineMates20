@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cinemates20.Model.Feed;
+import com.cinemates20.Model.Movie;
 import com.cinemates20.Presenter.FeedPresenter;
 import com.cinemates20.R;
 import com.cinemates20.Utils.Adapters.GenericAdapter;
@@ -69,7 +70,7 @@ public class FeedFragment extends Fragment {
     private void clickListener(GenericAdapter<Feed> feedAdapter) {
         feedAdapter.setOnItemClickListener(new GenericAdapter.ClickListener() {
             @Override
-            public void onItemClickListener(Feed object, String iconAuthor, MovieDb movieDb) {
+            public void onItemClickListener(Feed object, String iconAuthor, Movie movieDb) {
                 feedPresenter.onClickItem(object, iconAuthor, movieDb);
             }
         });
