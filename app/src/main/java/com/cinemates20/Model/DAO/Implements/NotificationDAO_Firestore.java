@@ -184,4 +184,48 @@ public class NotificationDAO_Firestore implements NotificationDAO {
 
         return notificationList;
     }
+
+    @Override
+    public List<String> getRequestSent(String query, String currentUser) {
+        List<String> listUsername = new ArrayList<>();
+
+        // Create a query against the subcollection.
+        Query queryRequest =  collectionReference
+                .orderBy("userWhoReceived")
+                .startAt(query.toLowerCase())
+                .endBefore(query.toLowerCase() + '~')
+                .whereGreaterThanOrEqualTo("userWhoReceived", query)
+                .whereEqualTo("userWhoSent", currentUser)
+                .whereEqualTo("typeNotification", "RequestReceived");
+
+        //Get query results
+        Task<QuerySnapshot> taskRequest = queryRequest.get().addOnCompleteListener(task2 -> {});
+        Utils.waitTask(taskRequest);
+
+        if(taskRequest.isSuccessful()) {
+            for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(taskRequest.getResult())) {
+                listUsername.add(documentSnapshot2.getString("userWhoReceived"));
+            }
+        }
+
+        return listUsername;
+    }
+
+    @Override
+    public List<String> getAllRequestSent(String currentUser) {
+        List<String> listUsername = new ArrayList<>();
+
+        Task<QuerySnapshot> taskRequest = collectionReference
+                .whereEqualTo("userWhoSent", currentUser)
+                .get().addOnCompleteListener(task2 -> {});
+        Utils.waitTask(taskRequest);
+
+        if(taskRequest.isSuccessful()) {
+            for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(taskRequest.getResult())) {
+                listUsername.add(documentSnapshot2.getString("userWhoReceived"));
+            }
+        }
+
+        return listUsername;
+    }
 }

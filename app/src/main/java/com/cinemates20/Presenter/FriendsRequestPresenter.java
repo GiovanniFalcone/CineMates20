@@ -56,10 +56,8 @@ public class FriendsRequestPresenter {
 
         if (buttonState.equals("notFriend")) {
             notificationDAO.addRequest(currentUser, userWhoReceivedRequest);
-            userDAO.addRequestSent(currentUser, userWhoReceivedRequest);
         }else{
             notificationDAO.removeRequestReceived(currentUser, userWhoReceivedRequest);
-            userDAO.removeRequestSent(currentUser, userWhoReceivedRequest);
         }
     }
 
@@ -109,7 +107,6 @@ public class FriendsRequestPresenter {
         }
 
         notificationDAO.removeRequestReceived(userWhoSentRequest, userWhoReceivedRequest);
-        userDAO.removeRequestSent(userWhoSentRequest, userWhoReceivedRequest);
     }
 
 }

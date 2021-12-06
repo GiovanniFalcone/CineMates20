@@ -66,7 +66,9 @@ public class MenuPresenter {
     public void clickButtonLogout(){
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
+        User.setCurrentUser(null);
         menuFragment.startActivity(new Intent(menuFragment.getContext(), AuthenticationActivity.class));
+        menuFragment.requireActivity().finishAffinity();
     }
 
     public void clickButtonFriendList() {

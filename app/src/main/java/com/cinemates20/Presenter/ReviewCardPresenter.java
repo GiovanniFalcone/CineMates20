@@ -91,8 +91,9 @@ public class ReviewCardPresenter {
         //Get sent and received request and friend list
         UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
         User user = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
-        List<String> sentList = userDAO.getAllRequestSent(user.getUsername());
+
         NotificationDAO notificationDAO = DAOFactory.getNotificationDAO(DAOFactory.FIREBASE);
+        List<String> sentList = notificationDAO.getAllRequestSent(user.getUsername());
         List<String> receivedList = notificationDAO.getRequestReceived("", user.getUsername());
 
         //Pass the id and user info to fragment dialog and show it

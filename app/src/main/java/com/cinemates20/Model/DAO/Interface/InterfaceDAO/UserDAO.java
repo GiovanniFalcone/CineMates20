@@ -25,17 +25,9 @@ public interface UserDAO {
 
     void checkIfEmailExists_Firestore(String email, UserCallback userCallback);
 
-    void addRequestSent(String currentUser, String userWhoReceivedRequest);
-
-    void removeRequestSent(String currentUser, String userWhoReceivedRequest);
-
     void removeFriend(String currentUser, String friendToRemove);
 
     List<String> getFriends(String currentUser);
-
-    List<String> getRequestSent(String searchedUser);
-
-    List<String> getAllRequestSent(String currentUser);
 
     void addFriend(String currentUser, String userWhoSentRequest);
 

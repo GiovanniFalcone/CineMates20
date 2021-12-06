@@ -10,7 +10,6 @@ import com.cinemates20.Utils.Utils;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -203,31 +202,6 @@ public class UserDAO_Firestore implements UserDAO {
     }
 
     @Override
-    public void addRequestSent(String currentUser, String userWhoReceivedRequest) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("friendshipRequestSentTo", userWhoReceivedRequest);
-        map.put("DateAndTime", new Timestamp(new Date()));
-
-        //Insert of the request in the subcollection of the requests received
-        collectionReference
-                .whereEqualTo("username", currentUser)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())){
-                            String idUserDocument = documentSnapshot.getId();
-                            collectionReference
-                                    .document(idUserDocument)
-                                    .collection("RequestsSent")
-                                    .document()
-                                    .set(map);
-                        }
-                    }else
-                        Log.d("UserDAO", "Error getting documents: ", task.getException());
-                });
-    }
-
-    @Override
     public void addFriend(String currentUser, String userWhoSentRequest) {
         collectionReference
                 .whereEqualTo("username", currentUser)
@@ -259,41 +233,6 @@ public class UserDAO_Firestore implements UserDAO {
                         Log.d("UserDAO", "Error getting documents: ", task.getException());
                     }
                 });
-    }
-
-    @Override
-    public void removeRequestSent(String currentUser, String userWhoReceivedRequest) {
-        //Remove from the request table of the user that received the request
-        //get IdDocument of the user who received the friendship request
-        collectionReference
-                .whereEqualTo("username", currentUser)
-                .get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                for (DocumentSnapshot documentSnapshot: Objects.requireNonNull(task.getResult())){
-                    String idUsers = documentSnapshot.getId();
-                    //get IdDocument of the subcollection which conteines the user who send the request
-                    collectionReference
-                            .document(idUsers)
-                            .collection("RequestsSent")
-                            .whereEqualTo("friendshipRequestSentTo", userWhoReceivedRequest)
-                            .get()
-                            .addOnCompleteListener(taskRequests -> {
-                                if (taskRequests.isSuccessful()){
-                                    for (DocumentSnapshot documentSnapshot1 : Objects.requireNonNull(taskRequests.getResult())){
-                                        String idRequests = documentSnapshot1.getId();
-                                        collectionReference
-                                                .document(idUsers)
-                                                .collection("RequestsSent")
-                                                .document(idRequests)
-                                                .delete();
-                                    }
-                                }else
-                                    Log.d("UserDAO", "Error getting documents: ", taskRequests.getException());
-                            });
-                }
-            }else
-                Log.d("UserDAO", "Error getting documents: ", task.getException());
-        });
     }
 
     @Override
@@ -335,56 +274,6 @@ public class UserDAO_Firestore implements UserDAO {
     }
 
     @Override
-    public List<String> getRequestSent(String userWhoReceivedRequest) {
-        List<String> listUsername = new ArrayList<>();
-        String idUser = getUserIdDocument();
-
-        // Create a query against the subcollection.
-        Query queryRequest =  collectionReference
-                .document(idUser)
-                .collection("RequestsSent")
-                .orderBy("friendshipRequestSentTo")
-                .startAt(userWhoReceivedRequest.toLowerCase())
-                .endBefore(userWhoReceivedRequest.toLowerCase() + '~')
-                .whereGreaterThanOrEqualTo("friendshipRequestSentTo", userWhoReceivedRequest);
-
-        //Get query results
-        Task<QuerySnapshot> taskRequest = queryRequest.get().addOnCompleteListener(task2 -> {});
-        Utils.waitTask(taskRequest);
-
-        if(taskRequest.isSuccessful()) {
-            for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(taskRequest.getResult())) {
-                listUsername.add(documentSnapshot2.getString("friendshipRequestSentTo"));
-            }
-        }
-
-        return listUsername;
-    }
-
-    @Override
-    public List<String> getAllRequestSent(String currentUser) {
-        List<String> listUsername = new ArrayList<>();
-        String idUser = getUserIdDocument();
-
-        // Create a query against the subcollection.
-        Query queryRequest =  collectionReference
-                .document(idUser)
-                .collection("RequestsSent");
-
-        //Get query results
-        Task<QuerySnapshot> taskRequest = queryRequest.get().addOnCompleteListener(task2 -> {});
-        Utils.waitTask(taskRequest);
-
-        if(taskRequest.isSuccessful()) {
-            for (DocumentSnapshot documentSnapshot2 : Objects.requireNonNull(taskRequest.getResult())) {
-                listUsername.add(documentSnapshot2.getString("friendshipRequestSentTo"));
-            }
-        }
-
-        return listUsername;
-    }
-
-    @Override
     public boolean checkIfUsernameExists(String username) {
         // Create a query against the collection.
         Query query = collectionReference.whereEqualTo("username", username);
@@ -397,23 +286,5 @@ public class UserDAO_Firestore implements UserDAO {
             result = !Objects.requireNonNull(task.getResult()).isEmpty();
 
         return result;
-    }
-
-    private String getUserIdDocument(){
-        //Query against collection
-        Query query = collectionReference.whereEqualTo("email",
-                Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
-
-        //Create task and wait until it finish
-        Task<QuerySnapshot> task = query.get().addOnCompleteListener(task1 -> {});
-        Utils.waitTask(task);
-
-        if (task.isSuccessful()) {
-            for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                return documentSnapshot.getId();
-            }
-        }
-
-        return null;
     }
 }

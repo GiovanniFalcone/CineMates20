@@ -15,11 +15,15 @@ public interface NotificationDAO {
 
     void removeNotificationOfAcceptedRequest(String currentUser, String userWhoReceivedNotification);
 
-    List<String> getRequestReceived(String userWhoRecivedRequest, String currentUser);
+    List<String> getRequestReceived(String userWhoReceivedRequest, String currentUser);
 
     void sendNotificationAccepted(String currentUser, String userAdded, Timestamp dateAndTime);
 
     List<Notification> getNotifications(String currentUser);
 
     List<Notification> updateNotifications(String currentUser, NotificationCallback notificationCallback);
+
+    List<String> getRequestSent(String query, String currentUser);
+
+    List<String> getAllRequestSent(String currentUser);
 }

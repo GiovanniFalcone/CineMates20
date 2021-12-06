@@ -34,8 +34,9 @@ public class NavigationPresenter {
     }
 
     public void initUser() {
-        if(User.getCurrentUser() == null)
+        if(User.getCurrentUser() == null) {
             User.setCurrentUser(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        }
 
         Log.d("CurrentUser", User.getCurrentUser());
     }
