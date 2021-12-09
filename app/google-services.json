@@ -22,6 +22,38 @@
           }
         },
         {
+          "client_id": "463993273378-1dh4dp94pm8eb4i04ri0gil5ms552o39.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinemates20_v1",
+            "certificate_hash": "4c1a9f530b3979cf1fea2dc68428799df466f080"
+          }
+        },
+        {
+          "client_id": "463993273378-bgj5jblh3te3futrlhfq3ft88j4t3kjb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinemates20_v1",
+            "certificate_hash": "98b0ea97aabcc4581ef0d0c3b272f7dd9df1516d"
+          }
+        },
+        {
+          "client_id": "463993273378-gm9995q8uh4j2e2ats46l3c9a1krevv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinemates20_v1",
+            "certificate_hash": "b929f9c91bf17f1f633f0e0f5b1a0492cad0e3d2"
+          }
+        },
+        {
+          "client_id": "463993273378-jn40gqcqemn1gudt5d306578hjpvlh8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinemates20_v1",
+            "certificate_hash": "589011fc1e9ac98d4fd7ab2118b6bff180821154"
+          }
+        },
+        {
           "client_id": "463993273378-l4r9puatkos9mh40votkg1t6h1a30c03.apps.googleusercontent.com",
           "client_type": 3
         }
