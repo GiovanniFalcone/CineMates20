@@ -54,7 +54,7 @@ public class HomePresenter{
             List<Movie> nowPlaying = movieDAO.getNowPlaying();
             int randomNum = (int) ((Math.random() * (20 - 1)) + 1);
             Movie movieDb = nowPlaying.get(randomNum);
-            idMovie_nowPlaying.set(movieDb.getMovieDb().getId());
+            idMovie_nowPlaying.set(movieDb.getId());
             handler.post(() -> homeFragment.setRandomMovie(movieDb));
 
 
@@ -74,13 +74,12 @@ public class HomePresenter{
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", movieClicked.getMovieDb().getId());
-            args.putString("MovieTitle", movieClicked.getMovieDb().getTitle());
-            args.putString("MovieUrl", movieClicked.getMovieDb().getPosterPath());
-            args.putString("MovieImg", movieClicked.getMovieDb().getPosterPath());
-            args.putString("MovieOverview", movieClicked.getMovieDb().getOverview());
-            args.putFloat("MovieRating", movieClicked.getMovieDb().getVoteAverage());
-            args.putString("MoviePoster", movieClicked.getMovieDb().getPosterPath());
+            args.putInt("MovieID", movieClicked.getId());
+            args.putString("MovieTitle", movieClicked.getTitle());
+            args.putString("MovieUrl", movieClicked.getPosterPath());
+            args.putString("MovieImg", movieClicked.getPosterPath());
+            args.putString("MovieOverview", movieClicked.getOverview());
+            args.putString("MoviePoster", movieClicked.getPosterPath());
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(homeFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

@@ -61,11 +61,10 @@ public class GenresPresenter {
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", movieDb.getMovieDb().getId());
-            args.putString("MovieTitle", movieDb.getMovieDb().getTitle());
-            args.putString("MovieUrl", movieDb.getMovieDb().getPosterPath());
-            args.putString("MovieOverview", movieDb.getMovieDb().getOverview());
-            args.putFloat("MovieRating", movieDb.getMovieDb().getVoteAverage() / 2);
+            args.putInt("MovieID", movieDb.getId());
+            args.putString("MovieTitle", movieDb.getTitle());
+            args.putString("MovieUrl", movieDb.getPosterPath());
+            args.putString("MovieOverview", movieDb.getOverview());
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(genresFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

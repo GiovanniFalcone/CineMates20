@@ -120,13 +120,12 @@ public class FeedPresenter {
             case "valuation":
                 MovieCardFragment movieCardFragment = new MovieCardFragment();
                 Bundle args = new Bundle();
-                args.putInt("MovieID", movieDb.getMovieDb().getId());
-                args.putString("MovieTitle", movieDb.getMovieDb().getTitle());
-                args.putString("MovieUrl", movieDb.getMovieDb().getPosterPath());
-                args.putString("MovieImg", movieDb.getMovieDb().getPosterPath());
-                args.putString("MovieOverview", movieDb.getMovieDb().getOverview());
-                args.putFloat("MovieRating", movieDb.getMovieDb().getVoteAverage());
-                args.putString("MoviePoster", movieDb.getMovieDb().getPosterPath());
+                args.putInt("MovieID", movieDb.getId());
+                args.putString("MovieTitle", movieDb.getTitle());
+                args.putString("MovieUrl", movieDb.getPosterPath());
+                args.putString("MovieImg", movieDb.getPosterPath());
+                args.putString("MovieOverview", movieDb.getOverview());
+                args.putString("MoviePoster", movieDb.getPosterPath());
                 movieCardFragment.setArguments(args);
                 Utils.changeFragment_BottomAnim(feedFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
                 break;

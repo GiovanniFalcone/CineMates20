@@ -81,7 +81,6 @@ public class MovieCardFragment extends Fragment{
         title = requireArguments().getString("MovieTitle");
         url = requireArguments().getString("MovieUrl");
         overview = requireArguments().getString("MovieOverview");
-        valuation = requireArguments().getFloat("MovieRating", 3f);
 
         background = view.findViewById(R.id.background);
 

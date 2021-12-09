@@ -353,10 +353,10 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                     MovieDAO movieDAO = DAOFactory.getMovieDAO(DAOFactory.TMDB);
                     Movie movie = movieDAO.getMovieById(review.getIdMovie());
                     handler.post(() -> {
-                        ((ViewHolder_PersonalReview)holder).getMovieTitle().setText(movie.getMovieDb().getTitle());
+                        ((ViewHolder_PersonalReview)holder).getMovieTitle().setText(movie.getTitle());
 
                         Glide.with(context)
-                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .load("http://image.tmdb.org/t/p/original" + movie.getPosterPath())
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .override(200, 300)
                                 .transform(new RoundedCorners(30))
@@ -440,9 +440,9 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                     handler.post(() -> {
                         //set the type of the news
                         ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews()
-                                + "</b> has reviewed <b>" + movie.getMovieDb().getTitle() + "</b>"));
+                                + "</b> has reviewed <b>" + movie.getTitle() + "</b>"));
                         Glide.with(context)
-                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .load("http://image.tmdb.org/t/p/original" + movie.getPosterPath())
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .override(800, 900)
                                 .transform(new RoundedCorners(30))
@@ -528,7 +528,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Movie movie = movieDAO.getMovieById(Integer.parseInt(feed.getMovie()));
                     handler.post(() -> {
                         ((ViewHolder_FeedValuation) holder).getTextView().setText(Html.fromHtml("<b>" + feed.getUserOfTheNews() +
-                                "</b> has valuated <b>" + movie.getMovieDb().getTitle() + "</b> with rating"));
+                                "</b> has valuated <b>" + movie.getTitle() + "</b> with rating"));
 
                         ((ViewHolder_FeedValuation) holder).getValuation().setRating(feed.getValuation());
 
@@ -556,9 +556,9 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Movie movie = movieDAO.getMovieById(Integer.parseInt(feed.getMovie()));
                     handler.post(() -> {
                         //set the type of the news
-                        ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml(feed.getUserOfTheNews() + " has reviewed <b>" + movie.getMovieDb().getTitle() + "</b>"));
+                        ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html.fromHtml(feed.getUserOfTheNews() + " has reviewed <b>" + movie.getTitle() + "</b>"));
                         Glide.with(context)
-                                .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                                .load("http://image.tmdb.org/t/p/original" + movie.getPosterPath())
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .override(800, 900)
                                 .transform(new RoundedCorners(30))
@@ -566,7 +566,7 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                         ((ViewHolder_FeedWithPoster) holder).getUsername().setText(Html
                                 .fromHtml("<b>" + feed.getUserOfTheNews() + "</b> has added <b>"
-                                        + movie.getMovieDb().getTitle() + "</b> into a list."));
+                                        + movie.getTitle() + "</b> into a list."));
                     });
                 });
 

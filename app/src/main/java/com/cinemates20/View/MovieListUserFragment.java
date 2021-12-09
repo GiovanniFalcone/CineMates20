@@ -75,7 +75,7 @@ public class MovieListUserFragment extends Fragment {
         movieAdapter.setOnItemClickListener(new MovieAdapter.ClickListener() {
             @Override
             public void onItemClickListener(Movie movieClicked, int position) {
-                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getMovieDb().getId()), nameListClicked);
+                movieListUserPresenter.removeMovieFromList(String.valueOf(movieClicked.getId()), nameListClicked);
 
                 movieDbList.remove(position);
                 recyclerView.removeViewAt(position);

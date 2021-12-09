@@ -67,11 +67,10 @@ public class SearchMoviePresenter {
                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         if (!current.getClass().equals(movieCardFragment.getClass())) {
             Bundle args = new Bundle();
-            args.putInt("MovieID", filteredMovie.getMovieDb().getId());
-            args.putString("MovieTitle", filteredMovie.getMovieDb().getTitle());
-            args.putString("MovieUrl", filteredMovie.getMovieDb().getPosterPath());
-            args.putString("MovieOverview", filteredMovie.getMovieDb().getOverview());
-            args.putFloat("MovieRating", filteredMovie.getMovieDb().getVoteAverage());
+            args.putInt("MovieID", filteredMovie.getId());
+            args.putString("MovieTitle", filteredMovie.getTitle());
+            args.putString("MovieUrl", filteredMovie.getPosterPath());
+            args.putString("MovieOverview", filteredMovie.getOverview());
             movieCardFragment.setArguments(args);
             Utils.changeFragment_BottomAnim(searchMovieTabFragment, movieCardFragment, R.id.nav_host_fragment_activity_main);
         } else

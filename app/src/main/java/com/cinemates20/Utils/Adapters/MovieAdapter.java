@@ -95,13 +95,13 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Movie movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(750, 850)
                         .transform(new RoundedCorners(30))
                         .into(((ViewHolder)holder).getMoviePoster());
 
-                ViewCompat.setTransitionName(((ViewHolder) holder).getMoviePoster(), movieDb.getMovieDb().getTitle());
+                ViewCompat.setTransitionName(((ViewHolder) holder).getMoviePoster(), movieDb.getTitle());
 
                 ((ViewHolder)holder).getMoviePoster().setOnClickListener(view -> clickListener.onItemClickListener(movieDb));
                 break;
@@ -109,10 +109,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case MOVIE_RECYCLER_HOME:
                 movieDb = movieDbList.get(position);
 
-                ((ViewHolder)holder).getMovieTitle().setText(movieDb.getMovieDb().getTitle());
+                ((ViewHolder)holder).getMovieTitle().setText(movieDb.getTitle());
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getBackdropPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getBackdropPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(400, 250)
                         .transform(new RoundedCorners(30))
@@ -124,11 +124,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             case MOVIE_SEARCH:
                 Movie movie = filteredMovie.get(position);
-                ((ViewHolder_Search)holder).getMovieTitle().setText(movie.getMovieDb().getTitle());
+                ((ViewHolder_Search)holder).getMovieTitle().setText(movie.getTitle());
 
-                if(movie.getMovieDb().getPosterPath() != null) {
+                if(movie.getPosterPath() != null) {
                     Glide.with(this.context)
-                            .load("http://image.tmdb.org/t/p/original" + movie.getMovieDb().getPosterPath())
+                            .load("http://image.tmdb.org/t/p/original" + movie.getPosterPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .override(250, 350)
                             .transform(new RoundedCorners(30))
@@ -142,7 +142,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
 
                 ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
-                reviewDAO.getMovieRating(movie.getMovieDb().getId(), new ReviewCallback() {
+                reviewDAO.getMovieRating(movie.getId(), new ReviewCallback() {
                     @Override
                     public void setRating(float rating, int total) {
                         ((ViewHolder_Search) holder).getRatingBar().setRating(rating);
@@ -157,7 +157,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(350, 450)
                         .transform(new RoundedCorners(30))
@@ -171,7 +171,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 movieDb = movieDbList.get(position);
 
                 Glide.with(this.context)
-                        .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getPosterPath())
+                        .load("http://image.tmdb.org/t/p/original" + movieDb.getPosterPath())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(350, 450)
                         .transform(new RoundedCorners(30))
@@ -273,7 +273,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 else{
                     List<Movie> stdFiltered = new ArrayList<>();
                     for(Movie row: movieDbList){
-                        if (row.getMovieDb().getTitle().toLowerCase().contains(key.toLowerCase()))
+                        if (row.getTitle().toLowerCase().contains(key.toLowerCase()))
                             stdFiltered.add(row);
                     }
                     filteredMovie = stdFiltered;

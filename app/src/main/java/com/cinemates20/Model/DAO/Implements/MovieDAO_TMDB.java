@@ -15,10 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
@@ -36,8 +32,14 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
         TmdbMovies tmdbMovies = api.getMovies();
 
+        MovieDb movieDb = tmdbMovies.getMovie(idMovie, "en");
+
         Movie movie = new Movie();
-        movie.setMovieDb(tmdbMovies.getMovie(idMovie, "en"));
+        movie.setId(movieDb.getId());
+        movie.setTitle(movieDb.getTitle());
+        movie.setPosterPath(movieDb.getPosterPath());
+        movie.setBackdropPath(movieDb.getBackdropPath());
+        movie.setOverview(movieDb.getOverview());
 
         return movie;
     }
@@ -56,7 +58,13 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         if(!movieList.isEmpty()){
             for(MovieDb movieDb: movieList){
                 Movie movie = new Movie();
-                movie.setMovieDb(movieDb);
+
+                movie.setId(movieDb.getId());
+                movie.setTitle(movieDb.getTitle());
+                movie.setPosterPath(movieDb.getPosterPath());
+                movie.setBackdropPath(movieDb.getBackdropPath());
+                movie.setOverview(movieDb.getOverview());
+
                 myMovieList.add(movie);
             }
         }
@@ -73,7 +81,13 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         List<Movie> movieDbList = new ArrayList<>();
         for(MovieDb movieDb: popular){
             Movie movie = new Movie();
-            movie.setMovieDb(movieDb);
+
+            movie.setId(movieDb.getId());
+            movie.setTitle(movieDb.getTitle());
+            movie.setPosterPath(movieDb.getPosterPath());
+            movie.setBackdropPath(movieDb.getBackdropPath());
+            movie.setOverview(movieDb.getOverview());
+
             movieDbList.add(movie);
         }
 
@@ -89,7 +103,12 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         List<Movie> movieDbList = new ArrayList<>();
         for(MovieDb movieDb: nowPlaying){
             Movie movie = new Movie();
-            movie.setMovieDb(movieDb);
+
+            movie.setId(movieDb.getId());
+            movie.setTitle(movieDb.getTitle());
+            movie.setPosterPath(movieDb.getPosterPath());
+            movie.setBackdropPath(movieDb.getBackdropPath());
+            movie.setOverview(movieDb.getOverview());
 
             movieDbList.add(movie);
         }
@@ -106,7 +125,12 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         List<Movie> movieDbList = new ArrayList<>();
         for(MovieDb movieDb: topRated){
             Movie movie = new Movie();
-            movie.setMovieDb(movieDb);
+
+            movie.setId(movieDb.getId());
+            movie.setTitle(movieDb.getTitle());
+            movie.setPosterPath(movieDb.getPosterPath());
+            movie.setBackdropPath(movieDb.getBackdropPath());
+            movie.setOverview(movieDb.getOverview());
 
             movieDbList.add(movie);
         }
@@ -139,7 +163,13 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
         List<Movie> movieList = new ArrayList<>();
         for(MovieDb movieDb: movieDbList){
             Movie movie = new Movie();
-            movie.setMovieDb(movieDb);
+
+            movie.setId(movieDb.getId());
+            movie.setTitle(movieDb.getTitle());
+            movie.setPosterPath(movieDb.getPosterPath());
+            movie.setBackdropPath(movieDb.getBackdropPath());
+            movie.setOverview(movieDb.getOverview());
+
             movieList.add(movie);
         }
 
@@ -178,7 +208,13 @@ public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
 
         for(MovieDb movieDb: movieDbList){
             Movie movie = new Movie();
-            movie.setMovieDb(movieDb);
+
+            movie.setId(movieDb.getId());
+            movie.setTitle(movieDb.getTitle());
+            movie.setPosterPath(movieDb.getPosterPath());
+            movie.setBackdropPath(movieDb.getBackdropPath());
+            movie.setOverview(movieDb.getOverview());
+
             movieList.add(movie);
         }
 

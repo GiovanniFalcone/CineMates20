@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
         if(isAdded()) {
             Glide.with(requireContext())
                     .asBitmap()
-                    .load("http://image.tmdb.org/t/p/original" + movieDb.getMovieDb().getBackdropPath())
+                    .load("http://image.tmdb.org/t/p/original" + movieDb.getBackdropPath())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new CustomTarget<Bitmap>() {
