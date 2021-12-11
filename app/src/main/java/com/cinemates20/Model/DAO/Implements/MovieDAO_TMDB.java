@@ -1,6 +1,5 @@
 package com.cinemates20.Model.DAO.Implements;
 
-import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.TMDB.MovieDAO;
 import com.cinemates20.Model.Movie;
 
@@ -25,7 +24,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.MovieImages;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
-public class MovieDAO_TMDB implements MovieDAO, MovieCallback {
+public class MovieDAO_TMDB implements MovieDAO{
 
     @Override
     public Movie getMovieById(int idMovie) {

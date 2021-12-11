@@ -1,7 +1,6 @@
 package com.cinemates20.Presenter;
 
 import android.app.ActivityOptions;
-import android.app.Person;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinemates20.Model.DAO.DAOFactory;
-import com.cinemates20.Model.DAO.Interface.Callbacks.MovieCallback;
 import com.cinemates20.Model.DAO.Interface.Callbacks.ReviewCallback;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.FeedDAO;
 import com.cinemates20.Model.DAO.Interface.InterfaceDAO.MovieListDAO;
