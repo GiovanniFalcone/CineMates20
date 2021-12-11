@@ -201,20 +201,22 @@ public class MovieDAO_TMDB implements MovieDAO{
 
         TmdbApi api = new TmdbApi("27d6d704f8c045e37c749748d75b3f46");
 
-        for (int i = 0; i < idMoviesList.size(); i++)
-            movieDbList.add(api.getMovies()
-                    .getMovie(idMoviesList.get(i), "en"));
+        if(idMoviesList != null) {
+            for (int i = 0; i < idMoviesList.size(); i++)
+                movieDbList.add(api.getMovies()
+                        .getMovie(idMoviesList.get(i), "en"));
 
-        for(MovieDb movieDb: movieDbList){
-            Movie movie = new Movie();
+            for (MovieDb movieDb : movieDbList) {
+                Movie movie = new Movie();
 
-            movie.setId(movieDb.getId());
-            movie.setTitle(movieDb.getTitle());
-            movie.setPosterPath(movieDb.getPosterPath());
-            movie.setBackdropPath(movieDb.getBackdropPath());
-            movie.setOverview(movieDb.getOverview());
+                movie.setId(movieDb.getId());
+                movie.setTitle(movieDb.getTitle());
+                movie.setPosterPath(movieDb.getPosterPath());
+                movie.setBackdropPath(movieDb.getBackdropPath());
+                movie.setOverview(movieDb.getOverview());
 
-            movieList.add(movie);
+                movieList.add(movie);
+            }
         }
 
         return movieList;
