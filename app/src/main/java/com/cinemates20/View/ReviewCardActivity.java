@@ -149,9 +149,7 @@ public class ReviewCardActivity extends AppCompatActivity implements Toolbar.OnM
         return review;
     }
 
-    public void setUserIcon(){
-        String url = getIntent().getStringExtra("Icon");
-
+    public void setUserIcon(String url){
         if(url != null) {
             if (!url.equals("")) {
                 Glide.with(getApplicationContext())

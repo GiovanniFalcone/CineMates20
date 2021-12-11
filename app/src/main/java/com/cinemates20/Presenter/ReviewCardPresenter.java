@@ -33,9 +33,11 @@ public class ReviewCardPresenter {
         reviewCardActivity.setRatingReview(review.getRating());
         reviewCardActivity.setReview(review.getTextReview());
         //Set icon on toolbar
-        reviewCardActivity.setUserIcon();
-        //Set icon for comment
         reviewCardActivity.setAuthorIcon();
+        //Set icon for comment
+        UserDAO userDAO = DAOFactory.getUserDAO(DAOFactory.FIREBASE);
+        User currentUser = userDAO.getUser(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail());
+        reviewCardActivity.setUserIcon(currentUser.getIcon());
 
         //Check if the user reacted to the review
         ReviewDAO reviewDAO = DAOFactory.getReviewDAO(DAOFactory.FIREBASE);
