@@ -65,7 +65,7 @@ public class UserDAO_Firestore implements UserDAO {
         favorite.put("username", username);
         favorite.put("description", "Your favorite list.");
         favorite.put("nameList", "Favorite list");
-        favorite.put("dateAndTimeCreationList", new Timestamp(new Date()));
+        favorite.put("dateAndTime", new Timestamp(new Date()));
         favorite.put("listIDMovie", Collections.emptyList());
 
         // Save data into document
@@ -80,7 +80,7 @@ public class UserDAO_Firestore implements UserDAO {
         watch.put("username", username);
         watch.put("description", "Your watch list.");
         watch.put("nameList", "Watch list");
-        watch.put("dateAndTimeCreationList", new Timestamp(new Date()));
+        watch.put("dateAndTime", new Timestamp(new Date()));
         watch.put("listIDMovie", Collections.emptyList());
 
         // Save data into document
