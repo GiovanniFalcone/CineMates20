@@ -77,9 +77,11 @@ public class MenuPresenter {
 
     public void clickButtonMyReviews() {
         MyReviewsFragment myReviewsFragment = new MyReviewsFragment();
-        Bundle args = new Bundle();
-        args.putString("Icon", menuFragment.getImageUri().toString());
-        myReviewsFragment.setArguments(args);
+        if(menuFragment.getImageUri() != null) {
+            Bundle args = new Bundle();
+            args.putString("Icon", menuFragment.getImageUri().toString());
+            myReviewsFragment.setArguments(args);
+        }
         Utils.changeFragment_SlideAnim(menuFragment, myReviewsFragment, R.id.container);
     }
 

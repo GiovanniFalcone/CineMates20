@@ -70,6 +70,8 @@ public class MyReviewsFragment extends Fragment {
     }
 
     public String getUserIcon() {
-        return requireArguments().getString("Icon");
+        if(getArguments() != null)
+            return requireArguments().getString("Icon");
+        else return null;
     }
 }
