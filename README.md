@@ -4,4 +4,4 @@
 - Francesco La Frazia N86002238 - f.lafrzia@studenti.unina.it
 - Giovanni Falcone N86002329 - giova.falcone@studenti.unina.it
 
-Desktop: https://github.com/Lafry/Cinemates20Desktop
+Desktop side: https://github.com/Lafry/Cinemates20Desktop
